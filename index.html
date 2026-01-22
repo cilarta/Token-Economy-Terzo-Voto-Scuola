@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Economy - Sax Scuola</title>
+    <style>
+        :root {
+            --primary: #3182f6; --primary-dark: #2563eb; --success: #10b981;
+            --danger: #ef4444; --danger-dark: #b91c1c; --warning: #f59e0b; 
+            --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-700: #374151; --gray-900: #111827;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gray-100); color: var(--gray-900); padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* LOGIN OVERLAY */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--gray-900); z-index: 1000; display: flex;
+            align-items: center; justify-content: center; flex-direction: column;
+        }
+        .login-box {
+            background: white; padding: 30px; border-radius: 12px; text-align: center; width: 90%; max-width: 400px;
+        }
+        .login-box input { width: 100%; padding: 12px; font-size: 18px; margin: 15px 0; border: 2px solid var(--primary); border-radius: 8px; text-align: center;}
+        
+        /* HEADER */
+        header { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;}
+        h1 { font-size: 24px; margin-bottom: 5px; }
+        .student-name-display { color: var(--primary); font-weight: bold; font-size: 1.2em; }
+        .token-display { font-size: 24px; color: var(--primary); font-weight: bold; margin: 10px 0; }
+        
+        /* LAYOUT GRIGLIE */
+        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 15px; }
+        
+        /* CARD INTERATTIVE */
+        .action-card {
+            padding: 15px 10px; border-radius: 12px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            height: 100%; cursor: not-allowed; opacity: 0.7; transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); background: white; border: 2px solid transparent; min-height: 160px;
+        }
+        
+        /* Quando sbloccato */
+        body.admin-unlocked .action-card { cursor: pointer; opacity: 1; }
+        body.admin-unlocked .action-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        body.admin-unlocked .action-card:active { transform: scale(0.98); }
+
+        .card-desc { font-size: 13px; font-weight: 600; line-height: 1.3; margin: 10px 0; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .card-title { font-weight: 800; font-size: 15px; margin-bottom: 5px; color: var(--gray-700); }
+        .card-badge { padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 14px; }
+
+        /* Colori Card */
+        .style-base { border-color: #d1fae5; background: #ecfdf5; color: #065f46; }
+        .style-base .card-badge { background: var(--success); color: white; }
+        .style-base:hover { border-color: var(--success); }
+
+        .style-pro { border-color: #fef3c7; background: #fffbeb; color: #92400e; }
+        .style-pro .card-badge { background: var(--warning); color: white; }
+        .style-pro:hover { border-color: var(--warning); }
+
+        .style-vip { border-color: #fee2e2; background: #fef2f2; color: #991b1b; }
+        .style-vip .card-badge { background: var(--danger); color: white; }
+        .style-vip:hover { border-color: var(--danger); }
+
+        .style-penalty { border-color: #fee2e2; background: #fff1f2; color: var(--danger); }
+        .style-penalty .card-badge { background: white; color: var(--danger); border: 1px solid var(--danger); }
+        .style-penalty:hover { border-color: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+
+        /* SEZIONI GENERALI */
+        .main-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .main-section h2 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-200); }
+        .base-header { border-color: var(--success) !important; color: var(--success); }
+        .pro-header { border-color: var(--warning) !important; color: #d97706; }
+        .vip-header { border-color: var(--danger) !important; color: var(--danger); }
+        .penalty-header { border-color: var(--danger) !important; color: var(--danger); }
+
+        /* STATUS E STORICO */
+        .status { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .status-item { display: flex; justify-content: space-between; padding: 10px; border: 1px solid var(--gray-200); border-radius: 6px; }
+        .history-list { max-height: 300px; overflow-y: auto; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--gray-100); border-radius: 6px; margin-bottom: 8px; font-size: 13px; }
+        .history-type { padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        
+        .type-base { background: var(--success); color: white; }
+        .type-pro { background: var(--warning); color: white; }
+        .type-vip { background: var(--danger); color: white; }
+        .type-penalty { background: #6b7280; color: white; }
+
+        /* ADMIN SECTION */
+        .edit-section { background: var(--gray-100); padding: 20px; border-radius: 10px; margin: 30px 0; border: 2px solid var(--primary); }
+        .edit-controls { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .reason-input { width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 16px; margin-bottom: 15px; }
+
+        /* UI GENERALE */
+        input, select, button { padding: 8px 12px; border-radius: 6px; font-size: 14px; border: 1px solid #ddd; }
+        button { cursor: pointer; border: none; color: white; font-weight: bold; }
+        .btn-primary { background: var(--primary); }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-logout { background: var(--gray-700); margin-left: 10px;}
+        
+        #lockMessage { text-align: center; background: #fff3cd; color: #854d0e; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: block; border: 1px solid #fde68a; }
+        .footer { background: white; padding: 20px; border-radius: 10px; text-align: center; font-size: 13px; color: var(--gray-700); margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2>🎷 Registro Sax Scuola</h2>
+            <p>Inserisci il CognomeNome dell'alunno<br><small>(es. RossiMario)</small></p>
+            <input type="text" id="studentNameInput" placeholder="CognomeNome">
+            <button class="btn-primary" style="width:100%; font-size: 16px; padding: 12px;" onclick="window.loginStudent()">ENTRA</button>
+        </div>
+    </div>
+
+    <div class="container" id="appContainer" style="display:none;">
+        <header>
+            <div>
+                <h1>Valutazione Musicale</h1>
+                <p class="student-name-display">Alunno: <span id="displayStudentName">...</span></p>
+            </div>
+            <div style="text-align: right;">
+                <div class="token-display">Punteggio: <span id="totalTokens">...</span></div>
+                <button class="btn-logout" onclick="window.logout()">Esci / Cambia Alunno</button>
+            </div>
+        </header>
+
+        <div id="lockMessage">🔒 <strong>Modalità sola lettura.</strong> Il docente deve inserire la password per assegnare punti.</div>
+
+        <div class="status">
+            <div class="status-item"><span>Voto VIP:</span><span id="vipTokens" style="font-weight:bold; color:var(--danger);">0</span></div>
+            <div class="status-item"><span>Voto PRO:</span><span id="proTokens" style="font-weight:bold; color:var(--warning);">0</span></div>
+            <div class="status-item"><span>Voto BASE:</span><span id="baseTokens" style="font-weight:bold; color:var(--success);">0</span></div>
+            <div class="status-item"><span>Penalità:</span><span id="penaltyTokens" style="font-weight:bold; color:gray;">0</span></div>
+        </div>
+
+        <div class="edit-section">
+            <h3 style="margin-bottom:15px;">⚙️ Area Docente</h3>
+            <div class="edit-controls">
+                <input type="password" id="adminPassword" placeholder="Password Docente">
+                <button class="btn-primary" onclick="window.checkPassword()">🔓 Sblocca Modifiche</button>
+            </div>
+            
+            <div id="editContent" style="display: none;">
+                <input type="text" id="customReason" class="reason-input" placeholder="📝 Motivo personalizzato (es. Bonus concerto)">
+                <div class="edit-controls">
+                    <select id="tokenType">
+                        <option value="base">Base (+1)</option>
+                        <option value="pro">Pro (+3)</option>
+                        <option value="vip">VIP (+8/10/15)</option>
+                    </select>
+                    <input type="number" id="tokenAmount" value="1" style="width: 60px;">
+                    <button class="btn-success" onclick="window.addTokenTyped()">+ Assegna Manuale</button>
+                    <button class="btn-danger" onclick="window.removeTokenTyped()">- Rimuovi Manuale</button>
+                </div>
+                <div class="edit-controls">
+                     <button class="btn-danger" onclick="window.resetData()">🗑️ RESET ALUNNO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2 class="vip-header">🏆 LIVELLO VIP (Brani Solista & Orchestra)</h2>
+            <div class="card-container">
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Solista: Brano 1 OK')">
+                    <div class="card-title">Solista: Brano 1</div>
+                    <div class="card-desc">Primo brano studiato e pronto per il voto</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Solista: Brano 2 OK')">
+                    <div class="card-title">Solista: Brano 2</div>
+                    <div class="card-desc">Secondo brano studiato e pronto per il voto</div>
+                    <div class="card-badge">+10</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(15, 'vip', 'Solista: Brano 3 OK')">
+                    <div class="card-title">Solista: Brano 3</div>
+                    <div class="card-desc">Terzo brano studiato e pronto per il voto</div>
+                    <div class="card-badge">+15</div>
+                </div>
+                
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 1 OK')">
+                    <div class="card-title">Orchestra: Brano 1</div>
+                    <div class="card-desc">Parte imparata ed eseguita bene</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 2 OK')">
+                    <div class="card-title">Orchestra: Brano 2</div>
+                    <div class="card-desc">Parte imparata ed eseguita bene</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 3 OK')">
+                    <div class="card-title">Orchestra: Brano 3</div>
+                    <div class="card-desc">Parte imparata ed eseguita bene</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 4 OK')">
+                    <div class="card-title">Orchestra: Brano 4</div>
+                    <div class="card-desc">Parte imparata ed eseguita bene</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
+                    <div class="card-title">Orchestra: Brano 5</div>
+                    <div class="card-desc">Parte imparata ed eseguita bene</div>
+                    <div class="card-badge">+8</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2 class="pro-header">🌟 LIVELLO PRO (Costanza Mensile)</h2>
+            <div class="card-container">
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
+                    <div class="card-title">Studio Costante</div>
+                    <div class="card-desc">Hai studiato a ogni lezione durante il mese</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
+                    <div class="card-title">Frequenza</div>
+                    <div class="card-desc">1 Mese intero senza assenze</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
+                    <div class="card-title">Comportamento</div>
+                    <div class="card-desc">1 Mese intero senza penalità</div>
+                    <div class="card-badge">+3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2 class="base-header">✅ LIVELLO BASE (Routine Settimanale)</h2>
+            <div class="card-container">
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Ascolto Consigli')">
+                    <div class="card-title">Metodo</div>
+                    <div class="card-desc">Applicato subito i consigli del docente</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali Orchestra OK')">
+                    <div class="card-title">Orchestra Materiali</div>
+                    <div class="card-desc">Strumento + Spartito + Matita presenti</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Puntualità')">
+                    <div class="card-title">Puntualità</div>
+                    <div class="card-desc">Arrivato in orario e pronto a suonare</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
+                    <div class="card-title">Comportamento Orch.</div>
+                    <div class="card-desc">Nessun disturbo alla lezione di orchestra</div>
+                    <div class="card-badge">+1</div>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="main-section">
+            <h2 class="penalty-header">⚠️ PENALITÀ</h2>
+            <div class="card-container">
+                <div class="action-card style-penalty" onclick="window.clickPenalty(2, 'NO Studio a casa')">
+                    <div class="card-title">Studio Insuff.</div>
+                    <div class="card-desc">Studio assente o scarso</div>
+                    <div class="card-badge">-2</div>
+                </div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(3, 'NO Materiale')">
+                    <div class="card-title">Materiale Mancante</div>
+                    <div class="card-desc">Dimenticato strumento, spartiti o leggio</div>
+                    <div class="card-badge">-3</div>
+                </div>
+                 <div class="action-card style-penalty" onclick="window.clickPenalty(5, 'Disturbo Orchestra')">
+                    <div class="card-title">Disturbo Orchestra</div>
+                    <div class="card-desc">Ripetuto disturbo durante le prove</div>
+                    <div class="card-badge">-5</div>
+                </div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(4, 'Danni / Rispetto')">
+                    <div class="card-title">Grave / Danni</div>
+                    <div class="card-desc">Danno a strumenti o mancanza di rispetto</div>
+                    <div class="card-badge">-4</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2>📊 Registro Storico</h2>
+            <div class="history-list" id="historyList">Seleziona un alunno...</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+        // CONFIGURAZIONE DI FIREBASE (INSERITA)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCK-zPKKAk1P5ZxqyJexmx6a9H6OIkw5JY",
+            authDomain: "token-economy-sax-scuola.firebaseapp.com",
+            databaseURL: "https://token-economy-sax-scuola-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "token-economy-sax-scuola",
+            storageBucket: "token-economy-sax-scuola.firebasestorage.app",
+            messagingSenderId: "850065378747",
+            appId: "1:850065378747:web:17b30c2b980ac3a5dc889e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // PASSWORD DOCENTE
+        const ADMIN_PASSWORD = "FalkorMiuraFrechete";
+
+        // STATO GLOBALE
+        let isAdminUnlocked = false;
+        let currentStudentId = null;
+        let dbRef = null; 
+        let currentData = {
+            totalTokens: 0, baseTokens: 0,
+            proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: []
+        };
+
+        // --- SISTEMA LOGIN MULTI-UTENTE ---
+        
+        window.loginStudent = function() {
+            const rawName = document.getElementById('studentNameInput').value.trim();
+            if(!rawName) return alert("Inserisci un nome!");
+            
+            // Pulisce il nome per usarlo come ID (toglie spazi e caratteri strani)
+            currentStudentId = rawName.replace(/[^a-zA-Z0-9]/g, ''); 
+            
+            document.getElementById('displayStudentName').textContent = rawName;
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+
+            // Collega il DB specifico per questo alunno
+            dbRef = ref(db, 'sax_students/' + currentStudentId);
+            
+            // Avvia Sync
+            startSync();
+        }
+
+        window.logout = function() {
+            location.reload(); 
+        }
+
+        function startSync() {
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    currentData = data;
+                    if (!currentData.history) currentData.history = [];
+                } else { 
+                    // Se l'alunno è nuovo, inizializza i dati
+                    currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
+                    saveDataToCloud(); 
+                }
+                updateDisplay();
+                updateHistory();
+            });
+        }
+
+        function saveDataToCloud() {
+            if(dbRef) set(dbRef, currentData).catch((e) => alert("Errore Cloud: " + e));
+        }
+
+        // --- FUNZIONI CORE ---
+
+        function addToHistory(type, amount, description) {
+            const now = new Date();
+            const timeStr = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            if (!currentData.history) currentData.history = [];
+            currentData.history.unshift({
+                type: type, amount: amount, description: description, time: timeStr
+            });
+            if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
+            saveDataToCloud();
+        }
+
+        // --- GESTIONE CLICK ---
+        
+        window.clickTask = function(amount, type, description) {
+            if (!isAdminUnlocked) {
+                alert("🔒 BLOCCATO! Solo il docente può assegnare punti.");
+                return;
+            }
+            
+            currentData.totalTokens += amount;
+            
+            if (type === 'base') currentData.baseTokens += amount;
+            else if (type === 'pro') currentData.proTokens += amount;
+            else if (type === 'vip') currentData.vipTokens += amount;
+
+            addToHistory(type, amount, description);
+        }
+
+        window.clickPenalty = function(amount, description) {
+            if (!isAdminUnlocked) {
+                alert("🔒 BLOCCATO! Password richiesta per penalità.");
+                return;
+            }
+            
+            if(confirm(`Confermi penalità: ${description} (-${amount})?`)) {
+                currentData.totalTokens -= amount;
+                currentData.penaltyTokens += amount;
+                addToHistory('penalty', -amount, description);
+            }
+        }
+
+        // --- GESTIONE MANUALE ---
+
+        window.addTokenTyped = function() {
+            const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
+            const type = document.getElementById('tokenType').value;
+            const customReason = document.getElementById('customReason').value.trim() || "Assegnazione manuale";
+            window.clickTask(amount, type, customReason); 
+            document.getElementById('customReason').value = "";
+        }
+
+        window.removeTokenTyped = function() {
+            const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
+            const type = document.getElementById('tokenType').value;
+            const customReason = document.getElementById('customReason').value.trim() || "Rimozione manuale";
+            
+            currentData.totalTokens -= amount;
+            if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
+            else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
+            else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
+            
+            addToHistory(type, -amount, customReason);
+            alert(`❌ Rimossi ${amount} punti`);
+        }
+
+        window.resetData = function() {
+            if (confirm('SICURO? Cancella tutti i voti di QUESTO alunno.')) {
+                currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
+                saveDataToCloud();
+            }
+        }
+
+        // --- SISTEMA PASSWORD ---
+
+        window.checkPassword = function() {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === ADMIN_PASSWORD) {
+                isAdminUnlocked = true;
+                document.body.classList.add('admin-unlocked');
+                document.getElementById('editContent').style.display = 'block';
+                document.getElementById('lockMessage').style.display = 'none';
+                document.getElementById('adminPassword').value = '';
+                alert("🔓 Sbloccato! Ora puoi assegnare i voti.");
+            } else {
+                alert("Password errata!");
+            }
+        }
+
+        function updateDisplay() {
+            const totalEl = document.getElementById('totalTokens');
+            totalEl.textContent = currentData.totalTokens;
+            totalEl.style.color = currentData.totalTokens < 0 ? 'var(--danger)' : 'var(--primary)';
+
+            document.getElementById('baseTokens').textContent = currentData.baseTokens || 0;
+            document.getElementById('proTokens').textContent = currentData.proTokens || 0;
+            document.getElementById('vipTokens').textContent = currentData.vipTokens || 0;
+            document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
+        }
+
+        function updateHistory() {
+            const list = document.getElementById('historyList');
+            if (!currentData.history || !currentData.history.length) { 
+                list.innerHTML = '<div style="padding:10px; color:#666;">Nessun dato registrato.</div>'; 
+                return; 
+            }
+            
+            let html = '';
+            currentData.history.forEach(item => {
+                let cl = 'type-base', em = '📌', col = 'var(--success)', sign='+';
+                if(item.type=='pro'){cl='type-pro'; em='⭐'; col='#d97706';}
+                if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--danger)';}
+                if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
+                
+                html += `<div class="history-item">
+                    <div>
+                        <span class="history-type ${cl}">${em}</span> 
+                        <span style="margin-left:5px; font-weight:bold;">${item.description}</span>
+                        <div style="font-size:11px; color:#666; margin-left: 28px;">${item.time}</div>
+                    </div>
+                    <div style="font-weight:bold; font-size:15px; color:${col}">${sign}${item.amount}</div>
+                </div>`;
+            });
+            list.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

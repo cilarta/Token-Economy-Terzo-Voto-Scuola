@@ -6,8 +6,16 @@
     <title>Token Economy - Sax Scuola</title>
     <style>
         :root {
-            --primary: #3182f6; --primary-dark: #2563eb; --success: #10b981;
-            --danger: #ef4444; --danger-dark: #b91c1c; --warning: #f59e0b; 
+            --primary: #3182f6; 
+            --success: #10b981; 
+            --danger: #ef4444; 
+            
+            /* NUOVI COLORI */
+            --azure: #0ea5e9;    /* Colore Pro */
+            --azure-bg: #e0f2fe;
+            --purple: #9333ea;   /* Colore VIP */
+            --purple-bg: #f3e8ff;
+
             --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-700: #374151; --gray-900: #111827;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,19 +59,23 @@
         .card-title { font-weight: 800; font-size: 15px; margin-bottom: 5px; color: var(--gray-700); }
         .card-badge { padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 14px; }
 
-        /* Colori Card */
+        /* Colori Card Aggiornati */
+        /* BASE - VERDE */
         .style-base { border-color: #d1fae5; background: #ecfdf5; color: #065f46; }
         .style-base .card-badge { background: var(--success); color: white; }
         .style-base:hover { border-color: var(--success); }
 
-        .style-pro { border-color: #fef3c7; background: #fffbeb; color: #92400e; }
-        .style-pro .card-badge { background: var(--warning); color: white; }
-        .style-pro:hover { border-color: var(--warning); }
+        /* PRO - AZZURRO */
+        .style-pro { border-color: #bae6fd; background: var(--azure-bg); color: #0369a1; }
+        .style-pro .card-badge { background: var(--azure); color: white; }
+        .style-pro:hover { border-color: var(--azure); }
 
-        .style-vip { border-color: #fee2e2; background: #fef2f2; color: #991b1b; }
-        .style-vip .card-badge { background: var(--danger); color: white; }
-        .style-vip:hover { border-color: var(--danger); }
+        /* VIP - VIOLA */
+        .style-vip { border-color: #e9d5ff; background: var(--purple-bg); color: #6b21a8; }
+        .style-vip .card-badge { background: var(--purple); color: white; }
+        .style-vip:hover { border-color: var(--purple); }
 
+        /* PENALITA - ROSSO */
         .style-penalty { border-color: #fee2e2; background: #fff1f2; color: var(--danger); }
         .style-penalty .card-badge { background: white; color: var(--danger); border: 1px solid var(--danger); }
         .style-penalty:hover { border-color: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
@@ -71,9 +83,10 @@
         /* SEZIONI GENERALI */
         .main-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .main-section h2 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-200); }
+        
         .base-header { border-color: var(--success) !important; color: var(--success); }
-        .pro-header { border-color: var(--warning) !important; color: #d97706; }
-        .vip-header { border-color: var(--danger) !important; color: var(--danger); }
+        .pro-header { border-color: var(--azure) !important; color: var(--azure); }
+        .vip-header { border-color: var(--purple) !important; color: var(--purple); }
         .penalty-header { border-color: var(--danger) !important; color: var(--danger); }
 
         /* STATUS E STORICO */
@@ -84,8 +97,8 @@
         .history-type { padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
         
         .type-base { background: var(--success); color: white; }
-        .type-pro { background: var(--warning); color: white; }
-        .type-vip { background: var(--danger); color: white; }
+        .type-pro { background: var(--azure); color: white; }
+        .type-vip { background: var(--purple); color: white; }
         .type-penalty { background: #6b7280; color: white; }
 
         /* ADMIN SECTION */
@@ -131,10 +144,15 @@
         <div id="lockMessage">🔒 <strong>Modalità sola lettura.</strong> Il docente deve inserire la password per assegnare punti.</div>
 
         <div class="status">
-            <div class="status-item"><span>Voto VIP:</span><span id="vipTokens" style="font-weight:bold; color:var(--danger);">0</span></div>
-            <div class="status-item"><span>Voto PRO:</span><span id="proTokens" style="font-weight:bold; color:var(--warning);">0</span></div>
+            <div class="status-item"><span>Voto VIP:</span><span id="vipTokens" style="font-weight:bold; color:var(--purple);">0</span></div>
+            <div class="status-item"><span>Voto PRO:</span><span id="proTokens" style="font-weight:bold; color:var(--azure);">0</span></div>
             <div class="status-item"><span>Voto BASE:</span><span id="baseTokens" style="font-weight:bold; color:var(--success);">0</span></div>
             <div class="status-item"><span>Penalità:</span><span id="penaltyTokens" style="font-weight:bold; color:gray;">0</span></div>
+        </div>
+
+        <div class="main-section">
+            <h2>📊 Registro Storico</h2>
+            <div class="history-list" id="historyList">Seleziona un alunno...</div>
         </div>
 
         <div class="edit-section">
@@ -158,6 +176,53 @@
                 </div>
                 <div class="edit-controls">
                      <button class="btn-danger" onclick="window.resetData()">🗑️ RESET ALUNNO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2 class="base-header">✅ LIVELLO BASE (Routine Settimanale)</h2>
+            <div class="card-container">
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Ascolto Consigli')">
+                    <div class="card-title">Metodo</div>
+                    <div class="card-desc">Applicato subito i consigli del docente</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali Orchestra OK')">
+                    <div class="card-title">Orchestra Materiali</div>
+                    <div class="card-desc">Strumento + Spartito + Matita presenti</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Puntualità')">
+                    <div class="card-title">Puntualità</div>
+                    <div class="card-desc">Arrivato in orario e pronto a suonare</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
+                    <div class="card-title">Comportamento Orch.</div>
+                    <div class="card-desc">Nessun disturbo alla lezione di orchestra</div>
+                    <div class="card-badge">+1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <h2 class="pro-header">🌟 LIVELLO PRO (Costanza Mensile)</h2>
+            <div class="card-container">
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
+                    <div class="card-title">Studio Costante</div>
+                    <div class="card-desc">Hai studiato a ogni lezione durante il mese</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
+                    <div class="card-title">Frequenza</div>
+                    <div class="card-desc">1 Mese intero senza assenze</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
+                    <div class="card-title">Comportamento</div>
+                    <div class="card-desc">1 Mese intero senza penalità</div>
+                    <div class="card-badge">+3</div>
                 </div>
             </div>
         </div>
@@ -208,53 +273,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="main-section">
-            <h2 class="pro-header">🌟 LIVELLO PRO (Costanza Mensile)</h2>
-            <div class="card-container">
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
-                    <div class="card-title">Studio Costante</div>
-                    <div class="card-desc">Hai studiato a ogni lezione durante il mese</div>
-                    <div class="card-badge">+3</div>
-                </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
-                    <div class="card-title">Frequenza</div>
-                    <div class="card-desc">1 Mese intero senza assenze</div>
-                    <div class="card-badge">+3</div>
-                </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
-                    <div class="card-title">Comportamento</div>
-                    <div class="card-desc">1 Mese intero senza penalità</div>
-                    <div class="card-badge">+3</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-section">
-            <h2 class="base-header">✅ LIVELLO BASE (Routine Settimanale)</h2>
-            <div class="card-container">
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Ascolto Consigli')">
-                    <div class="card-title">Metodo</div>
-                    <div class="card-desc">Applicato subito i consigli del docente</div>
-                    <div class="card-badge">+1</div>
-                </div>
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali Orchestra OK')">
-                    <div class="card-title">Orchestra Materiali</div>
-                    <div class="card-desc">Strumento + Spartito + Matita presenti</div>
-                    <div class="card-badge">+1</div>
-                </div>
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Puntualità')">
-                    <div class="card-title">Puntualità</div>
-                    <div class="card-desc">Arrivato in orario e pronto a suonare</div>
-                    <div class="card-badge">+1</div>
-                </div>
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
-                    <div class="card-title">Comportamento Orch.</div>
-                    <div class="card-desc">Nessun disturbo alla lezione di orchestra</div>
-                    <div class="card-badge">+1</div>
-                </div>
-            </div>
-        </div>
  
         <div class="main-section">
             <h2 class="penalty-header">⚠️ PENALITÀ</h2>
@@ -282,18 +300,13 @@
             </div>
         </div>
 
-        <div class="main-section">
-            <h2>📊 Registro Storico</h2>
-            <div class="history-list" id="historyList">Seleziona un alunno...</div>
-        </div>
-
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-        // CONFIGURAZIONE DI FIREBASE (INSERITA)
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCK-zPKKAk1P5ZxqyJexmx6a9H6OIkw5JY",
             authDomain: "token-economy-sax-scuola.firebaseapp.com",
@@ -325,7 +338,7 @@
             const rawName = document.getElementById('studentNameInput').value.trim();
             if(!rawName) return alert("Inserisci un nome!");
             
-            // Pulisce il nome per usarlo come ID (toglie spazi e caratteri strani)
+            // Pulisce il nome per usarlo come ID
             currentStudentId = rawName.replace(/[^a-zA-Z0-9]/g, ''); 
             
             document.getElementById('displayStudentName').textContent = rawName;
@@ -350,7 +363,6 @@
                     currentData = data;
                     if (!currentData.history) currentData.history = [];
                 } else { 
-                    // Se l'alunno è nuovo, inizializza i dati
                     currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
                     saveDataToCloud(); 
                 }
@@ -474,8 +486,8 @@
             let html = '';
             currentData.history.forEach(item => {
                 let cl = 'type-base', em = '📌', col = 'var(--success)', sign='+';
-                if(item.type=='pro'){cl='type-pro'; em='⭐'; col='#d97706';}
-                if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--danger)';}
+                if(item.type=='pro'){cl='type-pro'; em='⭐'; col='var(--azure)';}
+                if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
                 if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
                 
                 html += `<div class="history-item">

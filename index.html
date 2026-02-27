@@ -196,6 +196,24 @@
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
         .avatar-emoji { font-size: 85px; display: block; margin-bottom: 5px; }
         .avatar-rank { font-weight: 900; color: #166534; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+                /* --- SISTEMA TROFEI --- */
+        .trophies-container {
+            background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 2px dashed #fbbf24;
+        }
+        .trophies-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px;
+        }
+        .trophy {
+            width: 45px; height: 45px; border-radius: 50%; background: #f3f4f6; border: 2px solid #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 20px; filter: grayscale(100%) opacity(0.5); transition: all 0.3s ease; position: relative; cursor: help;
+        }
+        .trophy.unlocked {
+            filter: grayscale(0%) opacity(1); background: linear-gradient(135deg, #fef08a, #f59e0b); border-color: #d97706; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); transform: scale(1.1);
+        }
+        /* Tooltip per il nome del trofeo */
+        .trophy:hover::after {
+            content: attr(data-title); position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 5px 10px; border-radius: 6px; font-size: 11px; white-space: nowrap; z-index: 10; pointer-events: none; font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -255,6 +273,14 @@
             </div>
             <!-- FINE LEGENDA SPOSTATA -->
         </div>
+            <!-- INIZIO VETRINA TROFEI -->
+            <div class="trophies-container">
+                <h3 style="margin: 0; font-size: 15px; color: #b45309;">🏆 La mia Bacheca Trofei</h3>
+                <div class="trophies-grid" id="trophiesGrid">
+                    <!-- I trofei verranno generati dal JavaScript -->
+                </div>
+            </div>
+            <!-- FINE VETRINA TROFEI -->
 
         <div class="edit-section">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
@@ -673,6 +699,7 @@
             
             // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
             aggiornaAvatar(); 
+            aggiornaTrofei();
         }
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {
@@ -773,6 +800,40 @@
                 icon.innerText = "🥚";
                 rank.innerText = "Livello 1: Uovo Principiante";
             }
+        }
+        // --- SISTEMA TROFEI AUTOMATICO ---
+        const trofeiList = [
+            { id: 1, icon: '🥉', name: 'Primo Traguardo (30 pt totali)', condition: (d) => d.totalTokens >= 30 },
+            { id: 2, icon: '🥈', name: 'Metà dell\'Opera (60 pt totali)', condition: (d) => d.totalTokens >= 60 },
+            { id: 3, icon: '🥇', name: 'Cento e Lode (100 pt totali)', condition: (d) => d.totalTokens >= 100 },
+            { id: 4, icon: '💎', name: 'Leggenda Vivente (150 pt totali)', condition: (d) => d.totalTokens >= 150 },
+            { id: 5, icon: '✅', name: 'Affidabile (40 pt BASE + 0 Penalità)', condition: (d) => d.baseTokens >= 40 && d.penaltyTokens === 0 },
+            { id: 6, icon: '🚀', name: 'Professionista (6 voti PRO)', condition: (d) => calcolaVotiPro(d) >= 6 },
+            { id: 7, icon: '🌟', name: 'Solista Coraggioso (Primo voto VIP)', condition: (d) => d.vipTokens > 0 },
+            { id: 8, icon: '👑', name: 'Re dell\'Orchestra (40 pt VIP)', condition: (d) => d.vipTokens >= 40 },
+            { id: 9, icon: '👼', name: 'Angelo Custode (60 pt VIP)', condition: (d) => d.vipTokens >= 60 },
+            { id: 10, icon: '🦅', name: 'Fenice (100 pt totali)', condition: (d) => d.totalTokens >= 100 }
+        ];
+
+        // Funzione di supporto per contare quante volte ha preso un voto PRO
+        function calcolaVotiPro(data) {
+            if (!data.history) return 0;
+            return data.history.filter(h => h.type === 'pro').length;
+        }
+
+        function aggiornaTrofei() {
+            const grid = document.getElementById('trophiesGrid');
+            if (!grid || !currentData) return;
+
+            let html = '';
+            trofeiList.forEach(trofeo => {
+                // Controlla se la regola è soddisfatta usando i dati attuali
+                const isUnlocked = trofeo.condition(currentData);
+                const cssClass = isUnlocked ? 'trophy unlocked' : 'trophy';
+                
+                html += `<div class="${cssClass}" data-title="${trofeo.name}">${trofeo.icon}</div>`;
+            });
+            grid.innerHTML = html;
         }
 
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---

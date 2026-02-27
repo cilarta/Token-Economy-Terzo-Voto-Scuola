@@ -557,6 +557,7 @@
                 }
                 updateDisplay();
                 updateHistory();
+                aggiornaAvatar();
             });
         }
 
@@ -668,87 +669,79 @@
             aggiornaAvatar(); 
         }
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
-        function updateHistory() {
-            const list = document.getElementById('historyList'); // Lo storico pubblico
-            const pendingList = document.getElementById('pendingProposalsList'); // Il cassetto segreto del Maestro
+function updateHistory() {
+            const container = document.getElementById('historyList');
+            const proposteContainer = document.getElementById('proposteAttesa'); // Il cassetto giallo
+            if (!container) return;
 
-            let htmlStorico = '';
-            let htmlAttesa = '';
+            container.innerHTML = "";
+            if (proposteContainer) proposteContainer.innerHTML = "";
+            
             let proposteCount = 0;
 
-            if (!currentData.history || !currentData.history.length) { 
-                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
-                if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
-                return; 
+            if (!currentData.history || currentData.history.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:gray;'>Nessuna operazione registrata.</p>";
+                return;
             }
-            
-            currentData.history.forEach(item => {
-                let testo = item.note || item.description || "Nessuna nota";
-                let dataOra = item.date || item.time || "";
+
+            // Ordina per data (più recenti in alto)
+            const sortedHistory = [...currentData.history].sort((a, b) => b.id - a.id);
+
+            sortedHistory.forEach(item => {
+                const dataOra = item.date || "Data non disponibile";
+                const segno = item.amount >= 0 ? "+" : "";
+                const classePunti = item.amount >= 0 ? "text-success" : "text-danger";
 
                 // SE LA PROPOSTA È IN ATTESA -> Va nel cassetto del Maestro!
                 if (item.status === "pending") {
                     proposteCount++;
-                    htmlAttesa += `
-                    <div style="background: white; border: 1px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                        <div>
-                            <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">+${item.amount} PUNTI</span>
-                            <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${testo}</span>
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">🕒 ${dataOra}</div>
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✅ Accetta</button>
-                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
-                        </div>
-                    </div>`;
-                } 
-                // ALTRIMENTI -> Va nello storico pubblico dell'alunno
-                else {
-                    let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
-                    if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
-                    if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
-                    if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
-                    
-                    let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
-                    let extraStyle = "";
-
-                    if (item.status === "approved") {
-                        em = '✔️';
-                        extraStyle = "border-left: 4px solid #10b981;";
-                    } else if (item.status === "rejected") {
-                        em = '❌';
-                        extraStyle = "opacity: 0.6; background-color: #fef2f2;";
-                        amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
-                    }
-
-                    htmlStorico += `<div class="history-item" style="${extraStyle}">
-                        <div style="display: flex; align-items: center;">
-                            <span class="history-type ${cl}">${em}</span> 
-                            <div style="margin-left:15px;">
-                                <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
-                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
+                    if (proposteContainer) {
+                        proposteContainer.innerHTML += `
+                        <div style="background: white; border: 1px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <div>
+                                <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">+${item.amount} PUNTI</span>
+                                <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${item.note}</span>
+                                <div style="font-size: 11px; color: #64748b; margin-top: 4px;">🕒 ${dataOra}</div>
                             </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✅ Accetta</button>
+                                <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
+                            </div>
+                        </div>`;
+                    }
+                } 
+                // ALTRIMENTI VA NELLO STORICO NORMALE
+                else {
+                    container.innerHTML += `
+                    <div class="history-item">
+                        <div>
+                            <div class="history-note">${item.note}</div>
+                            <div class="history-date">${dataOra}</div>
                         </div>
-                        ${amountBox}
+                        <div class="history-amount ${classePunti}">${segno}${item.amount}</div>
                     </div>`;
                 }
             });
 
+            // Se non ci sono proposte in attesa, mostra un messaggio nel cassetto
+            if (proposteCount === 0 && proposteContainer) {
+                proposteContainer.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px; padding:10px;'>Nessuna proposta da valutare al momento.</p>";
+            }
+        }
             // Scrive il risultato a schermo
             if(list) list.innerHTML = htmlStorico || '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato nello storico.</div>';
             if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
         }
         
 // Funzione per l'Avatar Evolutivo collegata a Firebase
-        function aggiornaAvatar() {
-            // Legge il totale reale dal database locale
-            const totale = currentData.totalTokens || 0;
+function aggiornaAvatar() {
+            // Number() assicura che il computer legga un numero e non un testo
+            const totale = Number(currentData.totalTokens) || 0;
             const icon = document.getElementById('avatarIcon');
             const rank = document.getElementById('avatarRank');
         
             if (!icon || !rank) return;
         
-            // Logica basata sulle tue nuove soglie
             if (totale >= 130) {
                 icon.innerText = "🎷👑";
                 rank.innerText = "Re del Sax (BONUS)";
@@ -765,12 +758,11 @@
                 icon.innerText = "🥚";
                 rank.innerText = "Grado: Uovo";
             } else {
-                // Sotto i 25 punti
                 icon.innerText = "🎵";
                 rank.innerText = "In attesa del primo grado...";
             }
         }
-
+        
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
 // 1. L'alunno invia la proposta di punti specifici

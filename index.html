@@ -217,6 +217,18 @@
             </div>
             <div style="text-align: right;">
                 <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
+                <div style="margin-top: 15px; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
+                    <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px;">🌟 Evoluzione Avatar:</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <div>🥚 <b>0 - 29 pt</b>: Livello 1</div>
+                        <div>🐣 <b>30 - 69 pt</b>: Livello 2</div>
+                        <div>🐥 <b>70 - 129 pt</b>: Livello 3</div>
+                        <div>🎷👑 <b>130 - 199 pt</b>: Livello 4</div>
+                    </div>
+                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold;">
+                        🐉 200+ pt: Livello Bonus Supremo!
+                    </div>
+                </div>
                 <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
             </div>
         </header>
@@ -652,8 +664,10 @@
             document.getElementById('proTokens').textContent = currentData.proTokens || 0;
             document.getElementById('vipTokens').textContent = currentData.vipTokens || 0;
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
+            
+            // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
+            aggiornaAvatar(); 
         }
-
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {
             const list = document.getElementById('historyList'); // Lo storico pubblico
@@ -726,39 +740,36 @@
             if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
         }
         
-        // Funzione per l'Avatar Evolutivo con i nuovi gradi
+// Funzione per l'Avatar Evolutivo collegata a Firebase
         function aggiornaAvatar() {
-            const totale = vBase + vPro + vVip; // Calcola il totale dei punti
+            // Prende il totale esatto salvato nel database
+            const totale = currentData.totalTokens || 0; 
+            
             const icon = document.getElementById('avatarIcon');
             const rank = document.getElementById('avatarRank');
-            
-            if (totale >= 130) {
+
+            if (!icon || !rank) return; // Evita errori se mancano i pezzi HTML
+
+            // Calcolo dei livelli (se cambi i numeri nella legenda, cambiali anche qui!)
+            if (totale >= 200) {
+                icon.innerText = "🐉"; 
+                rank.innerText = "Livello Bonus Supremo!";
+            } else if (totale >= 130) {
                 icon.innerText = "🎷👑";
-                rank.innerText = "Grado: Re del Sax (LIVELLO MASSIMO)";
-                rank.style.color = "#d97706"; // Colore oro/ambra per il bonus
-            } else if (totale >= 100) {
-                icon.innerText = "🦅";
-                rank.innerText = "Grado: Aquila";
-                rank.style.color = "#1e40af"; // Blu
-            } else if (totale >= 75) {
-                icon.innerText = "🐔";
-                rank.innerText = "Grado: Gallina";
-                rank.style.color = "#b91c1c"; // Rosso
-            } else if (totale >= 50) {
+                rank.innerText = "Livello 4: Falco del Sax";
+            } else if (totale >= 70) {
+                icon.innerText = "🐥";
+                rank.innerText = "Livello 3: Musicista in Erba";
+            } else if (totale >= 30) {
                 icon.innerText = "🐣";
-                rank.innerText = "Grado: Pulcino";
-                rank.style.color = "#16a34a"; // Verde
-            } else if (totale >= 25) {
-                icon.innerText = "🥚";
-                rank.innerText = "Grado: Uovo";
-                rank.style.color = "#4b5563"; // Grigio
+                rank.innerText = "Livello 2: Pulcino Curioso";
             } else {
-                icon.innerText = "❓";
-                rank.innerText = "Inizia a raccogliere punti!";
-                rank.style.color = "#9ca3af";
+                icon.innerText = "🥚";
+                rank.innerText = "Livello 1: Uovo Principiante";
             }
         }
-// --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
+
+        // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
 // 1. L'alunno invia la proposta di punti specifici
         async function inviaProposta() {

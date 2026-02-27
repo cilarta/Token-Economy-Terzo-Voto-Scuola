@@ -681,27 +681,38 @@
             list.innerHTML = html;
         }
 
-        // Funzione per l'Avatar Evolutivo
+// Funzione per l'Avatar Evolutivo con i nuovi gradi
         function aggiornaAvatar() {
             const totale = vBase + vPro + vVip; // Calcola il totale dei punti
             const icon = document.getElementById('avatarIcon');
             const rank = document.getElementById('avatarRank');
 
-            if (totale > 150) {
+            if (totale >= 130) {
+                icon.innerText = "🎷👑";
+                rank.innerText = "Grado: Re del Sax (LIVELLO MASSIMO)";
+                rank.style.color = "#d97706"; // Colore oro/ambra per il bonus
+            } else if (totale >= 100) {
                 icon.innerText = "🦅";
-                rank.innerText = "Grado: Aquila Reale";
-            } else if (totale > 100) {
-                icon.innerText = "🦁";
-                rank.innerText = "Grado: Leone Coraggioso";
-            } else if (totale > 50) {
+                rank.innerText = "Grado: Aquila";
+                rank.style.color = "#1e40af"; // Blu
+            } else if (totale >= 75) {
+                icon.innerText = "🐔";
+                rank.innerText = "Grado: Gallina";
+                rank.style.color = "#b91c1c"; // Rosso
+            } else if (totale >= 50) {
                 icon.innerText = "🐣";
-                rank.innerText = "Grado: Pulcino Esperto";
-            } else {
+                rank.innerText = "Grado: Pulcino";
+                rank.style.color = "#16a34a"; // Verde
+            } else if (totale >= 25) {
                 icon.innerText = "🥚";
-                rank.innerText = "Grado: Uovo Novizio";
+                rank.innerText = "Grado: Uovo";
+                rank.style.color = "#4b5563"; // Grigio
+            } else {
+                icon.innerText = "❓";
+                rank.innerText = "Inizia a raccogliere punti!";
+                rank.style.color = "#9ca3af";
             }
         }
-
         // Funzione per inviare la proposta
         function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;

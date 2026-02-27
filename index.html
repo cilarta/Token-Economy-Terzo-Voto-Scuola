@@ -215,35 +215,55 @@
         .btn-use:hover { background: #2563eb; }
         .btn-active { background: #10b981; color: white; cursor: default; }
 
-        /* VARIABILI TEMI DINAMICI */
+        /* ANIMAZIONE BASE PER TUTTI I GRADIENTI */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* VARIABILI TEMI DINAMICI AGGIORNATI */
+        /* TEMA 1: COSMIC AURORA (Dark Animato) */
         body.theme-dark {
-            background: linear-gradient(135deg, #1e1e2f 0%, #000000 100%);
+            background: linear-gradient(-45deg, #0f172a, #312e81, #4c1d95, #1e1b4b);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
             color: #f8fafc;
         }
         body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
-            background: #2d2d44; border-color: #4b5563; color: #f8fafc;
+            background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px); border-color: #6366f1; color: #f8fafc;
         }
-        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #f8fafc !important; }
-        body.theme-dark .action-card { background: #1e1e2f; color: #f8fafc; }
-        body.theme-dark .history-item { background: #1e1e2f; border-color: #4b5563; }
+        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #e0e7ff !important; }
+        body.theme-dark .action-card { background: rgba(15, 23, 42, 0.9); color: #f8fafc; }
+        body.theme-dark .history-item { background: rgba(30, 41, 59, 0.9); border-color: #6366f1; }
         
+        /* TEMA 2: CYBERPUNK (Neon Animato) */
         body.theme-neon {
-            background: #0f172a; color: #0ea5e9;
+            background: linear-gradient(-45deg, #083344, #0369a1, #0d9488, #0284c7);
+            background-size: 400% 400%;
+            animation: gradientAnimation 12s ease infinite;
+            color: #e0f2fe;
         }
         body.theme-neon .main-section, body.theme-neon .interactive-card, body.theme-neon .theme-store {
-            background: #1e293b; border: 2px solid #0ea5e9; box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+            background: rgba(8, 47, 73, 0.85); backdrop-filter: blur(10px); border: 2px solid #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
         }
-        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #38bdf8 !important; }
-        body.theme-neon .action-card { background: #0f172a; border-color: #0ea5e9; color: #e2e8f0; }
-        body.theme-neon .history-item { background: #0f172a; border-left-color: #0ea5e9; color: #e2e8f0; }
+        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #67e8f9 !important; }
+        body.theme-neon .action-card { background: rgba(8, 47, 73, 0.9); border-color: #06b6d4; color: #cffafe; }
+        body.theme-neon .history-item { background: rgba(8, 47, 73, 0.9); border-left-color: #06b6d4; color: #cffafe; }
 
+        /* TEMA 3: LAVA FLOW (Rosso/Arancio Animato) */
         body.theme-forest {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #064e3b;
+            background: linear-gradient(-45deg, #7f1d1d, #b91c1c, #ea580c, #c2410c);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: #fff7ed;
         }
         body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
-            background: rgba(255,255,255,0.9); border-color: #6ee7b7;
+            background: rgba(127, 29, 29, 0.85); backdrop-filter: blur(10px); border-color: #fb923c;
         }
-        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #047857 !important; }
+        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #fed7aa !important; }
+        body.theme-forest .action-card { background: rgba(153, 27, 27, 0.9); color: #fff7ed; border-color: #f97316;}
+        body.theme-forest .history-item { background: rgba(127, 29, 29, 0.9); border-color: #fb923c; color: #fff7ed;}
 
         /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
@@ -934,9 +954,9 @@
         // --- SISTEMA NEGOZIO TEMI ---
         const themes = [
             { id: 'default', name: 'Chiaro (Standard)', icon: '☀️', price: 0, class: '' },
-            { id: 'dark', name: 'Galassia Dark', icon: '🌙', price: 30, class: 'theme-dark' },
-            { id: 'forest', name: 'Foresta Magica', icon: '🌲', price: 40, class: 'theme-forest' },
-            { id: 'neon', name: 'Hacker Neon', icon: '💻', price: 50, class: 'theme-neon' }
+            { id: 'dark', name: 'Cosmic Aurora', icon: '🌌', price: 30, class: 'theme-dark' },
+            { id: 'forest', name: 'Lava Flow', icon: '🔥', price: 40, class: 'theme-forest' },
+            { id: 'neon', name: 'Cyberpunk', icon: '💎', price: 50, class: 'theme-neon' }
         ];
 
         function renderThemeStore() {

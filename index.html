@@ -842,18 +842,18 @@
                 alert("❌ Proposta rifiutata ed eliminata dallo storico.");
             }
 
-            // Usa la tua funzione nativa infallibile per salvare su Firebase!
+        // Usa la tua funzione nativa infallibile per salvare su Firebase!
             saveDataToCloud(); 
             updateDisplay();   // Aggiorna il numero grande dei punti in alto
             updateHistory();   // Aggiorna la lista
-        }        
-    } // <-- LA PARENTESI DELLA FUNZIONE ORA SI CHIUDE QUI
+        }
 
         // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
         window.inviaProposta = inviaProposta;
         window.valutaProposta = valutaProposta;
 
         // --- FINE NUOVO SISTEMA PROPOSTE ---        
+        
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
     </script>

@@ -256,12 +256,7 @@
                
                 <div class="input-group">
                     <label>Categoria Punti</label>
-                    <select id="catPunti">
-                        <option value="BASE">Voto BASE</option>
-                        <option value="PRO">Voto PRO</option>
-                        <option value="VIP">Voto VIP</option>
-                    </select>
-                </div>
+<input type="number" id="puntiRichiesti" placeholder="N° Punti" min="1" max="100" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">                </div>
             </div>
             
             <div class="input-group">
@@ -765,17 +760,21 @@
         }
 // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
-        // 1. L'alunno invia la proposta e la salva su Firebase
+// 1. L'alunno invia la proposta di punti specifici
         async function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;
-            const cat = document.getElementById('catPunti').value; // BASE, PRO, VIP
+            const inputPunti = document.getElementById('puntiRichiesti');
+            const puntiRichiesti = inputPunti ? parseInt(inputPunti.value) : 1;
             const motivo = document.getElementById('motivo').value;
             
             if (motivo.trim() === "") {
                 alert("Ehi! Scrivi prima una motivazione!");
                 return;
             }
-            
+            if (isNaN(puntiRichiesti) || puntiRichiesti <= 0) {
+                alert("Inserisci un numero di punti maggiore di zero!");
+                return;
+            }
             if (!dbRef) {
                 alert("Errore: Seleziona prima un alunno dal menu!");
                 return;
@@ -783,85 +782,72 @@
 
             const etichetta = tipo === 'auto' ? '🙋 Autocandidatura' : '🤝 Segnalazione';
             
-            // Creiamo l'oggetto della proposta per Firebase
             const nuovaProposta = {
-                date: new Date().toLocaleString(),
-                type: cat.toLowerCase(), // base, pro, o vip
-                amount: 1,
+                id: Date.now(),
+                type: "base", // Usiamo il tipo standard, conterà solo la quantità
+                amount: puntiRichiesti,
+                status: "pending", // L'etichetta magica
                 note: `${etichetta}: ${motivo}`,
-                status: "pending", // ⏳ Indica che è in attesa di approvazione
-                id: Date.now()     // Un ID unico per trovarla dopo
+                date: new Date().toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })
             };
 
-            // Aggiungiamo la proposta allo storico locale e salviamo su Firebase
-            const updatedHistory = [nuovaProposta, ...(currentData.history || [])];
+            // Salva nel database locale dell'alunno
+            currentData.history = [nuovaProposta, ...(currentData.history || [])];
             
             try {
-                // Invia a Firebase
-                await set(ref(db, `students/${currentStudentId}/history`), updatedHistory);
-                currentData.history = updatedHistory; // Aggiorna i dati nella memoria locale
-        updateHistory();                      // Ridisegna subito il cassetto e lo storico!
-                alert("Proposta inviata al Maestro! Ora è nello Storico in attesa di approvazione.");
-                document.getElementById('motivo').value = ""; // Svuota la casella
+                // Salva su Firebase e aggiorna subito lo schermo!
+                await set(ref(db, `students/${currentStudentId}/history`), currentData.history);
+                alert(`Proposta di +${puntiRichiesti} punti inviata al Maestro!`);
+                document.getElementById('motivo').value = ""; // Svuota casella testo
+                if(inputPunti) inputPunti.value = ""; // Svuota casella numeri
+                updateHistory(); // Fa apparire subito la voce nel cassetto
             } catch (error) {
                 console.error("Errore Firebase:", error);
                 alert("Errore nell'invio. Riprova!");
             }
         }
 
-// 2. Il maestro valuta la proposta (Protetto dal pannello sbloccato)
-        async function valutaProposta(propostaId, azione) {
-            // Verifica che il Maestro abbia sbloccato l'area segreta
+        // 2. Il maestro valuta: Accetta (dà i punti) o Rifiuta (Elimina la voce)
+        function valutaProposta(propostaId, azione) {
             if (!isAdminUnlocked) {
                 alert("❌ Errore: Sblocca l'Area Docente con la password prima di valutare!");
                 return;
             }
 
-            // Troviamo la proposta nel database scaricato
-            const history = [...(currentData.history || [])];
-            const index = history.findIndex(h => h.id == propostaId);
+            if (!currentData.history) return;
+            const index = currentData.history.findIndex(h => h.id == propostaId);
             
             if (index === -1) {
                 alert("Errore: Proposta non trovata.");
                 return;
             }
 
-            const cat = history[index].type; // 'base', 'pro', o 'vip'            let updates = { history: history };
+            const proposta = currentData.history[index];
+            const puntiDaAggiungere = parseInt(proposta.amount) || 0;
 
             if (azione === 'accetta') {
-                // 1. Aggiorna lo stato della proposta
-                history[index].status = "approved";
-                history[index].note = "✔️ ACCETTATA - " + history[index].note;
+                // Cambia lo stato e aggiunge il segno di spunta
+                currentData.history[index].status = "approved";
+                currentData.history[index].note = "✔️ ACCETTATA - " + currentData.history[index].note;
 
-                // 2. Aggiunge i punti in automatico!
-                if (cat === 'base') updates.baseTokens = (currentData.baseTokens || 0) + 1;
-                if (cat === 'pro') updates.proTokens = (currentData.proTokens || 0) + 1;
-                if (cat === 'vip') updates.vipTokens = (currentData.vipTokens || 0) + 1;
-                
-                try {
-                    // Aggiorna Firebase con i nuovi punti e il nuovo storico
-                    await update(dbRef, updates);
-                    alert(`✅ Punto ${cat.toUpperCase()} assegnato con successo in automatico!`);
-                } catch (error) {
-                    console.error(error);
-                    alert("Errore nell'aggiornamento dei punti.");
-                }
+                // Aggiunge fisicamente i punti al totale dell'alunno!
+                currentData.baseTokens = (currentData.baseTokens || 0) + puntiDaAggiungere;
+                currentData.totalTokens = (currentData.totalTokens || 0) + puntiDaAggiungere;
+
+                alert(`✅ Hai accettato la proposta e assegnato ${puntiDaAggiungere} punti!`);
                 
             } else if (azione === 'rifiuta') {
-                // Rifiuta: cambia la scritta nello storico
-                history[index].status = "rejected";
-                history[index].note = "❌ RIFIUTATA - " + history[index].note;
-                
-                try {
-                    // Aggiorna Firebase
-                    await update(dbRef, updates);
-                    alert("❌ Proposta rifiutata. Lo storico è stato aggiornato.");
-                } catch (error) {
-                    console.error(error);
-                    alert("Errore nell'aggiornamento.");
-                }
+                // ELIMINA TOTALMENTE la proposta dallo storico usando "splice"
+                currentData.history.splice(index, 1);
+                alert("❌ Proposta rifiutata ed eliminata dallo storico.");
             }
-        } // <-- LA PARENTESI DELLA FUNZIONE ORA SI CHIUDE QUI
+
+            // Usa la tua funzione nativa infallibile per salvare su Firebase!
+            saveDataToCloud(); 
+            updateDisplay();   // Aggiorna il numero grande dei punti in alto
+            updateHistory();   // Aggiorna la lista
+        }        
+    } // <-- LA PARENTESI DELLA FUNZIONE ORA SI CHIUDE QUI
 
         // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
         window.inviaProposta = inviaProposta;

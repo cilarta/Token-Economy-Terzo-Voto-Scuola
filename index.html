@@ -713,20 +713,108 @@
                 rank.style.color = "#9ca3af";
             }
         }
-        // Funzione per inviare la proposta
-        function inviaProposta() {
+// --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
+
+        // 1. L'alunno invia la proposta e la salva su Firebase
+        async function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;
+            const cat = document.getElementById('catPunti').value; // BASE, PRO, VIP
             const motivo = document.getElementById('motivo').value;
             
             if (motivo.trim() === "") {
-                alert("Per favore, scrivi una motivazione!");
+                alert("Ehi! Scrivi prima una motivazione!");
                 return;
             }
             
-            alert("Ottimo lavoro! La tua proposta è stata inviata. Il maestro la valuterà presto! ⭐");
-            document.getElementById('motivo').value = ""; // Pulisce il campo
+            if (!dbRef) {
+                alert("Errore: Seleziona prima un alunno dal menu!");
+                return;
+            }
+
+            const etichetta = tipo === 'auto' ? '🙋 Autocandidatura' : '🤝 Segnalazione';
+            
+            // Creiamo l'oggetto della proposta per Firebase
+            const nuovaProposta = {
+                date: new Date().toLocaleString(),
+                type: cat.toLowerCase(), // base, pro, o vip
+                amount: 1,
+                note: `${etichetta}: ${motivo}`,
+                status: "pending", // ⏳ Indica che è in attesa di approvazione
+                id: Date.now()     // Un ID unico per trovarla dopo
+            };
+
+            // Aggiungiamo la proposta allo storico locale e salviamo su Firebase
+            const updatedHistory = [nuovaProposta, ...(currentData.history || [])];
+            
+            try {
+                // Invia a Firebase
+                await set(ref(db, `students/${currentStudentId}/history`), updatedHistory);
+                alert("Proposta inviata al Maestro! Ora è nello Storico in attesa di approvazione.");
+                document.getElementById('motivo').value = ""; // Svuota la casella
+            } catch (error) {
+                console.error("Errore Firebase:", error);
+                alert("Errore nell'invio. Riprova!");
+            }
         }
 
+        // 2. Il maestro valuta la proposta (Protetto da Password e collegato a Firebase)
+        async function valutaProposta(propostaId, azione) {
+            // Usa la password amministratore già definita in alto nel tuo codice
+            const passwordInserita = prompt("🔒 Accesso Riservato al Maestro. Inserisci la password:");
+            
+            if (passwordInserita !== ADMIN_PASSWORD) {
+                alert("❌ Password errata! Riprova.");
+                return;
+            }
+
+            // Troviamo la proposta nel database scaricato
+            const history = [...(currentData.history || [])];
+            const index = history.findIndex(h => h.id == propostaId);
+            
+            if (index === -1) {
+                alert("Errore: Proposta non trovata.");
+                return;
+            }
+
+            const cat = history[index].type; // 'base', 'pro', o 'vip'
+            let updates = { history: history };
+
+            if (azione === 'accetta') {
+                // 1. Aggiorna lo stato della proposta
+                history[index].status = "approved";
+                history[index].note = "✔️ ACCETTATA - " + history[index].note;
+
+                // 2. Aggiunge i punti in automatico!
+                if (cat === 'base') updates.baseTokens = (currentData.baseTokens || 0) + 1;
+                if (cat === 'pro') updates.proTokens = (currentData.proTokens || 0) + 1;
+                if (cat === 'vip') updates.vipTokens = (currentData.vipTokens || 0) + 1;
+                
+                try {
+                    // Aggiorna Firebase con i nuovi punti e il nuovo storico
+                    await update(dbRef, updates);
+                    alert(`✅ Punto ${cat.toUpperCase()} assegnato con successo in automatico!`);
+                } catch (error) {
+                    console.error(error);
+                    alert("Errore nell'aggiornamento dei punti.");
+                }
+                
+            } else if (azione === 'rifiuta') {
+                // Rifiuta: cambia la scritta nello storico
+                history[index].status = "rejected";
+                history[index].note = "❌ RIFIUTATA - " + history[index].note;
+                
+                try {
+                    // Aggiorna Firebase
+                    await update(dbRef, updates);
+                    alert("❌ Proposta rifiutata. Lo storico è stato aggiornato.");
+                } catch (error) {
+                    console.error(error);
+                    alert("Errore nell'aggiornamento.");
+                }
+            }
+        }
+        // --- FINE NUOVO SISTEMA PROPOSTE ---
+        
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
     </script>

@@ -799,6 +799,8 @@
             try {
                 // Invia a Firebase
                 await set(ref(db, `students/${currentStudentId}/history`), updatedHistory);
+                currentData.history = updatedHistory; // Aggiorna i dati nella memoria locale
+        updateHistory();                      // Ridisegna subito il cassetto e lo storico!
                 alert("Proposta inviata al Maestro! Ora è nello Storico in attesa di approvazione.");
                 document.getElementById('motivo').value = ""; // Svuota la casella
             } catch (error) {
@@ -807,13 +809,11 @@
             }
         }
 
-        // 2. Il maestro valuta la proposta (Protetto da Password e collegato a Firebase)
+// 2. Il maestro valuta la proposta (Protetto dal pannello sbloccato)
         async function valutaProposta(propostaId, azione) {
-            // Usa la password amministratore già definita in alto nel tuo codice
-            const passwordInserita = prompt("🔒 Accesso Riservato al Maestro. Inserisci la password:");
-            
-            if (passwordInserita !== ADMIN_PASSWORD) {
-                alert("❌ Password errata! Riprova.");
+            // Verifica che il Maestro abbia sbloccato l'area segreta
+            if (!isAdminUnlocked) {
+                alert("❌ Errore: Sblocca l'Area Docente con la password prima di valutare!");
                 return;
             }
 
@@ -826,8 +826,7 @@
                 return;
             }
 
-            const cat = history[index].type; // 'base', 'pro', o 'vip'
-            let updates = { history: history };
+            const cat = history[index].type; // 'base', 'pro', o 'vip'            let updates = { history: history };
 
             if (azione === 'accetta') {
                 // 1. Aggiorna lo stato della proposta

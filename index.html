@@ -113,9 +113,9 @@
         .vip-header { border-bottom-color: var(--purple) !important; color: var(--purple); background: var(--purple-bg); padding: 15px; border-radius: 10px; }
         .penalty-header { border-bottom-color: var(--danger) !important; color: var(--danger); background: #fff1f2; padding: 15px; border-radius: 10px; }
 
-/* STATUS E STORICO COLORATI (Versione Compatta) */
-        .status { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 12px; font-weight: 600; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
+/* STATUS E STORICO COLORATI (Versione Extra Compatta completa di colori) */
+        .status { background: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border: 2px solid var(--gray-200); border-radius: 6px; font-size: 11px; font-weight: 600; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
         
         /* Colora i singoli blocchi status */
         .status-item:nth-child(1) { background: var(--purple-bg); border-color: #d8b4fe; } /* VIP */
@@ -125,20 +125,22 @@
 
         .status-item span:last-child { font-size: 24px; background: white; padding: 5px 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        .history-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
-        .history-list::-webkit-scrollbar { width: 8px; }
+        /* Lista Storico */
+        .history-list { max-height: 200px; overflow-y: auto; padding-right: 10px; font-size: 13px;}
+        .history-list::-webkit-scrollbar { width: 6px; }
         .history-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f8fafc; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;}
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; margin-bottom: 6px; border-left: 4px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;}
         .history-item:hover { transform: translateX(5px); background: white; }
         
-        .history-type { padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .history-type { padding: 3px 8px; border-radius: 5px; font-weight: 900; font-size: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
+        /* Colori etichette storico */
         .type-base { background: linear-gradient(45deg, var(--success), #34d399); color: white; }
         .type-pro { background: linear-gradient(45deg, var(--azure), #38bdf8); color: white; }
         .type-vip { background: linear-gradient(45deg, var(--purple), #c084fc); color: white; }
         .type-penalty { background: linear-gradient(45deg, var(--gray-700), #9ca3af); color: white; }
-
+        
         /* ADMIN SECTION DIVERTENTE MA PROFESSIONALE */
         .edit-section { 
             background: linear-gradient(to right, #fffbeb, #fef3c7); 

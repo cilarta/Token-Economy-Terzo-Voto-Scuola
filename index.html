@@ -6,82 +6,92 @@
     <title>Token Economy - Sax Scuola</title>
     <style>
         :root {
-            --primary: #3182f6; 
-            --success: #10b981; 
-            --danger: #ef4444; 
-            
+            --primary: #3182f6;
+            --success: #10b981;
+            --danger: #ef4444;
             /* NUOVI COLORI */
-            --azure: #0ea5e9;    /* Colore Pro */
+            --azure: #0ea5e9; /* Colore Pro */
             --azure-bg: #e0f2fe;
-            --purple: #9333ea;   /* Colore VIP */
+            --purple: #9333ea; /* Colore VIP */
             --purple-bg: #f3e8ff;
             --orange: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
 
-            --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-700: #374151; --gray-900: #111827;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-            /* Sfondo generale piÃ¹ vivace */
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
-            color: var(--gray-900); 
-            padding: 20px; 
-        }
-        .container { max-width: 1200px; margin: 0 auto; }
         
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            /* Sfondo generale più vivace */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
+            color: var(--gray-900);
+            padding: 20px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
         /* LOGIN OVERLAY SUPER COLORATO */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 1000; display: flex;
-            align-items: center; justify-content: center; flex-direction: column;
+            z-index: 1000; display: flex; align-items: center; justify-content: center; flex-direction: column;
         }
         .login-box {
-            background: rgba(255, 255, 255, 0.95); padding: 40px 30px; border-radius: 20px; 
+            background: rgba(255, 255, 255, 0.95); padding: 40px 30px; border-radius: 20px;
             text-align: center; width: 90%; max-width: 450px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            border: 4px solid #fde047;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 4px solid #fde047;
         }
-        .login-box h2 { color: var(--purple); font-size: 28px; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .login-box input { 
-            width: 100%; padding: 15px; font-size: 18px; margin: 20px 0; 
-            border: 3px solid var(--primary); border-radius: 12px; text-align: center;
-            background: #f8fafc; transition: all 0.3s ease;
+        .login-box h2 {
+            color: var(--purple); font-size: 28px; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        .login-box input:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3); }
-        
+        .login-box input {
+            width: 100%; padding: 15px; font-size: 18px; margin: 20px 0;
+            border: 3px solid var(--primary); border-radius: 12px; text-align: center; background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .login-box input:focus {
+            outline: none; border-color: var(--purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
+        }
+
         /* HEADER SFUMATO */
-        header { 
+        header {
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            padding: 25px; border-radius: 15px; margin-bottom: 30px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08); 
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-            border: 3px solid white;
+            padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border: 3px solid white;
         }
         h1 { font-size: 26px; margin-bottom: 5px; color: #1e3a8a; text-shadow: 1px 1px 0px white; }
-        .student-name-display { color: #4338ca; font-weight: 900; font-size: 1.4em; background: rgba(255,255,255,0.6); padding: 5px 15px; border-radius: 10px; display: inline-block; margin-top: 5px;}
-        .token-display { font-size: 28px; color: #b91c1c; font-weight: 900; margin: 10px 0; background: white; padding: 10px 20px; border-radius: 12px; border: 2px dashed #b91c1c; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
+        .student-name-display {
+            color: #4338ca; font-weight: 900; font-size: 1.4em; background: rgba(255,255,255,0.6); padding: 5px 15px; border-radius: 10px; display: inline-block; margin-top: 5px;
+        }
+        .token-display {
+            font-size: 28px; color: #b91c1c; font-weight: 900; margin: 10px 0;
+            background: white; padding: 10px 20px; border-radius: 12px; border: 2px dashed #b91c1c; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
         /* LAYOUT GRIGLIE */
         .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-top: 15px; }
-        
+
         /* CARD INTERATTIVE CON EFFETTI */
         .action-card {
             padding: 20px 15px; border-radius: 16px; text-align: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            height: 100%; cursor: not-allowed; opacity: 0.8; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: white; border: 3px solid transparent; min-height: 180px;
-            position: relative; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 100%;
+            cursor: not-allowed; opacity: 0.8; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: white; border: 3px solid transparent; min-height: 180px; position: relative; overflow: hidden;
         }
-        
-        /* Quando sbloccato */
+        /* Quando sbloccato... */
         body.admin-unlocked .action-card { cursor: pointer; opacity: 1; }
         body.admin-unlocked .action-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 12px 20px rgba(0,0,0,0.15); }
         body.admin-unlocked .action-card:active { transform: scale(0.95); }
-
+        
         .card-desc { font-size: 14px; font-weight: 600; line-height: 1.4; margin: 10px 0; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
-        .card-title { font-weight: 900; font-size: 16px; margin-bottom: 5px; color: var(--gray-900); text-transform: uppercase; letter-spacing: 0.5px;}
-        .card-badge { padding: 6px 16px; border-radius: 25px; font-weight: 900; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: absolute; top: -10px; right: -10px; transform: rotate(10deg); border: 2px solid white;}
+        .card-title { font-weight: 900; font-size: 16px; margin-bottom: 5px; color: var(--gray-900); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-badge {
+            padding: 6px 16px; border-radius: 25px; font-weight: 900; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            position: absolute; top: -10px; right: -10px; transform: rotate(10deg); border: 2px solid white;
+        }
 
         /* Colori Card Aggiornati e Potenziati */
         /* BASE - VERDE */
@@ -102,37 +112,48 @@
         /* PENALITA - ROSSO */
         .style-penalty { border-color: #fca5a5; background: linear-gradient(to bottom, #fff1f2, #ffffff); color: var(--danger); }
         .style-penalty .card-badge { background: white; color: var(--danger); border: 3px solid var(--danger); transform: rotate(-10deg); }
-        .style-penalty:hover { border-color: var(--danger); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); background: #fee2e2;}
+        .style-penalty:hover { border-color: var(--danger); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); background: #fee2e2; }
 
         /* SEZIONI GENERALI */
-        .main-section { background: white; padding: 25px; border-radius: 15px; margin-bottom: 35px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; }
-        .main-section h2 { font-size: 22px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 3px dashed var(--gray-200); display: flex; align-items: center; gap: 10px;}
+        .main-section {
+            background: white; padding: 25px; border-radius: 15px; margin-bottom: 35px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;
+        }
+        .main-section h2 { font-size: 22px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 3px dashed var(--gray-200); display: flex; align-items: center; gap: 10px; }
         
-        .base-header { border-bottom-color: var(--success) !important; color: var(--success); background: #ecfdf5; padding: 15px; border-radius: 10px; }
-        .pro-header { border-bottom-color: var(--azure) !important; color: var(--azure); background: var(--azure-bg); padding: 15px; border-radius: 10px; }
-        .vip-header { border-bottom-color: var(--purple) !important; color: var(--purple); background: var(--purple-bg); padding: 15px; border-radius: 10px; }
-        .penalty-header { border-bottom-color: var(--danger) !important; color: var(--danger); background: #fff1f2; padding: 15px; border-radius: 10px; }
+        .base-header { border-bottom-color: var(--success) !important; color: var(--success); background: #ecfdf5; padding: 15px; border-radius: 10px;}
+        .pro-header { border-bottom-color: var(--azure) !important; color: var(--azure); background: var(--azure-bg); padding: 15px; border-radius: 10px;}
+        .vip-header { border-bottom-color: var(--purple) !important; color: var(--purple); background: var(--purple-bg); padding: 15px; border-radius: 10px;}
+        .penalty-header { border-bottom-color: var(--danger) !important; color: var(--danger); background: #fff1f2; padding: 15px; border-radius: 10px;}
 
-/* STATUS E STORICO COLORATI (Versione Extra Compatta completa di colori) */
-        .status { background: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border: 2px solid var(--gray-200); border-radius: 6px; font-size: 18px; font-weight: 600; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
-        
+        /* STATUS E STORICO COLORATI */
+        /* Versione Extra Compatta completa di colori */
+        .status {
+            background: white; padding: 10px; border-radius: 10px; margin-bottom: 15px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .status-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 5px 8px; border: 2px solid var(--gray-200); border-radius: 6px; font-size: 18px; font-weight: 600; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
         /* Colora i singoli blocchi status */
         .status-item:nth-child(1) { background: var(--purple-bg); border-color: #d8b4fe; } /* VIP */
         .status-item:nth-child(2) { background: var(--azure-bg); border-color: #7dd3fc; } /* PRO */
         .status-item:nth-child(3) { background: #ecfdf5; border-color: #6ee7b7; } /* BASE */
         .status-item:nth-child(4) { background: #fff1f2; border-color: #fca5a5; } /* PENALITA */
-
         .status-item span:last-child { font-size: 24px; background: white; padding: 5px 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
         /* Lista Storico */
-        .history-list { max-height: 200px; overflow-y: auto; padding-right: 10px; font-size: 13px;}
+        .history-list { max-height: 200px; overflow-y: auto; padding-right: 10px; font-size: 13px; }
         .history-list::-webkit-scrollbar { width: 6px; }
         .history-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; margin-bottom: 6px; border-left: 4px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;}
+        .history-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 10px; background: #f8fafc; border-radius: 8px; margin-bottom: 6px; border-left: 4px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;
+        }
         .history-item:hover { transform: translateX(5px); background: white; }
-        
         .history-type { padding: 3px 8px; border-radius: 5px; font-weight: 900; font-size: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
         /* Colori etichette storico */
@@ -140,20 +161,20 @@
         .type-pro { background: linear-gradient(45deg, var(--azure), #38bdf8); color: white; }
         .type-vip { background: linear-gradient(45deg, var(--purple), #c084fc); color: white; }
         .type-penalty { background: linear-gradient(45deg, var(--gray-700), #9ca3af); color: white; }
-        
+
         /* ADMIN SECTION DIVERTENTE MA PROFESSIONALE */
-        .edit-section { 
-            background: linear-gradient(to right, #fffbeb, #fef3c7); 
-            padding: 25px; border-radius: 15px; margin: 35px 0; 
-            border: 3px dashed var(--orange); box-shadow: 0 8px 15px rgba(0,0,0,0.05); 
+        .edit-section {
+            background: linear-gradient(to right, #fffbeb, #fef3c7); padding: 25px; border-radius: 15px; margin: 35px 0; border: 3px dashed var(--orange); box-shadow: 0 8px 15px rgba(0,0,0,0.05);
         }
         .edit-controls { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
-        .reason-input { width: 100%; padding: 15px; border: 2px solid #fbbf24; border-radius: 10px; font-size: 16px; margin-bottom: 15px; background: white;}
+        .reason-input { width: 100%; padding: 15px; border: 2px solid #fbbf24; border-radius: 10px; font-size: 16px; margin-bottom: 15px; background: white; }
 
         /* UI GENERALE PULSANTI */
         input, select, button { padding: 10px 18px; border-radius: 10px; font-size: 15px; border: 1px solid #ddd; outline: none; transition: all 0.2s; }
         select { font-weight: bold; cursor: pointer; }
-        button { cursor: pointer; border: none; color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button {
+            cursor: pointer; border: none; color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
         button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); filter: brightness(1.1); }
         button:active { transform: translateY(1px); }
         
@@ -161,8 +182,11 @@
         .btn-success { background: linear-gradient(45deg, var(--success), #34d399); }
         .btn-danger { background: linear-gradient(45deg, var(--danger), #f87171); }
         .btn-logout { background: linear-gradient(45deg, var(--gray-700), #4b5563); margin-left: 10px;}
-        
-        #lockMessage { text-align: center; background: linear-gradient(to right, #fef08a, #fde047); color: #854d0e; padding: 15px; border-radius: 12px; margin-bottom: 25px; display: block; border: 2px solid #eab308; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.05); animation: pulse 2s infinite; }
+
+        #lockMessage {
+            text-align: center; background: linear-gradient(to right, #fef08a, #fde047); color: #854d0e; padding: 15px; border-radius: 12px; margin-bottom: 25px; display: block; border: 2px solid #eab308; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            animation: pulse 2s infinite;
+        }
         
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
@@ -171,327 +195,480 @@
         }
 
         .footer { background: white; padding: 20px; border-radius: 10px; text-align: center; font-size: 13px; color: var(--gray-700); margin-top: 30px; border-top: 4px solid var(--primary); }
-        
+
         /* TABLE STYLES FOR REWARDS COLORATA */
         .rewards-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
-        .rewards-table th, .rewards-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 15px;}
+        .rewards-table th, .rewards-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 15px; }
         .rewards-table th { background: linear-gradient(to right, #1e293b, #334155); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 1px; }
         .rewards-table tr:nth-child(even) { background-color: #f8fafc; }
         .rewards-table tr:nth-child(odd) { background-color: #ffffff; }
         .rewards-table tr:hover { background-color: #e0f2fe; }
         .rewards-table tr:last-child td { border-bottom: none; }
-        .rewards-note { margin-top: 25px; padding: 20px; background: linear-gradient(to right, #dbeafe, #eff6ff); border-left: 6px solid var(--primary); border-radius: 10px; color: #1e3a8a; font-size: 15px; line-height: 1.6; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-       
+        
+        .rewards-note {
+            margin-top: 25px; padding: 20px; background: linear-gradient(to right, #dbeafe, #eff6ff); border-left: 6px solid var(--primary); border-radius: 10px; color: #1e3a8a; font-size: 15px; line-height: 1.6; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
         /* SEZIONE INTERATTIVA */
-        .interactive-card { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--purple); }
+        .interactive-card {
+            background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--purple);
+        }
         .interactive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .input-group { margin-bottom: 12px; }
         .input-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--gray-700); }
-        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 10px; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; }
-        
-        .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; padding: 10px; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit;
+        }
+        .btn-send {
+            width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px;
+        }
         .btn-send:hover { transform: scale(1.02); }
 
+        /* RUOTA DELLA FORTUNA */
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: 20px auto; }
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(from -36deg,
+                #94a3b8 0deg 72deg,    /* 1 pt - Grigio */
+                #fbd38d 72deg 144deg,  /* 2 pt - Arancio */
+                #86efac 144deg 216deg, /* 3 pt - Verde */
+                #93c5fd 216deg 288deg, /* 4 pt - Blu */
+                #d8b4fe 288deg 360deg  /* 5 pt - Viola */
+            );
+            transition: transform 3.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            border: 4px solid #1e293b;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+        .wheel-pointer {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 15px solid transparent; border-right: 15px solid transparent;
+            border-top: 25px solid #ef4444; z-index: 10;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));
+        }
+        .wheel-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 35px; height: 35px; background: white; border-radius: 50%;
+            border: 4px solid #1e293b; z-index: 5;
+        }
+        .wheel-legend { display: flex; justify-content: center; gap: 12px; font-size: 12px; margin-top: 15px; flex-wrap: wrap; font-weight: bold; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .color-box { width: 14px; height: 14px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+        /* NEGOZIO TEMI */
+        .theme-store {
+            background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #14b8a6;
+        }
+        .theme-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px;
+        }
+        .theme-card {
+            border: 2px solid var(--gray-200); border-radius: 12px; padding: 15px 10px; text-align: center; transition: all 0.2s; background: #f8fafc;
+        }
+        .theme-card.owned { border-color: #10b981; background: #ecfdf5; }
+        .theme-card.active { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); transform: scale(1.02); }
+        .theme-icon { font-size: 30px; margin-bottom: 5px; display: block; }
+        .theme-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--gray-900); }
+        .theme-price { font-size: 13px; color: #ef4444; font-weight: bold; margin-bottom: 10px; }
+        .theme-btn {
+            padding: 8px 12px; font-size: 12px; border-radius: 6px; width: 100%; border: none; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .btn-buy { background: #f59e0b; color: white; }
+        .btn-buy:hover { background: #ea580c; }
+        .btn-use { background: #3b82f6; color: white; }
+        .btn-use:hover { background: #2563eb; }
+        .btn-active { background: #10b981; color: white; cursor: default; }
+
+        /* VARIABILI TEMI DINAMICI */
+        body.theme-dark {
+            background: linear-gradient(135deg, #1e1e2f 0%, #000000 100%);
+            color: #f8fafc;
+        }
+        body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
+            background: #2d2d44; border-color: #4b5563; color: #f8fafc;
+        }
+        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #f8fafc !important; }
+        body.theme-dark .action-card { background: #1e1e2f; color: #f8fafc; }
+        body.theme-dark .history-item { background: #1e1e2f; border-color: #4b5563; }
+        
+        body.theme-neon {
+            background: #0f172a; color: #0ea5e9;
+        }
+        body.theme-neon .main-section, body.theme-neon .interactive-card, body.theme-neon .theme-store {
+            background: #1e293b; border: 2px solid #0ea5e9; box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+        }
+        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #38bdf8 !important; }
+        body.theme-neon .action-card { background: #0f172a; border-color: #0ea5e9; color: #e2e8f0; }
+        body.theme-neon .history-item { background: #0f172a; border-left-color: #0ea5e9; color: #e2e8f0; }
+
+        body.theme-forest {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #064e3b;
+        }
+        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
+            background: rgba(255,255,255,0.9); border-color: #6ee7b7;
+        }
+        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #047857 !important; }
+
         /* AVATAR EVOLUTIVO */
-        .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
-        .avatar-emoji { font-size: 50px; display: block; }
-        .avatar-rank { font-weight: 800; color: #166534; font-size: 14px; text-transform: uppercase; }
+        .avatar-container {
+            text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0;
+        }
+        .avatar-emoji { font-size: 85px; display: block; margin-bottom: 5px; }
+        .avatar-rank { font-weight: 900; color: #166534; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+
     </style>
 </head>
 <body>
 
+    <!-- OVERLAY DI LOGIN INIZIALE -->
     <div id="loginOverlay">
         <div class="login-box">
-            <h2>ðŸŽ· Terzo Voto ðŸŽ¶<br><span style="font-size: 20px; color: #475569;">Strumento Musicale</span></h2>
-            <p style="font-size: 16px; color: #334155; margin-top: 10px;">âœ¨ Inserisci il Nickname dell'alunno ðŸ§‘ðŸŽ“<br><small style="color:#64748b;">(es. petacciatoWow)</small></p>
-            <input type="text" id="studentNameInput" placeholder="âœï¸ Scrivi qui il nickname segreto">
-            <button class="btn-primary" style="width:100%; font-size: 18px; padding: 15px; border-radius: 12px;" onclick="window.loginStudent()">ðŸš€ ENTRA NEL REGISTRO</button>
+            <h2>🏆 Terzo Voto <br><span style="font-size: 20px; color: #475569;">Strumento Musicale</span></h2>
+            <p style="font-size: 16px; color: #334155; margin-top: 10px;">Inserisci il Nickname dell'alunno: <br><small style="color:#64748b;">(es. petacciatoWow)</small></p>
+            <input type="text" id="studentNameInput" placeholder="Scrivi qui il nickname segreto...">
+            <button class="btn-primary" style="width:100%; font-size: 18px; padding: 15px; border-radius: 12px;" onclick="window.loginStudent()">ENTRA NEL REGISTRO</button>
         </div>
     </div>
 
     <div class="container" id="appContainer" style="display:none;">
         <header>
             <div>
-                <h1>ðŸŽµ Punti per Terzo Voto ðŸŽ·</h1>
-                <p class="student-name-display">ðŸ§‘ðŸŽ“ Alunno: <span id="displayStudentName">...</span></p>
+                <h1>🏆 Punti per Terzo Voto </h1>
+                <p class="student-name-display">👤 Alunno: <span id="displayStudentName">...</span></p>
             </div>
             <div style="text-align: right;">
-                <div class="token-display">ðŸ’Ž Punteggio: <span id="totalTokens">...</span></div>
-                <div style="margin-top: 15px; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
-                    <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px;">ðŸŒŸ Evoluzione Avatar:</strong>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                        <div>ðŸ¥š <b>0 - 30 pt</b>: Livello 1</div>
-                        <div>ðŸ£ <b>31 - 60 pt</b>: Livello 2</div>
-                        <div>ðŸ¥ <b>61 - 90 pt</b>: Livello 3</div>
-                        <div>ðŸŽ·ðŸ‘‘ <b>91 - 180 pt</b>: Livello 4</div>
-                    </div>
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold;">
-                        ðŸ‰ 181+ pt: Livello Bonus Supremo!
-                    </div>
-                </div>
-                <button class="btn-logout" onclick="window.logout()">ðŸšª Esci / Cambia Alunno</button>
+                <div class="token-display">Punteggio: <span id="totalTokens">...</span></div>
+                <button class="btn-logout" onclick="window.logout()">Esci / Cambia Alunno</button>
             </div>
         </header>
 
-        <div id="lockMessage">ðŸ”’ <strong>ModalitÃ  sola lettura attiva!</strong><br>ðŸ‘¨ðŸ« Inserisci la password per assegnare i punti.</div>
+        <div id="lockMessage">
+            🔒 <strong>Modalità sola lettura attiva!</strong><br> Inserisci la password per assegnare i punti.
+        </div>
 
+        <!-- RIEPILOGO PUNTI -->
         <div class="status">
-            <div class="status-item"><span>âœ… Voto BASE:</span><span id="baseTokens" style="color:var(--success);">0</span></div>
-            <div class="status-item"><span>ðŸŒŸ Voto PRO:</span><span id="proTokens" style="color:var(--azure);">0</span></div>
-            <div class="status-item"><span>ðŸ† Voto VIP:</span><span id="vipTokens" style="color:var(--purple);">0</span></div>
-            <div class="status-item"><span>âš ï¸ PenalitÃ :</span><span id="penaltyTokens" style="color:var(--danger);">0</span></div>
+            <div class="status-item"><span>🌟 Voto VIP</span><span id="vipTokens" style="color:var(--purple);">0</span></div>
+            <div class="status-item"><span>🚀 Voto PRO</span><span id="proTokens" style="color:var(--azure);">0</span></div>
+            <div class="status-item"><span>✅ Voto BASE</span><span id="baseTokens" style="color:var(--success);">0</span></div>
+            <div class="status-item"><span>⚠️ Penalità</span><span id="penaltyTokens" style="color:var(--danger);">0</span></div>
         </div>
 
+        <!-- DASHBOARD LATERALE: STORICO E AVATAR -->
         <div class="main-section" style="background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
-            <h2 style="font-size: 18px; margin-bottom: 15px;">ðŸ“œ ðŸ“Š Registro Storico delle AttivitÃ  ðŸ•µï¸â™‚ï¸</h2>
-            <div class="history-list" id="historyList">â³ Caricamento dati o seleziona un alunno...</div>
-        </div>
-        
-        <div class="avatar-container">
-            <span class="avatar-emoji" id="avatarIcon">ðŸ¥š</span>
-            <div class="avatar-rank" id="avatarRank">Grado: Uovo Novizio</div>
-            <small>Accumula punti per evolverti!</small>
+            <h2 style="font-size: 18px; margin-bottom: 15px;">📖 Registro Storico delle Attività </h2>
+            <div class="history-list" id="historyList">
+                Caricamento dati o seleziona un alunno...
+            </div>
+            
+            <div class="avatar-container">
+                <span class="avatar-emoji" id="avatarIcon">🥚</span>
+                <div class="avatar-rank" id="avatarRank">Grado: Uovo Novizio</div>
+                <small>Accumula punti per evolverti!</small>
+                
+                <!-- INIZIO LEGENDA -->
+                <div style="max-width: 500px; margin: 15px auto 0; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
+                    <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px; text-align: center;">📈 Evoluzione Avatar</strong>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px;">
+                        <div>🥚 <b>0 - 30 pt:</b> Livello 1</div>
+                        <div>🐣 <b>31 - 60 pt:</b> Livello 2</div>
+                        <div>🌱 <b>61 - 90 pt:</b> Livello 3</div>
+                        <div>🦅 <b>91 - 180 pt:</b> Livello 4</div>
+                    </div>
+                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold; text-align: center;">
+                        👑 181+ pt: Livello Bonus Supremo!
+                    </div>
+                </div>
+                <!-- FINE LEGENDA -->
+            </div>
+
+            <!-- INIZIO RUOTA DELLA FORTUNA -->
+            <div class="interactive-card" style="text-align: center; border-top: 5px solid #f59e0b;">
+                <h3 style="margin-top:0; color: #b45309;">🎰 La Ruota della Fortuna</h3>
+                <p style="font-size: 13px; color: var(--gray-600);">Costo: 3 Punti. Tenta la sorte (1 giro ogni 24h)!</p>
+
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="spinningWheel"></div>
+                    <div class="wheel-center"></div>
+                </div>
+
+                <div class="wheel-legend">
+                    <div class="legend-item"><div class="color-box" style="background:#94a3b8;"></div>1 pt (3%)</div>
+                    <div class="legend-item"><div class="color-box" style="background:#fbd38d;"></div>2 pt (7%)</div>
+                    <div class="legend-item"><div class="color-box" style="background:#86efac;"></div>3 pt (80%)</div>
+                    <div class="legend-item"><div class="color-box" style="background:#93c5fd;"></div>4 pt (7%)</div>
+                    <div class="legend-item"><div class="color-box" style="background:#d8b4fe;"></div>5 pt (3%)</div>
+                </div>
+
+                <button id="btnRuota" class="btn-send" style="background: linear-gradient(45deg, #f59e0b, #ea580c); margin-top: 20px; font-size: 16px;" onclick="window.giraRuota()">Gira la Ruota (-3 Punti) 🎲</button>
+                <div id="ruotaTimer" style="font-size: 13px; color: #ef4444; margin-top: 10px; font-weight: bold;"></div>
+            </div>
+            <!-- FINE RUOTA DELLA FORTUNA -->
+
+            <!-- INIZIO NEGOZIO TEMI -->
+            <div class="theme-store">
+                <h3 style="margin-top:0; color: #0f766e;">🎨 Negozio Personalizzazioni</h3>
+                <p style="font-size: 13px; color: var(--gray-600);">Spendi i tuoi punti per sbloccare nuovi colori per il tuo registro!</p>
+                
+                <div class="theme-grid" id="themeGrid">
+                    <!-- Generato via JS -->
+                </div>
+            </div>
+            <!-- FINE NEGOZIO TEMI -->
+
+            <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
+            <div class="interactive-card">
+                <h3 style="margin-top:0; color: var(--gray-800);">✉️ Area Proposte Alunni</h3>
+                <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
+                
+                <div class="interactive-grid">
+                    <div class="input-group">
+                        <label>Tipo di Proposta</label>
+                        <select id="tipoProposta">
+                            <option value="auto">Bonus per me (Autocandidatura)</option>
+                            <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Categoria Punti</label>
+                        <input type="number" id="puntiRichiesti" placeholder="N° Punti (min.1 max.100)" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Motivazione (Cosa hai fatto di speciale?)</label>
+                    <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
+                </div>
+                
+                <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 🚀</button>
+            </div>
+            <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
         </div>
 
-        <div class="interactive-card">
-            <h3 style="margin-top:0; color: var(--gray-800);">ðŸš€ Area Proposte Alunni</h3>
-            <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
-            
-            <div class="interactive-grid">
-                <div class="input-group">
-                    <label>Tipo di Proposta</label>
-                    <select id="tipoProposta">
-                        <option value="auto">Bonus per me (Autocandidatura)</option>
-                        <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
-                    </select>
-                </div>
-               
-                <div class="input-group">
-                    <label>Categoria Punti</label>
-<input type="number" id="puntiRichiesti" placeholder="NÂ° Punti" min="1" max="100" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">                </div>
-            </div>
-            
-            <div class="input-group">
-                <label>Motivazione (Cosa hai fatto di speciale?)</label>
-                <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
-            </div>
-            
-            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro ðŸ“©</button>
-        </div>
+        <!-- SEZIONE DOCENTE NASCOSTA -->
         <div class="edit-section">
-            <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">âš™ï¸ ðŸ‘¨ðŸ« Area Segreta Docente</h3>
+            <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">🎓 Area Segreta Docente</h3>
             <div class="edit-controls">
-                <input type="password" id="adminPassword" placeholder="ðŸ”‘ Password Docente">
-                <button class="btn-primary" onclick="window.checkPassword()">ðŸ”“ Sblocca Modifiche</button>
+                <input type="password" id="adminPassword" placeholder="🔑 Password Docente">
+                <button class="btn-primary" onclick="window.checkPassword()">Sblocca Modifiche</button>
             </div>
-            
+
             <div id="editContent" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
-            <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
-                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">â³ Proposte degli Alunni da Valutare</h4>
+                
+                <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
+                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">📥 Proposte degli Alunni da Valutare</h4>
                     <div id="pendingProposalsList">
                         <div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>
                     </div>
                 </div>
-                <input type="text" id="customReason" class="reason-input" placeholder="ðŸ“ Motivo personalizzato (es. ðŸŽ¸ Super Assolo al concerto!)">
+
+                <input type="text" id="customReason" class="reason-input" placeholder="✏️ Motivo personalizzato (es. Super Assolo al concerto!)">
                 <div class="edit-controls">
                     <select id="tokenType" style="background: #f8fafc; border: 2px solid #cbd5e1;">
-                        <option value="base">âœ… Base (+1)</option>
-                        <option value="pro">ðŸŒŸ Pro (+3)</option>
-                        <option value="vip">ðŸ† VIP (+8/10/15)</option>
+                        <option value="base">✅ Base (1)</option>
+                        <option value="pro">🚀 Pro (3)</option>
+                        <option value="vip">🌟 VIP (8/10/15)</option>
                     </select>
                     <input type="number" id="tokenAmount" value="1" style="width: 80px; border: 2px solid #cbd5e1; font-weight: bold;">
-                    <button class="btn-success" onclick="window.addTokenTyped()">âž• Assegna Manuale</button>
-                    <button class="btn-danger" onclick="window.removeTokenTyped()">âž– Rimuovi Manuale</button>
+                    <button class="btn-success" onclick="window.addTokenTyped()">➕ Assegna Manuale</button>
+                    <button class="btn-danger" onclick="window.removeTokenTyped()">➖ Rimuovi Manuale</button>
                 </div>
+                
                 <div class="edit-controls" style="margin-top: 15px; justify-content: flex-end;">
-                      <button class="btn-danger" style="background: #dc2626;" onclick="window.resetData()">ðŸ—‘ï¸ AZZERA TUTTI I PUNTI DELL'ALUNNO ðŸ§¨</button>
+                    <button class="btn-danger" style="background: #dc2626;" onclick="window.resetData()">⚠️ AZZERA TUTTI I PUNTI DELL'ALUNNO ⚠️</button>
                 </div>
             </div>
         </div>
 
+        <!-- CARDS LIVELLO BASE -->
         <div class="main-section" style="border: 2px solid var(--success);">
-            <h2 class="base-header">ðŸŸ¢ âœ… LIVELLO BASE (Routine Settimanale) ðŸ“…</h2>
+            <h2 class="base-header">✅ LIVELLO BASE (Routine Settimanale) </h2>
             <div class="card-container">
                 <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Studio settimanale eseguito correttamente')">
-                    <div class="card-title">ðŸ‘‚ Ascolto consigli docente</div>
-                    <div class="card-desc">Hai applicato subito i consigli della scorsa lezione (solo lezione individuale) ðŸ’¡</div>
+                    <div class="card-title">Ascolto consigli docente</div>
+                    <div class="card-desc">Hai applicato subito i consigli della scorsa lezione (solo lezione individuale)</div>
                     <div class="card-badge">+1</div>
                 </div>
                 <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali OK')">
-                    <div class="card-title">ðŸŽ’ Ha tutti i materiali</div>
-                    <div class="card-desc">Strumento + Spartito ðŸ“„ + Leggio perfetti!</div>
+                    <div class="card-title">Ha tutti i materiali</div>
+                    <div class="card-desc">Strumento + Spartito + Leggio perfetti!</div>
                     <div class="card-badge">+1</div>
                 </div>
                 <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
-                    <div class="card-title">ðŸŽ» Comportamento Orchestra</div>
-                    <div class="card-desc">Nessun disturbo durante le prove d'orchestra ðŸ¤«</div>
+                    <div class="card-title">Comportamento Orchestra</div>
+                    <div class="card-desc">Nessun disturbo durante le prove d'orchestra</div>
                     <div class="card-badge">+1</div>
                 </div>
             </div>
         </div>
 
+        <!-- CARDS LIVELLO PRO -->
         <div class="main-section" style="border: 2px solid var(--azure);">
-            <h2 class="pro-header">ðŸ”µ ðŸŒŸ LIVELLO PRO (Costanza Mensile) ðŸš€</h2>
+            <h2 class="pro-header">🚀 LIVELLO PRO (Costanza Mensile) </h2>
             <div class="card-container">
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
-                    <div class="card-title">ðŸ“š Sempre preparato</div>
-                    <div class="card-desc">Hai studiato in modo costante a ogni lezione del mese ðŸ’ª</div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante Mese')">
+                    <div class="card-title">Sempre preparato</div>
+                    <div class="card-desc">Hai studiato in modo costante a ogni lezione del mese</div>
                     <div class="card-badge">+3</div>
                 </div>
-                <div class="action-card style-pro" onclick="window.clickTask(2, 'pro', 'Frequenza Top (Mese)')">
-                    <div class="card-title">ðŸš¶â™‚ï¸ Frequenza costante</div>
-                    <div class="card-desc">1 Mese intero con massimo 3 assenze ðŸ“†</div>
+                <div class="action-card style-pro" onclick="window.clickTask(2, 'pro', 'Frequenza Top Mese')">
+                    <div class="card-title">Frequenza costante</div>
+                    <div class="card-desc">1 Mese intero con massimo 3 assenze</div>
                     <div class="card-badge">+2</div>
                 </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
-                    <div class="card-title">ðŸ”¥ Frequenza TOP</div>
-                    <div class="card-desc">1 Mese intero con massimo 1 assenza ðŸŽ¯</div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top Mese')">
+                    <div class="card-title">Frequenza TOP</div>
+                    <div class="card-desc">1 Mese intero con massimo 1 assenza</div>
                     <div class="card-badge">+3</div>
                 </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
-                    <div class="card-title">ðŸ˜‡ Comportamento mensile OK</div>
-                    <div class="card-desc">1 intero Mese senza penalitÃ  ðŸ‘¼</div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top Mese')">
+                    <div class="card-title">Comportamento mensile OK</div>
+                    <div class="card-desc">1 intero Mese senza penalità</div>
                     <div class="card-badge">+3</div>
                 </div>
             </div>
         </div>
 
+        <!-- CARDS LIVELLO VIP -->
         <div class="main-section" style="border: 2px solid var(--purple);">
-            <h2 class="vip-header">ðŸŸ£ ðŸ† LIVELLO VIP (Brani Solista & Orchestra) ðŸ‘‘</h2>
+            <h2 class="vip-header">🌟 LIVELLO VIP (Brani Solista/Orchestra) </h2>
             <div class="card-container">
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Solista: Brano 1 OK')">
-                    <div class="card-title">ðŸŽµ Solista: Brano 1</div>
-                    <div class="card-desc">Primo brano da solista pronto per l'esecuzione ðŸŽ¤</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Solista Brano 1 OK')">
+                    <div class="card-title">Solista Brano 1</div>
+                    <div class="card-desc">Primo brano da solista pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Solista: Brano 2 OK')">
-                    <div class="card-title">ðŸŽ¶ Solista: Brano 2</div>
-                    <div class="card-desc">Secondo brano da solista pronto per l'esecuzione ðŸŽ¸</div>
+                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Solista Brano 2 OK')">
+                    <div class="card-title">Solista Brano 2</div>
+                    <div class="card-desc">Secondo brano da solista pronto per l'esecuzione</div>
                     <div class="card-badge">+10</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(15, 'vip', 'Solista: Brano 3 OK')">
-                    <div class="card-title">ðŸ¤˜ Solista: Brano 3</div>
-                    <div class="card-desc">Terzo brano da solista pronto per l'esecuzione ðŸŽ‡</div>
+                <div class="action-card style-vip" onclick="window.clickTask(15, 'vip', 'Solista Brano 3 OK')">
+                    <div class="card-title">Solista Brano 3</div>
+                    <div class="card-desc">Terzo brano da solista pronto per l'esecuzione</div>
                     <div class="card-badge">+15</div>
                 </div>
-                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 1 - O Fortuna OK')">
-                    <div class="card-title">ðŸŽ¼ Orchestra: Brano 1</div>
-                    <div class="card-desc">O Fortuna pronto per l'esecuzione ðŸŽ»</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra Brano 1 - O Fortuna OK')">
+                    <div class="card-title">Orchestra Brano 1</div>
+                    <div class="card-desc">O Fortuna pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 2 - YMCA OK')">
-                    <div class="card-title">ðŸ•º Orchestra: Brano 2</div>
-                    <div class="card-desc">YMCA pronto per l'esecuzione ðŸŽº</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra Brano 2 - YMCA OK')">
+                    <div class="card-title">Orchestra Brano 2</div>
+                    <div class="card-desc">YMCA pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Orchestra: Brano 3 OK')">
-                    <div class="card-title">ðŸ§žâ™‚ï¸ Orchestra: Brano 3</div>
-                    <div class="card-desc">Friend Like Me pronto per l'esecuzione âœ¨</div>
+                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Orchestra Brano 3 OK')">
+                    <div class="card-title">Orchestra Brano 3</div>
+                    <div class="card-desc">Friend Like Me pronto per l'esecuzione</div>
                     <div class="card-badge">+10</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 4 OK')">
-                    <div class="card-title">ðŸ’ƒ Orchestra: Brano 4</div>
-                    <div class="card-desc">Mamma Mia pronto per l'esecuzione ðŸŽ¹</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra Brano 4 OK')">
+                    <div class="card-title">Orchestra Brano 4</div>
+                    <div class="card-desc">Mamma Mia pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
-                    <div class="card-title">â¤ï¸ Orchestra: Brano 5</div>
-                    <div class="card-desc">Can't Take My Eyes Off You pronto per l'esecuzione ðŸŽ·</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra Brano 5 OK')">
+                    <div class="card-title">Orchestra Brano 5</div>
+                    <div class="card-desc">Can't Take My Eyes Off You pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
-                    <div class="card-title">ðŸŒ Orchestra: Brano 6</div>
-                    <div class="card-desc">Inno alla Gioia pronto per l'esecuzione ðŸ¥</div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra Brano 5 OK')">
+                    <div class="card-title">Orchestra Brano 6</div>
+                    <div class="card-desc">Inno alla Gioia pronto per l'esecuzione</div>
                     <div class="card-badge">+8</div>
                 </div>
-
             </div>
         </div>
- 
+
+        <!-- CARDS PENALITA -->
         <div class="main-section" style="border: 2px solid var(--danger);">
-            <h2 class="penalty-header">ðŸ”´ âš ï¸ PENALITÃ€ (Attenzione!) ðŸš¨</h2>
+            <h2 class="penalty-header">⚠️ PENALITÀ (Attenzione!) </h2>
             <div class="card-container">
                 <div class="action-card style-penalty" onclick="window.clickPenalty(2, 'NO Studio a casa')">
-                    <div class="card-title">ðŸ’¤ Settimana senza studio</div>
-                    <div class="card-desc">Studio a casa assente o troppo scarso ðŸ“‰</div>
+                    <div class="card-title">Settimana senza studio</div>
+                    <div class="card-desc">Studio a casa assente o troppo scarso</div>
                     <div class="card-badge">-2</div>
                 </div>
                 <div class="action-card style-penalty" onclick="window.clickPenalty(3, 'NO Materiale')">
-                    <div class="card-title">ðŸ¤·â™‚ï¸ Materiale Mancante</div>
-                    <div class="card-desc">Hai dimenticato lo Strumento, lo Spartito o il Leggio a casa ðŸ </div>
+                    <div class="card-title">Materiale Mancante</div>
+                    <div class="card-desc">Hai dimenticato lo Strumento, lo Spartito o il Leggio a casa</div>
                     <div class="card-badge">-3</div>
                 </div>
-                 <div class="action-card style-penalty" onclick="window.clickPenalty(5, 'Disturbo Orchestra')">
-                    <div class="card-title">ðŸ—£ï¸ Disturbo a Orchestra</div>
-                    <div class="card-desc">Ripetuto disturbo durante le prove ðŸ™‰</div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(5, 'Disturbo Orchestra')">
+                    <div class="card-title">Disturbo a Orchestra</div>
+                    <div class="card-desc">Ripetuto disturbo durante le prove</div>
                     <div class="card-badge">-5</div>
                 </div>
                 <div class="action-card style-penalty" onclick="window.clickPenalty(4, 'Danni / Rispetto')">
-                    <div class="card-title">ðŸ’¥ Danni / Mancato Rispetto</div>
-                    <div class="card-desc">Caduta/danno a strumenti o ai locali della scuola ðŸ«</div>
+                    <div class="card-title">Danni / Mancato Rispetto</div>
+                    <div class="card-desc">Caduta/danno a strumenti o ai locali della scuola</div>
                     <div class="card-badge">-4</div>
                 </div>
-                                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
-                    <div class="card-title">ðŸ¤¦â™‚ï¸ Brano non imparato</div>
-                    <div class="card-desc">Non conosci il brano durante il concerto o il concorso ðŸ¥¶</div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
+                    <div class="card-title">Brano non imparato</div>
+                    <div class="card-desc">Non conosci il brano durante il concerto o il concorso</div>
                     <div class="card-badge">-10</div>
                 </div>
             </div>
         </div>
 
         <div class="main-section">
-            <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">ðŸŽ ðŸŽ‰ TABELLA RICOMPENSE E VOTI ðŸ’¯</h2>
+            <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">🎁 TABELLA RICOMPENSE E VOTI </h2>
             <div style="overflow-x: auto;">
                 <table class="rewards-table">
                     <thead>
                         <tr>
-                            <th>ðŸŽ¯ Punti Accumulati</th>
-                            <th>ðŸ“ Voto sul Registro</th>
+                            <th>Punti Accumulati</th>
+                            <th>Voto sul Registro</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>ðŸ“‰ 0 - 49 punti</td>
+                            <td>0 - 49 punti</td>
                             <td style="color: var(--danger);"><strong>Voto 4</strong></td>
                         </tr>
                         <tr>
-                            <td>âš ï¸ 50 - 59 punti</td>
+                            <td>50 - 59 punti</td>
                             <td style="color: #ea580c;"><strong>Voto 5</strong></td>
                         </tr>
                         <tr>
-                            <td>ðŸ‘Œ 60 - 69 punti</td>
+                            <td>60 - 69 punti</td>
                             <td style="color: #ca8a04;"><strong>Voto 6</strong></td>
                         </tr>
                         <tr>
-                            <td>ðŸ™‚ 70 - 79 punti</td>
+                            <td>70 - 79 punti</td>
                             <td style="color: #65a30d;"><strong>Voto 7</strong></td>
                         </tr>
                         <tr>
-                            <td>ðŸ˜Ž 80 - 89 punti</td>
+                            <td>80 - 89 punti</td>
                             <td style="color: var(--success);"><strong>Voto 8</strong></td>
                         </tr>
                         <tr>
-                            <td>ðŸ¤© 90 - 99 punti</td>
+                            <td>90 - 99 punti</td>
                             <td style="color: var(--azure);"><strong>Voto 9</strong></td>
                         </tr>
                         <tr>
-                            <td>ðŸ‘‘ 100 punti in poi</td>
-                            <td style="color: var(--purple); font-size: 18px;"><strong>Voto 10 ðŸŒŸ</strong></td>
+                            <td>100 punti in poi</td>
+                            <td style="color: var(--purple); font-size: 18px;"><strong>Voto 10 👑</strong></td>
                         </tr>
-                         <tr style="background: #fef9c3;">
-                            <td>ðŸš€ <strong>Dal 100 in poi, ogni 5 punti:</strong></td>
-                            <td style="color: #b45309;"><strong>âž• (Un PiÃ¹) sul registro, che supporta gli altri voti giÃ  ricevuti!</strong></td>
+                        <tr style="background: #fef9c3;">
+                            <td><strong>Dal 100 in poi, ogni +5 punti</strong></td>
+                            <td style="color: #b45309;"><strong>⭐ Un 'Più' sul registro, che supporta gli altri voti già ricevuti!</strong></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            
             <div class="rewards-note">
-                <strong>ðŸ’¡ Attenzione:</strong> i punti possono essere sia guadagnati che persi! Impegnati costantemente, tieni d'occhio questo foglio per capire dove migliorare e vedrai che farai un percorso musicale straordinario! ðŸŽ·âœ¨
+                💡 <strong>Attenzione:</strong> i punti possono essere sia guadagnati che persi! Impegnati costantemente, tieni d'occhio questo foglio per capire dove migliorare e vedrai che farai un percorso musicale straordinario! 🎶
             </div>
         </div>
 
     </div>
 
+    <!-- LOGICA E FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
@@ -509,29 +686,33 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        
+
         // PASSWORD DOCENTE
         const ADMIN_PASSWORD = "Laguerramusicale";
 
         // STATO GLOBALE
         let isAdminUnlocked = false;
         let currentStudentId = null;
-        let dbRef = null; 
+        let dbRef = null;
+        
         let currentData = {
-            totalTokens: 0, baseTokens: 0,
-            proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: []
+            totalTokens: 0,
+            baseTokens: 0,
+            proTokens: 0,
+            vipTokens: 0,
+            penaltyTokens: 0,
+            history: []
         };
 
         // --- SISTEMA LOGIN MULTI-UTENTE ---
-        
         window.loginStudent = function() {
             const rawName = document.getElementById('studentNameInput').value.trim();
             if(!rawName) return alert("Inserisci un nome!");
             
             // Pulisce il nome per usarlo come ID
-            currentStudentId = rawName.replace(/[^a-zA-Z0-9]/g, ''); 
-            
+            currentStudentId = rawName.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
             document.getElementById('displayStudentName').textContent = rawName;
+            
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
 
@@ -540,11 +721,11 @@
             
             // Avvia Sync
             startSync();
-        }
+        };
 
         window.logout = function() {
-            location.reload(); 
-        }
+            location.reload();
+        };
 
         function startSync() {
             onValue(dbRef, (snapshot) => {
@@ -552,9 +733,9 @@
                 if (data) {
                     currentData = data;
                     if (!currentData.history) currentData.history = [];
-                } else { 
+                } else {
                     currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
-                    saveDataToCloud(); 
+                    saveDataToCloud();
                 }
                 updateDisplay();
                 updateHistory();
@@ -562,30 +743,37 @@
         }
 
         function saveDataToCloud() {
-            if(dbRef) set(dbRef, currentData).catch((e) => alert("Errore Cloud: " + e));
+            if(dbRef) {
+                set(dbRef, currentData).catch(e => alert("Errore Cloud: " + e));
+            }
         }
 
         // --- FUNZIONI CORE ---
-
         function addToHistory(type, amount, description) {
             const now = new Date();
-            const timeStr = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            const timeStr = now.toLocaleDateString('it-IT') + " " + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            
             if (!currentData.history) currentData.history = [];
+            
             currentData.history.unshift({
-                type: type, amount: amount, description: description, time: timeStr
+                type: type,
+                amount: amount,
+                description: description,
+                time: timeStr
             });
-            if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
+
+            if (currentData.history.length > 50) {
+                currentData.history = currentData.history.slice(0, 50);
+            }
             saveDataToCloud();
         }
 
         // --- GESTIONE CLICK ---
-        
         window.clickTask = function(amount, type, description) {
             if (!isAdminUnlocked) {
-                alert("ðŸ”’ BLOCCATO! Solo il docente puÃ² assegnare punti.");
+                alert("🔒 BLOCCATO! Solo il docente può assegnare punti.");
                 return;
             }
-            
             currentData.totalTokens += amount;
             
             if (type === 'base') currentData.baseTokens += amount;
@@ -593,54 +781,51 @@
             else if (type === 'vip') currentData.vipTokens += amount;
 
             addToHistory(type, amount, description);
-        }
+        };
 
         window.clickPenalty = function(amount, description) {
             if (!isAdminUnlocked) {
-                alert("ðŸ”’ BLOCCATO! Password richiesta per penalitÃ .");
+                alert("🔒 BLOCCATO! Password richiesta per penalità.");
                 return;
             }
-            
-            if(confirm(`Confermi penalitÃ : ${description} (-${amount})?`)) {
+            if(confirm(`Confermi penalità: ${description} (-${amount})?`)) {
                 currentData.totalTokens -= amount;
                 currentData.penaltyTokens += amount;
                 addToHistory('penalty', -amount, description);
             }
-        }
+        };
 
         // --- GESTIONE MANUALE ---
-
         window.addTokenTyped = function() {
             const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
             const type = document.getElementById('tokenType').value;
-            const customReason = document.getElementById('customReason').value.trim() || "Assegnazione manuale";
-            window.clickTask(amount, type, customReason); 
-            document.getElementById('customReason').value = "";
-        }
+            const customReason = document.getElementById('customReason').value.trim() || 'Assegnazione manuale';
+            window.clickTask(amount, type, customReason);
+            document.getElementById('customReason').value = '';
+        };
 
         window.removeTokenTyped = function() {
             const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
             const type = document.getElementById('tokenType').value;
-            const customReason = document.getElementById('customReason').value.trim() || "Rimozione manuale";
-            
+            const customReason = document.getElementById('customReason').value.trim() || 'Rimozione manuale';
+
             currentData.totalTokens -= amount;
             if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
             else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
             else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
             
             addToHistory(type, -amount, customReason);
-            alert(`âŒ Rimossi ${amount} punti`);
-        }
+            alert(`➖ Rimossi ${amount} punti`);
+        };
 
         window.resetData = function() {
-            if (confirm('SICURO? Cancella tutti i voti di QUESTO alunno.')) {
+            if (confirm("⚠️ SICURO? Cancella tutti i voti di QUESTO alunno.")) {
                 currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
                 saveDataToCloud();
             }
-        }
+        };
 
-// --- SISTEMA PASSWORD ---
-
+        // --- SISTEMA PASSWORD ---
         window.checkPassword = function() {
             const pwd = document.getElementById('adminPassword').value;
             if (pwd === ADMIN_PASSWORD) {
@@ -649,11 +834,96 @@
                 document.getElementById('editContent').style.display = 'block';
                 document.getElementById('lockMessage').style.display = 'none';
                 document.getElementById('adminPassword').value = '';
-                alert("ðŸ”“ Sbloccato! Ora puoi assegnare i voti.");
+                alert("🔓 Sbloccato! Ora puoi assegnare i voti.");
             } else {
                 alert("Password errata!");
             }
-        }
+        };
+
+        // --- SISTEMA RUOTA DELLA FORTUNA ---
+        let currentWheelRotation = 0;
+
+        window.giraRuota = function() {
+            if (!currentData) return;
+            if ((currentData.totalTokens || 0) < 3) {
+                alert("Non hai abbastanza punti! Te ne servono almeno 3 per poter girare.");
+                return;
+            }
+
+            const now = new Date().getTime();
+            const lastSpin = currentData.lastSpinTime || 0;
+            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
+
+            if (orePassate < 24) {
+                const oreMancanti = Math.ceil(24 - orePassate);
+                alert(`Hai già girato la ruota! Devi aspettare ancora ${oreMancanti} ore.`);
+                return;
+            }
+
+            document.getElementById("btnRuota").disabled = true;
+
+            // 1. Scalo subito i 3 punti (Anti-cheat se ricaricano la pagina)
+            currentData.totalTokens -= 3;
+            currentData.lastSpinTime = now;
+            addToHistory('penalty', -3, '🎟️ Biglietto Ruota della Fortuna');
+            saveDataToCloud();
+            updateDisplay();
+
+            // 2. Calcolo premio con le tue probabilità
+            const r = Math.floor(Math.random() * 100);
+            let prize = 0; let sliceIndex = 0;
+
+            if (r < 3) { prize = 1; sliceIndex = 0; }
+            else if (r < 10) { prize = 2; sliceIndex = 1; }
+            else if (r < 90) { prize = 3; sliceIndex = 2; }
+            else if (r < 97) { prize = 4; sliceIndex = 3; }
+            else { prize = 5; sliceIndex = 4; }
+
+            // 3. Animazione fisica della ruota
+            const wheel = document.getElementById("spinningWheel");
+            const spinAmount = 1800; // 5 giri completi di suspence
+            const baseTarget = -(sliceIndex * 72);
+            const randomOffset = Math.floor(Math.random() * 50) - 25; 
+            
+            const next360 = Math.ceil(currentWheelRotation / 360) * 360;
+            currentWheelRotation = next360 + spinAmount + baseTarget + randomOffset;
+            wheel.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+            // 4. Consegna il premio a fine giro
+            setTimeout(() => {
+                currentData.totalTokens += prize;
+                currentData.baseTokens = (currentData.baseTokens || 0) + prize;
+                addToHistory('base', prize, `🎰 Vincita alla Ruota della Fortuna!`);
+                saveDataToCloud();
+                updateDisplay();
+                
+                alert(`🎉 La ruota si è fermata! Hai vinto ${prize} punti!`);
+                document.getElementById("btnRuota").disabled = false;
+                window.updateWheelTimer();
+            }, 3500); 
+        };
+
+        window.updateWheelTimer = function() {
+            const timerDiv = document.getElementById("ruotaTimer");
+            const btn = document.getElementById("btnRuota");
+            if (!timerDiv || !currentData) return;
+            
+            const now = new Date().getTime();
+            const lastSpin = currentData.lastSpinTime || 0;
+            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
+            
+            if (orePassate < 24) {
+                const oreMancanti = Math.ceil(24 - orePassate);
+                timerDiv.textContent = `⏳ Prossimo giro disponibile tra ${oreMancanti} ore.`;
+                btn.style.opacity = "0.5";
+                btn.style.cursor = "not-allowed";
+            } else {
+                timerDiv.textContent = "✅ Puoi girare la ruota!";
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            }
+        };
+        // --- FINE RUOTA DELLA FORTUNA ---
 
         function updateDisplay() {
             const totalEl = document.getElementById('totalTokens');
@@ -666,68 +936,74 @@
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
             
             // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
-            aggiornaAvatar(); 
+            aggiornaAvatar();
+            renderThemeStore();
+            
+            // AGGIORNA IL TIMER DELLA RUOTA
+            window.updateWheelTimer();
         }
+
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {
             const list = document.getElementById('historyList'); // Lo storico pubblico
             const pendingList = document.getElementById('pendingProposalsList'); // Il cassetto segreto del Maestro
-
+            
             let htmlStorico = '';
             let htmlAttesa = '';
             let proposteCount = 0;
 
-            if (!currentData.history || !currentData.history.length) { 
-                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! ðŸŽµ</div>'; 
-                if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
-                return; 
+            if (!currentData.history || !currentData.history.length) {
+                if(list) list.innerHTML = `<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎶</div>`;
+                if(pendingList) pendingList.innerHTML = `<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>`;
+                return;
             }
-            
-            currentData.history.forEach(item => {
-                let testo = item.note || item.description || "Nessuna nota";
-                let dataOra = item.date || item.time || "";
 
-                // SE LA PROPOSTA Ãˆ IN ATTESA -> Va nel cassetto del Maestro!
-                if (item.status === "pending") {
+            currentData.history.forEach((item) => {
+                let testo = item.note || item.description || "Nessuna nota";
+                let dataOra = item.date || item.time;
+
+                // SE LA PROPOSTA E' IN ATTESA - Va nel cassetto del Maestro!
+                if (item.status === 'pending') {
                     proposteCount++;
                     htmlAttesa += `
                     <div style="background: white; border: 1px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                         <div>
                             <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">+${item.amount} PUNTI</span>
                             <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${testo}</span>
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">ðŸ•’ ${dataOra}</div>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">📅 ${dataOra}</div>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">âœ… Accetta</button>
-                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">âŒ Rifiuta</button>
+                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✔️ Accetta</button>
+                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
                         </div>
                     </div>`;
                 } 
-                // ALTRIMENTI -> Va nello storico pubblico dell'alunno
+                // ALTRIMENTI - Va nello storico pubblico dell'alunno
                 else {
-                    let cl = 'type-base', em = 'âœ…', col = 'var(--success)', sign='+';
-                    if(item.type=='pro'){cl='type-pro'; em='ðŸŒŸ'; col='var(--azure)';}
-                    if(item.type=='vip'){cl='type-vip'; em='ðŸ†'; col='var(--purple)';}
-                    if(item.type=='penalty'){cl='type-penalty'; em='âš ï¸'; col='var(--danger)'; sign='';}
-                    
-                    let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
-                    let extraStyle = "";
+                    let cl = 'type-base', em = '✅', col = 'var(--success)', sign = '+';
+                    if(item.type==='pro'){cl='type-pro'; em='🚀'; col='var(--azure)';}
+                    if(item.type==='vip'){cl='type-vip'; em='🌟'; col='var(--purple)';}
+                    if(item.type==='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
 
-                    if (item.status === "approved") {
-                        em = 'âœ”ï¸';
+                    let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
+                    
+                    let extraStyle = "";
+                    if (item.status === 'approved') {
+                        em = '✔️';
                         extraStyle = "border-left: 4px solid #10b981;";
-                    } else if (item.status === "rejected") {
-                        em = 'âŒ';
+                    } else if (item.status === 'rejected') {
+                        em = '❌';
                         extraStyle = "opacity: 0.6; background-color: #fef2f2;";
                         amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
                     }
 
-                    htmlStorico += `<div class="history-item" style="${extraStyle}">
+                    htmlStorico += `
+                    <div class="history-item" style="${extraStyle}">
                         <div style="display: flex; align-items: center;">
-                            <span class="history-type ${cl}">${em}</span> 
+                            <span class="history-type ${cl}">${em}</span>
                             <div style="margin-left:15px;">
                                 <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
-                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">ðŸ•’ ${dataOra}</div>
+                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">⏰ ${dataOra}</div>
                             </div>
                         </div>
                         ${amountBox}
@@ -736,11 +1012,11 @@
             });
 
             // Scrive il risultato a schermo
-            if(list) list.innerHTML = htmlStorico || '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato nello storico.</div>';
-            if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
+            if(list) list.innerHTML = htmlStorico || `<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato nello storico.</div>`;
+            if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : `<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>`;
         }
-        
-// Funzione per l'Avatar Evolutivo collegata a Firebase
+
+        // Funzione per l'Avatar Evolutivo (collegata a Firebase)
         function aggiornaAvatar() {
             // Prende il totale esatto salvato nel database
             const totale = currentData.totalTokens || 0; 
@@ -749,124 +1025,190 @@
             const rank = document.getElementById('avatarRank');
 
             if (!icon || !rank) return; // Evita errori se mancano i pezzi HTML
-
+            
             // Calcolo dei livelli (se cambi i numeri nella legenda, cambiali anche qui!)
             if (totale >= 181) {
-                icon.innerText = "ðŸ‰"; 
-                rank.innerText = "Livello Bonus Supremo!";
+                icon.innerText = "👑"; rank.innerText = "Livello Bonus Supremo!";
             } else if (totale >= 91) {
-                icon.innerText = "ðŸŽ·ðŸ‘‘";
-                rank.innerText = "Livello 4: Falco del Sax";
+                icon.innerText = "🦅"; rank.innerText = "Livello 4: Falco del Sax";
             } else if (totale >= 61) {
-                icon.innerText = "ðŸ¥";
-                rank.innerText = "Livello 3: Musicista in Erba";
+                icon.innerText = "🌱"; rank.innerText = "Livello 3: Musicista in Erba";
             } else if (totale >= 31) {
-                icon.innerText = "ðŸ£";
-                rank.innerText = "Livello 2: Pulcino Curioso";
+                icon.innerText = "🐣"; rank.innerText = "Livello 2: Pulcino Curioso";
             } else {
-                icon.innerText = "ðŸ¥š";
-                rank.innerText = "Livello 1: Uovo Principiante";
+                icon.innerText = "🥚"; rank.innerText = "Livello 1: Uovo Principiante";
             }
         }
 
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
-// 1. L'alunno invia la proposta di punti specifici
+        // 1. L'alunno invia la proposta di punti (specifici)
         async function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;
             const inputPunti = document.getElementById('puntiRichiesti');
-            const puntiRichiesti = inputPunti ? parseInt(inputPunti.value) : 1;
+            const puntiRichiesti = inputPunti ? parseInt(inputPunti.value) : 1; 
             const motivo = document.getElementById('motivo').value;
-            
-            if (motivo.trim() === "") {
-                alert("Ehi! Scrivi prima una motivazione!");
-                return;
-            }
-            if (isNaN(puntiRichiesti) || puntiRichiesti <= 0) {
-                alert("Inserisci un numero di punti maggiore di zero!");
-                return;
-            }
-            if (!dbRef) {
-                alert("Errore: Seleziona prima un alunno dal menu!");
-                return;
-            }
 
-            const etichetta = tipo === 'auto' ? 'ðŸ™‹ Autocandidatura' : 'ðŸ¤ Segnalazione';
+            if (!motivo.trim()) { alert("Ehi! Scrivi prima una motivazione!"); return; }
+            if (isNaN(puntiRichiesti) || puntiRichiesti <= 0) { alert("Inserisci un numero di punti maggiore di zero!"); return; }
+            if (!dbRef) { alert("Errore: Seleziona prima un alunno dal menu!"); return; }
+
+            const etichetta = tipo === 'auto' ? "🙋 Autocandidatura:" : "🤝 Segnalazione:";
             
             const nuovaProposta = {
                 id: Date.now(),
-                type: "base", // Usiamo il tipo standard, conterÃ  solo la quantitÃ 
+                type: 'base', // Usiamo il tipo standard, conterà solo la quantità
                 amount: puntiRichiesti,
-                status: "pending", // L'etichetta magica
-                note: `${etichetta}: ${motivo}`,
+                status: 'pending',
+                note: `${etichetta} ${motivo}`,
                 date: new Date().toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })
             };
 
             // Salva nel database locale dell'alunno
             currentData.history = [nuovaProposta, ...(currentData.history || [])];
-            
+
             try {
                 // Salva su Firebase e aggiorna subito lo schermo!
-                await set(ref(db, `students/${currentStudentId}/history`), currentData.history);
-                alert(`Proposta di +${puntiRichiesti} punti inviata al Maestro!`);
-                document.getElementById('motivo').value = ""; // Svuota casella testo
-                if(inputPunti) inputPunti.value = ""; // Svuota casella numeri
+                await set(ref(db, 'sax_students/' + currentStudentId + '/history'), currentData.history);
+                
+                alert(`🚀 Proposta di ${puntiRichiesti} punti inviata al Maestro!`);
+                document.getElementById('motivo').value = ''; // Svuota casella testo
+                if(inputPunti) inputPunti.value = ''; // Svuota casella numeri
+                
                 updateHistory(); // Fa apparire subito la voce nel cassetto
             } catch (error) {
                 console.error("Errore Firebase:", error);
-                alert("Errore nell'invio. Riprova!");
+                alert("❌ Errore nell'invio. Riprova!");
             }
         }
 
-        // 2. Il maestro valuta: Accetta (dÃ  i punti) o Rifiuta (Elimina la voce)
+        // 2. Il maestro valuta (Accetta= dà i punti, o Rifiuta = Elimina la voce)
         function valutaProposta(propostaId, azione) {
             if (!isAdminUnlocked) {
-                alert("âŒ Errore: Sblocca l'Area Docente con la password prima di valutare!");
-                return;
+                alert("🔒 Errore: Sblocca l'Area Docente con la password prima di valutare!"); return;
             }
-
             if (!currentData.history) return;
-            const index = currentData.history.findIndex(h => h.id == propostaId);
-            
-            if (index === -1) {
-                alert("Errore: Proposta non trovata.");
-                return;
-            }
+
+            const index = currentData.history.findIndex(h => h.id === propostaId);
+            if (index === -1) { alert("Errore: Proposta non trovata."); return; }
 
             const proposta = currentData.history[index];
             const puntiDaAggiungere = parseInt(proposta.amount) || 0;
 
             if (azione === 'accetta') {
                 // Cambia lo stato e aggiunge il segno di spunta
-                currentData.history[index].status = "approved";
-                currentData.history[index].note = "âœ”ï¸ ACCETTATA - " + currentData.history[index].note;
-
+                currentData.history[index].status = 'approved';
+                currentData.history[index].note = "✔️ ACCETTATA - " + currentData.history[index].note;
+                
                 // Aggiunge fisicamente i punti al totale dell'alunno!
                 currentData.baseTokens = (currentData.baseTokens || 0) + puntiDaAggiungere;
                 currentData.totalTokens = (currentData.totalTokens || 0) + puntiDaAggiungere;
-
-                alert(`âœ… Hai accettato la proposta e assegnato ${puntiDaAggiungere} punti!`);
                 
-            } else if (azione === 'rifiuta') {
-                // ELIMINA TOTALMENTE la proposta dallo storico usando "splice"
-                currentData.history.splice(index, 1);
-                alert("âŒ Proposta rifiutata ed eliminata dallo storico.");
+                alert(`✅ Hai accettato la proposta e assegnato +${puntiDaAggiungere} punti!`);
+            } 
+            else if (azione === 'rifiuta') {
+                // ELIMINA TOTALMENTE la proposta dallo storico usando splice
+                currentData.history.splice(index, 1); 
+                alert("❌ Proposta rifiutata ed eliminata dallo storico.");
             }
 
-        // Usa la tua funzione nativa infallibile per salvare su Firebase!
-            saveDataToCloud(); 
-            updateDisplay();   // Aggiorna il numero grande dei punti in alto
-            updateHistory();   // Aggiorna la lista
+            // Usa la tua funzione nativa infallibile per salvare su Firebase!
+            saveDataToCloud();
+            updateDisplay(); // Aggiorna il numero grande dei punti in alto
+            updateHistory(); // Aggiorna la lista
         }
 
-        // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
+        // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE!)
         window.inviaProposta = inviaProposta;
         window.valutaProposta = valutaProposta;
 
-        // --- FINE NUOVO SISTEMA PROPOSTE ---        
-        
+        // --- SISTEMA NEGOZIO TEMI ---
+        const themes = [
+            { id: 'default', name: 'Chiaro (Standard)', icon: '☀️', price: 0, class: '' },
+            { id: 'dark', name: 'Galassia Dark', icon: '🌙', price: 30, class: 'theme-dark' },
+            { id: 'forest', name: 'Foresta Magica', icon: '🌲', price: 40, class: 'theme-forest' },
+            { id: 'neon', name: 'Hacker Neon', icon: '💻', price: 50, class: 'theme-neon' }
+        ];
+
+        function renderThemeStore() {
+            const grid = document.getElementById('themeGrid');
+            if (!grid || !currentData) return;
+
+            // Assicurati che l'array ownedThemes esista
+            if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
+            const activeTheme = currentData.activeTheme || 'default';
+
+            let html = '';
+            themes.forEach(theme => {
+                const isOwned = currentData.ownedThemes.includes(theme.id);
+                const isActive = activeTheme === theme.id;
+                
+                let cardClass = 'theme-card';
+                if (isActive) cardClass += ' active';
+                else if (isOwned) cardClass += ' owned';
+
+                let btnHtml = '';
+                if (isActive) {
+                    btnHtml = `<button class="theme-btn btn-active" disabled>In Uso ✔️</button>`;
+                } else if (isOwned) {
+                    btnHtml = `<button class="theme-btn btn-use" onclick="window.useTheme('${theme.id}')">Usa Tema</button>`;
+                } else {
+                    btnHtml = `<button class="theme-btn btn-buy" onclick="window.buyTheme('${theme.id}', ${theme.price})">Compra (-${theme.price})</button>`;
+                }
+
+                html += `
+                <div class="${cardClass}">
+                    <span class="theme-icon">${theme.icon}</span>
+                    <div class="theme-name">${theme.name}</div>
+                    ${!isOwned ? `<div class="theme-price">💎 ${theme.price} pt</div>` : '<div class="theme-price" style="color:#10b981;">Acquistato</div>'}
+                    ${btnHtml}
+                </div>`;
+            });
+            grid.innerHTML = html;
+            applyThemeClass(activeTheme);
+        }
+
+        window.buyTheme = function(themeId, price) {
+            if (!currentData) return;
+            if ((currentData.totalTokens || 0) < price) {
+                alert(`Non hai abbastanza punti! Ti servono ${price} punti per questo tema.`);
+                return;
+            }
+            if (confirm(`Vuoi comprare questo tema per ${price} punti?`)) {
+                currentData.totalTokens -= price;
+                if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
+                currentData.ownedThemes.push(themeId);
+                
+                addToHistory('penalty', -price, `🎨 Acquisto Tema nel Negozio`);
+                window.useTheme(themeId); // Lo imposta in automatico dopo l'acquisto
+            }
+        };
+
+        window.useTheme = function(themeId) {
+            if (!currentData) return;
+            currentData.activeTheme = themeId;
+            saveDataToCloud();
+            renderThemeStore();
+            updateDisplay();
+        };
+
+        function applyThemeClass(themeId) {
+            // Rimuove tutte le classi tema dal body
+            document.body.classList.remove('theme-dark', 'theme-forest', 'theme-neon');
+            
+            // Aggiunge la classe del tema attivo
+            const theme = themes.find(t => t.id === themeId);
+            if (theme && theme.class) {
+                document.body.classList.add(theme.class);
+            }
+        }
+        // --- FINE SISTEMA NEGOZIO TEMI ---
+
+        // --- FINE NUOVO SISTEMA PROPOSTE ---
+
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
+
     </script>
 </body>
 </html>

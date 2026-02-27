@@ -192,7 +192,38 @@
         .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
         .btn-send:hover { transform: scale(1.02); }
 
-        /* AVATAR EVOLUTIVO */
+        /* RUOTA DELLA FORTUNA */
+.wheel-container { position: relative; width: 220px; height: 220px; margin: 20px auto; }
+.wheel {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: conic-gradient(from -36deg,
+        #94a3b8 0deg 72deg,    /* 1 pt - Grigio */
+        #fbd38d 72deg 144deg,  /* 2 pt - Arancio */
+        #86efac 144deg 216deg, /* 3 pt - Verde */
+        #93c5fd 216deg 288deg, /* 4 pt - Blu */
+        #d8b4fe 288deg 360deg  /* 5 pt - Viola */
+    );
+    transition: transform 3.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    border: 4px solid #1e293b;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+.wheel-pointer {
+    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 15px solid transparent; border-right: 15px solid transparent;
+    border-top: 25px solid #ef4444; z-index: 10;
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));
+}
+.wheel-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 35px; height: 35px; background: white; border-radius: 50%;
+    border: 4px solid #1e293b; z-index: 5;
+}
+.wheel-legend { display: flex; justify-content: center; gap: 12px; font-size: 12px; margin-top: 15px; flex-wrap: wrap; font-weight: bold; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.color-box { width: 14px; height: 14px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+            /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
         .avatar-emoji { font-size: 85px; display: block; margin-bottom: 5px; }
         .avatar-rank { font-weight: 900; color: #166534; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
@@ -255,6 +286,30 @@
             </div>
             <!-- FINE LEGENDA SPOSTATA -->
         </div>
+      
+        <!-- INIZIO RUOTA DELLA FORTUNA -->
+        <div class="interactive-card" style="text-align: center; border-top: 5px solid #f59e0b;">
+            <h3 style="margin-top:0; color: #b45309;">🎰 La Ruota della Fortuna</h3>
+            <p style="font-size: 13px; color: var(--gray-600);">Costo: 3 Punti. Tenta la sorte (1 giro ogni 24h)!</p>
+
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="spinningWheel"></div>
+                <div class="wheel-center"></div>
+            </div>
+
+            <div class="wheel-legend">
+                <div class="legend-item"><div class="color-box" style="background:#94a3b8;"></div>1 pt (3%)</div>
+                <div class="legend-item"><div class="color-box" style="background:#fbd38d;"></div>2 pt (7%)</div>
+                <div class="legend-item"><div class="color-box" style="background:#86efac;"></div>3 pt (80%)</div>
+                <div class="legend-item"><div class="color-box" style="background:#93c5fd;"></div>4 pt (7%)</div>
+                <div class="legend-item"><div class="color-box" style="background:#d8b4fe;"></div>5 pt (3%)</div>
+            </div>
+
+            <button id="btnRuota" class="btn-send" style="background: linear-gradient(45deg, #f59e0b, #ea580c); margin-top: 20px; font-size: 16px;" onclick="window.giraRuota()">Gira la Ruota (-3 Punti) 🎲</button>
+            <div id="ruotaTimer" style="font-size: 13px; color: #ef4444; margin-top: 10px; font-weight: bold;"></div>
+        </div>
+        <!-- FINE RUOTA DELLA FORTUNA -->
 
         <div class="edit-section">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
@@ -661,6 +716,91 @@
             }
         }
 
+        // --- SISTEMA RUOTA DELLA FORTUNA ---
+        let currentWheelRotation = 0;
+
+        window.giraRuota = function() {
+            if (!currentData) return;
+            if ((currentData.totalTokens || 0) < 3) {
+                alert("Non hai abbastanza punti! Te ne servono almeno 3 per poter girare.");
+                return;
+            }
+
+            const now = new Date().getTime();
+            const lastSpin = currentData.lastSpinTime || 0;
+            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
+
+            if (orePassate < 24) {
+                const oreMancanti = Math.ceil(24 - orePassate);
+                alert(`Hai già girato la ruota! Devi aspettare ancora ${oreMancanti} ore.`);
+                return;
+            }
+
+            document.getElementById("btnRuota").disabled = true;
+
+            // 1. Scalo subito i 3 punti (Anti-cheat se ricaricano la pagina)
+            currentData.totalTokens -= 3;
+            currentData.lastSpinTime = now;
+            addToHistory('penalty', -3, '🎟️ Biglietto Ruota della Fortuna');
+            saveDataToCloud();
+            updateDisplay();
+
+            // 2. Calcolo premio con le tue probabilità
+            const r = Math.floor(Math.random() * 100);
+            let prize = 0; let sliceIndex = 0;
+
+            if (r < 3) { prize = 1; sliceIndex = 0; }
+            else if (r < 10) { prize = 2; sliceIndex = 1; }
+            else if (r < 90) { prize = 3; sliceIndex = 2; }
+            else if (r < 97) { prize = 4; sliceIndex = 3; }
+            else { prize = 5; sliceIndex = 4; }
+
+            // 3. Animazione fisica della ruota
+            const wheel = document.getElementById("spinningWheel");
+            const spinAmount = 1800; // 5 giri completi di suspence
+            const baseTarget = -(sliceIndex * 72);
+            const randomOffset = Math.floor(Math.random() * 50) - 25; 
+            
+            const next360 = Math.ceil(currentWheelRotation / 360) * 360;
+            currentWheelRotation = next360 + spinAmount + baseTarget + randomOffset;
+            wheel.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+            // 4. Consegna il premio a fine giro
+            setTimeout(() => {
+                currentData.totalTokens += prize;
+                currentData.baseTokens = (currentData.baseTokens || 0) + prize;
+                addToHistory('base', prize, `🎰 Vincita alla Ruota della Fortuna!`);
+                saveDataToCloud();
+                updateDisplay();
+                
+                alert(`🎉 La ruota si è fermata! Hai vinto ${prize} punti!`);
+                document.getElementById("btnRuota").disabled = false;
+                window.updateWheelTimer();
+            }, 3500); 
+        };
+
+        window.updateWheelTimer = function() {
+            const timerDiv = document.getElementById("ruotaTimer");
+            const btn = document.getElementById("btnRuota");
+            if (!timerDiv || !currentData) return;
+            
+            const now = new Date().getTime();
+            const lastSpin = currentData.lastSpinTime || 0;
+            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
+            
+            if (orePassate < 24) {
+                const oreMancanti = Math.ceil(24 - orePassate);
+                timerDiv.textContent = `⏳ Prossimo giro disponibile tra ${oreMancanti} ore.`;
+                btn.style.opacity = "0.5";
+                btn.style.cursor = "not-allowed";
+            } else {
+                timerDiv.textContent = "✅ Puoi girare la ruota!";
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            }
+        };
+        // --- FINE RUOTA DELLA FORTUNA ---
+
         function updateDisplay() {
             const totalEl = document.getElementById('totalTokens');
             totalEl.textContent = currentData.totalTokens;
@@ -672,7 +812,10 @@
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
             
             // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
-            aggiornaAvatar(); 
+            aggiornaAvatar();
+            
+            // AGGIORNA IL TIMER DELLA RUOTA
+            window.updateWheelTimer();
         }
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {

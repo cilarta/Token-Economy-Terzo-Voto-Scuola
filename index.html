@@ -256,31 +256,6 @@
             <!-- FINE LEGENDA SPOSTATA -->
         </div>
 
-        <div class="interactive-card">
-            <h3 style="margin-top:0; color: var(--gray-800);">🚀 Area Proposte Alunni</h3>
-            <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
-            
-            <div class="interactive-grid">
-                <div class="input-group">
-                    <label>Tipo di Proposta</label>
-                    <select id="tipoProposta">
-                        <option value="auto">Bonus per me (Autocandidatura)</option>
-                        <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
-                    </select>
-                </div>
-               
-                <div class="input-group">
-                    <label>Categoria Punti</label>
-<input type="number" id="puntiRichiesti" placeholder="N° Punti" min="1" max="100" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">                </div>
-            </div>
-            
-            <div class="input-group">
-                <label>Motivazione (Cosa hai fatto di speciale?)</label>
-                <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
-            </div>
-            
-            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 📩</button>
-        </div>
         <div class="edit-section">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
             <div class="edit-controls">
@@ -434,13 +409,41 @@
                     <div class="card-desc">Caduta/danno a strumenti o ai locali della scuola 🏫</div>
                     <div class="card-badge">-4</div>
                 </div>
-                                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
-                    <div class="card-title">🤦♂️ Brano non imparato</div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
+                    <div class="card-title">🤦‍♂️ Brano non imparato</div>
                     <div class="card-desc">Non conosci il brano durante il concerto o il concorso 🥶</div>
                     <div class="card-badge">-10</div>
                 </div>
             </div>
         </div>
+
+        <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
+        <div class="interactive-card">
+            <h3 style="margin-top:0; color: var(--gray-800);">🚀 Area Proposte Alunni</h3>
+            <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
+            
+            <div class="interactive-grid">
+                <div class="input-group">
+                    <label>Tipo di Proposta</label>
+                    <select id="tipoProposta">
+                        <option value="auto">Bonus per me (Autocandidatura)</option>
+                        <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Categoria Punti</label>
+                    <input type="number" id="puntiRichiesti" placeholder="N° Punti (min:1 max:100)" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Motivazione (Cosa hai fatto di speciale?)</label>
+                <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
+            </div>
+            
+            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 📩</button>
+        </div>
+        <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
 
         <div class="main-section">
             <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">🎁 🎉 TABELLA RICOMPENSE E VOTI 💯</h2>

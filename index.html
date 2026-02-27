@@ -22,7 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-            /* Sfondo generale più vivace */
+            /* Sfondo generale piÃ¹ vivace */
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
             color: var(--gray-900); 
             padding: 20px; 
@@ -192,289 +192,69 @@
         .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
         .btn-send:hover { transform: scale(1.02); }
 
-        /* RUOTA DELLA FORTUNA */
-.wheel-container { position: relative; width: 220px; height: 220px; margin: 20px auto; }
-.wheel {
-    width: 100%; height: 100%; border-radius: 50%;
-    background: conic-gradient(from -36deg,
-        #94a3b8 0deg 72deg,    /* 1 pt - Grigio */
-        #fbd38d 72deg 144deg,  /* 2 pt - Arancio */
-        #86efac 144deg 216deg, /* 3 pt - Verde */
-        #93c5fd 216deg 288deg, /* 4 pt - Blu */
-        #d8b4fe 288deg 360deg  /* 5 pt - Viola */
-    );
-    transition: transform 3.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-    border: 4px solid #1e293b;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-}
-.wheel-pointer {
-    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 15px solid transparent; border-right: 15px solid transparent;
-    border-top: 25px solid #ef4444; z-index: 10;
-    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));
-}
-.wheel-center {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 35px; height: 35px; background: white; border-radius: 50%;
-    border: 4px solid #1e293b; z-index: 5;
-}
-.wheel-legend { display: flex; justify-content: center; gap: 12px; font-size: 12px; margin-top: 15px; flex-wrap: wrap; font-weight: bold; }
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.color-box { width: 14px; height: 14px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-
-            /* AVATAR EVOLUTIVO */
+        /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
-        .avatar-emoji { font-size: 85px; display: block; margin-bottom: 5px; }
-        .avatar-rank { font-weight: 900; color: #166534; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+        .avatar-emoji { font-size: 50px; display: block; }
+        .avatar-rank { font-weight: 800; color: #166534; font-size: 14px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div id="loginOverlay">
         <div class="login-box">
-            <h2>🎷 Terzo Voto 🎶<br><span style="font-size: 20px; color: #475569;">Strumento Musicale</span></h2>
-            <p style="font-size: 16px; color: #334155; margin-top: 10px;">✨ Inserisci il Nickname dell'alunno 🧑🎓<br><small style="color:#64748b;">(es. petacciatoWow)</small></p>
-            <input type="text" id="studentNameInput" placeholder="✍️ Scrivi qui il nickname segreto">
-            <button class="btn-primary" style="width:100%; font-size: 18px; padding: 15px; border-radius: 12px;" onclick="window.loginStudent()">🚀 ENTRA NEL REGISTRO</button>
+            <h2>ðŸŽ· Terzo Voto ðŸŽ¶<br><span style="font-size: 20px; color: #475569;">Strumento Musicale</span></h2>
+            <p style="font-size: 16px; color: #334155; margin-top: 10px;">âœ¨ Inserisci il Nickname dell'alunno ðŸ§‘ðŸŽ“<br><small style="color:#64748b;">(es. petacciatoWow)</small></p>
+            <input type="text" id="studentNameInput" placeholder="âœï¸ Scrivi qui il nickname segreto">
+            <button class="btn-primary" style="width:100%; font-size: 18px; padding: 15px; border-radius: 12px;" onclick="window.loginStudent()">ðŸš€ ENTRA NEL REGISTRO</button>
         </div>
     </div>
 
     <div class="container" id="appContainer" style="display:none;">
         <header>
             <div>
-                <h1>🎵 Punti per Terzo Voto 🎷</h1>
-                <p class="student-name-display">🧑🎓 Alunno: <span id="displayStudentName">...</span></p>
+                <h1>ðŸŽµ Punti per Terzo Voto ðŸŽ·</h1>
+                <p class="student-name-display">ðŸ§‘ðŸŽ“ Alunno: <span id="displayStudentName">...</span></p>
             </div>
             <div style="text-align: right;">
-                <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
-                <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
+                <div class="token-display">ðŸ’Ž Punteggio: <span id="totalTokens">...</span></div>
+                <div style="margin-top: 15px; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
+                    <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px;">ðŸŒŸ Evoluzione Avatar:</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <div>ðŸ¥š <b>0 - 30 pt</b>: Livello 1</div>
+                        <div>ðŸ£ <b>31 - 60 pt</b>: Livello 2</div>
+                        <div>ðŸ¥ <b>61 - 90 pt</b>: Livello 3</div>
+                        <div>ðŸŽ·ðŸ‘‘ <b>91 - 180 pt</b>: Livello 4</div>
+                    </div>
+                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold;">
+                        ðŸ‰ 181+ pt: Livello Bonus Supremo!
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="window.logout()">ðŸšª Esci / Cambia Alunno</button>
             </div>
         </header>
 
-        <div id="lockMessage">🔒 <strong>Modalità sola lettura attiva!</strong><br>👨🏫 Inserisci la password per assegnare i punti.</div>
+        <div id="lockMessage">ðŸ”’ <strong>ModalitÃ  sola lettura attiva!</strong><br>ðŸ‘¨ðŸ« Inserisci la password per assegnare i punti.</div>
 
         <div class="status">
-            <div class="status-item"><span>✅ Voto BASE:</span><span id="baseTokens" style="color:var(--success);">0</span></div>
-            <div class="status-item"><span>🌟 Voto PRO:</span><span id="proTokens" style="color:var(--azure);">0</span></div>
-            <div class="status-item"><span>🏆 Voto VIP:</span><span id="vipTokens" style="color:var(--purple);">0</span></div>
-            <div class="status-item"><span>⚠️ Penalità:</span><span id="penaltyTokens" style="color:var(--danger);">0</span></div>
+            <div class="status-item"><span>âœ… Voto BASE:</span><span id="baseTokens" style="color:var(--success);">0</span></div>
+            <div class="status-item"><span>ðŸŒŸ Voto PRO:</span><span id="proTokens" style="color:var(--azure);">0</span></div>
+            <div class="status-item"><span>ðŸ† Voto VIP:</span><span id="vipTokens" style="color:var(--purple);">0</span></div>
+            <div class="status-item"><span>âš ï¸ PenalitÃ :</span><span id="penaltyTokens" style="color:var(--danger);">0</span></div>
         </div>
 
         <div class="main-section" style="background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
-            <h2 style="font-size: 18px; margin-bottom: 15px;">📜 📊 Registro Storico delle Attività 🕵️♂️</h2>
-            <div class="history-list" id="historyList">⏳ Caricamento dati o seleziona un alunno...</div>
+            <h2 style="font-size: 18px; margin-bottom: 15px;">ðŸ“œ ðŸ“Š Registro Storico delle AttivitÃ  ðŸ•µï¸â™‚ï¸</h2>
+            <div class="history-list" id="historyList">â³ Caricamento dati o seleziona un alunno...</div>
         </div>
         
         <div class="avatar-container">
-            <span class="avatar-emoji" id="avatarIcon">🥚</span>
+            <span class="avatar-emoji" id="avatarIcon">ðŸ¥š</span>
             <div class="avatar-rank" id="avatarRank">Grado: Uovo Novizio</div>
             <small>Accumula punti per evolverti!</small>
-
-            <!-- INIZIO LEGENDA SPOSTATA -->
-            <div style="max-width: 500px; margin: 15px auto 0; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
-                <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px; text-align: center;">🌟 Evoluzione Avatar:</strong>
-                <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px;">
-                    <div>🥚 <b>0 - 30 pt</b>: Livello 1</div>
-                    <div>🐣 <b>31 - 60 pt</b>: Livello 2</div>
-                    <div>🐥 <b>61 - 90 pt</b>: Livello 3</div>
-                    <div>🎷👑 <b>91 - 180 pt</b>: Livello 4</div>
-                </div>
-                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold; text-align: center;">
-                    🐉 181+ pt: Livello Bonus Supremo!
-                </div>
-            </div>
-            <!-- FINE LEGENDA SPOSTATA -->
-        </div>
-      
-        <!-- INIZIO RUOTA DELLA FORTUNA -->
-        <div class="interactive-card" style="text-align: center; border-top: 5px solid #f59e0b;">
-            <h3 style="margin-top:0; color: #b45309;">🎰 La Ruota della Fortuna</h3>
-            <p style="font-size: 13px; color: var(--gray-600);">Costo: 3 Punti. Tenta la sorte (1 giro ogni 24h)!</p>
-
-            <div class="wheel-container">
-                <div class="wheel-pointer"></div>
-                <div class="wheel" id="spinningWheel"></div>
-                <div class="wheel-center"></div>
-            </div>
-
-            <div class="wheel-legend">
-                <div class="legend-item"><div class="color-box" style="background:#94a3b8;"></div>1 pt (3%)</div>
-                <div class="legend-item"><div class="color-box" style="background:#fbd38d;"></div>2 pt (7%)</div>
-                <div class="legend-item"><div class="color-box" style="background:#86efac;"></div>3 pt (80%)</div>
-                <div class="legend-item"><div class="color-box" style="background:#93c5fd;"></div>4 pt (7%)</div>
-                <div class="legend-item"><div class="color-box" style="background:#d8b4fe;"></div>5 pt (3%)</div>
-            </div>
-
-            <button id="btnRuota" class="btn-send" style="background: linear-gradient(45deg, #f59e0b, #ea580c); margin-top: 20px; font-size: 16px;" onclick="window.giraRuota()">Gira la Ruota (-3 Punti) 🎲</button>
-            <div id="ruotaTimer" style="font-size: 13px; color: #ef4444; margin-top: 10px; font-weight: bold;"></div>
-        </div>
-        <!-- FINE RUOTA DELLA FORTUNA -->
-
-        <div class="edit-section">
-            <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
-            <div class="edit-controls">
-                <input type="password" id="adminPassword" placeholder="🔑 Password Docente">
-                <button class="btn-primary" onclick="window.checkPassword()">🔓 Sblocca Modifiche</button>
-            </div>
-            
-            <div id="editContent" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
-            <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
-                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">⏳ Proposte degli Alunni da Valutare</h4>
-                    <div id="pendingProposalsList">
-                        <div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>
-                    </div>
-                </div>
-                <input type="text" id="customReason" class="reason-input" placeholder="📝 Motivo personalizzato (es. 🎸 Super Assolo al concerto!)">
-                <div class="edit-controls">
-                    <select id="tokenType" style="background: #f8fafc; border: 2px solid #cbd5e1;">
-                        <option value="base">✅ Base (+1)</option>
-                        <option value="pro">🌟 Pro (+3)</option>
-                        <option value="vip">🏆 VIP (+8/10/15)</option>
-                    </select>
-                    <input type="number" id="tokenAmount" value="1" style="width: 80px; border: 2px solid #cbd5e1; font-weight: bold;">
-                    <button class="btn-success" onclick="window.addTokenTyped()">➕ Assegna Manuale</button>
-                    <button class="btn-danger" onclick="window.removeTokenTyped()">➖ Rimuovi Manuale</button>
-                </div>
-                <div class="edit-controls" style="margin-top: 15px; justify-content: flex-end;">
-                      <button class="btn-danger" style="background: #dc2626;" onclick="window.resetData()">🗑️ AZZERA TUTTI I PUNTI DELL'ALUNNO 🧨</button>
-                </div>
-            </div>
         </div>
 
-        <div class="main-section" style="border: 2px solid var(--success);">
-            <h2 class="base-header">🟢 ✅ LIVELLO BASE (Routine Settimanale) 📅</h2>
-            <div class="card-container">
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Studio settimanale eseguito correttamente')">
-                    <div class="card-title">👂 Ascolto consigli docente</div>
-                    <div class="card-desc">Hai applicato subito i consigli della scorsa lezione (solo lezione individuale) 💡</div>
-                    <div class="card-badge">+1</div>
-                </div>
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali OK')">
-                    <div class="card-title">🎒 Ha tutti i materiali</div>
-                    <div class="card-desc">Strumento + Spartito 📄 + Leggio perfetti!</div>
-                    <div class="card-badge">+1</div>
-                </div>
-                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
-                    <div class="card-title">🎻 Comportamento Orchestra</div>
-                    <div class="card-desc">Nessun disturbo durante le prove d'orchestra 🤫</div>
-                    <div class="card-badge">+1</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-section" style="border: 2px solid var(--azure);">
-            <h2 class="pro-header">🔵 🌟 LIVELLO PRO (Costanza Mensile) 🚀</h2>
-            <div class="card-container">
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
-                    <div class="card-title">📚 Sempre preparato</div>
-                    <div class="card-desc">Hai studiato in modo costante a ogni lezione del mese 💪</div>
-                    <div class="card-badge">+3</div>
-                </div>
-                <div class="action-card style-pro" onclick="window.clickTask(2, 'pro', 'Frequenza Top (Mese)')">
-                    <div class="card-title">🚶♂️ Frequenza costante</div>
-                    <div class="card-desc">1 Mese intero con massimo 3 assenze 📆</div>
-                    <div class="card-badge">+2</div>
-                </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
-                    <div class="card-title">🔥 Frequenza TOP</div>
-                    <div class="card-desc">1 Mese intero con massimo 1 assenza 🎯</div>
-                    <div class="card-badge">+3</div>
-                </div>
-                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
-                    <div class="card-title">😇 Comportamento mensile OK</div>
-                    <div class="card-desc">1 intero Mese senza penalità 👼</div>
-                    <div class="card-badge">+3</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-section" style="border: 2px solid var(--purple);">
-            <h2 class="vip-header">🟣 🏆 LIVELLO VIP (Brani Solista & Orchestra) 👑</h2>
-            <div class="card-container">
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Solista: Brano 1 OK')">
-                    <div class="card-title">🎵 Solista: Brano 1</div>
-                    <div class="card-desc">Primo brano da solista pronto per l'esecuzione 🎤</div>
-                    <div class="card-badge">+8</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Solista: Brano 2 OK')">
-                    <div class="card-title">🎶 Solista: Brano 2</div>
-                    <div class="card-desc">Secondo brano da solista pronto per l'esecuzione 🎸</div>
-                    <div class="card-badge">+10</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(15, 'vip', 'Solista: Brano 3 OK')">
-                    <div class="card-title">🤘 Solista: Brano 3</div>
-                    <div class="card-desc">Terzo brano da solista pronto per l'esecuzione 🎇</div>
-                    <div class="card-badge">+15</div>
-                </div>
-                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 1 - O Fortuna OK')">
-                    <div class="card-title">🎼 Orchestra: Brano 1</div>
-                    <div class="card-desc">O Fortuna pronto per l'esecuzione 🎻</div>
-                    <div class="card-badge">+8</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 2 - YMCA OK')">
-                    <div class="card-title">🕺 Orchestra: Brano 2</div>
-                    <div class="card-desc">YMCA pronto per l'esecuzione 🎺</div>
-                    <div class="card-badge">+8</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Orchestra: Brano 3 OK')">
-                    <div class="card-title">🧞♂️ Orchestra: Brano 3</div>
-                    <div class="card-desc">Friend Like Me pronto per l'esecuzione ✨</div>
-                    <div class="card-badge">+10</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 4 OK')">
-                    <div class="card-title">💃 Orchestra: Brano 4</div>
-                    <div class="card-desc">Mamma Mia pronto per l'esecuzione 🎹</div>
-                    <div class="card-badge">+8</div>
-                </div>
-                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
-                    <div class="card-title">❤️ Orchestra: Brano 5</div>
-                    <div class="card-desc">Can't Take My Eyes Off You pronto per l'esecuzione 🎷</div>
-                    <div class="card-badge">+8</div>
-                </div>
-                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
-                    <div class="card-title">🌍 Orchestra: Brano 6</div>
-                    <div class="card-desc">Inno alla Gioia pronto per l'esecuzione 🥁</div>
-                    <div class="card-badge">+8</div>
-                </div>
-
-            </div>
-        </div>
- 
-        <div class="main-section" style="border: 2px solid var(--danger);">
-            <h2 class="penalty-header">🔴 ⚠️ PENALITÀ (Attenzione!) 🚨</h2>
-            <div class="card-container">
-                <div class="action-card style-penalty" onclick="window.clickPenalty(2, 'NO Studio a casa')">
-                    <div class="card-title">💤 Settimana senza studio</div>
-                    <div class="card-desc">Studio a casa assente o troppo scarso 📉</div>
-                    <div class="card-badge">-2</div>
-                </div>
-                <div class="action-card style-penalty" onclick="window.clickPenalty(3, 'NO Materiale')">
-                    <div class="card-title">🤷♂️ Materiale Mancante</div>
-                    <div class="card-desc">Hai dimenticato lo Strumento, lo Spartito o il Leggio a casa 🏠</div>
-                    <div class="card-badge">-3</div>
-                </div>
-                 <div class="action-card style-penalty" onclick="window.clickPenalty(5, 'Disturbo Orchestra')">
-                    <div class="card-title">🗣️ Disturbo a Orchestra</div>
-                    <div class="card-desc">Ripetuto disturbo durante le prove 🙉</div>
-                    <div class="card-badge">-5</div>
-                </div>
-                <div class="action-card style-penalty" onclick="window.clickPenalty(4, 'Danni / Rispetto')">
-                    <div class="card-title">💥 Danni / Mancato Rispetto</div>
-                    <div class="card-desc">Caduta/danno a strumenti o ai locali della scuola 🏫</div>
-                    <div class="card-badge">-4</div>
-                </div>
-                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
-                    <div class="card-title">🤦‍♂️ Brano non imparato</div>
-                    <div class="card-desc">Non conosci il brano durante il concerto o il concorso 🥶</div>
-                    <div class="card-badge">-10</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
         <div class="interactive-card">
-            <h3 style="margin-top:0; color: var(--gray-800);">🚀 Area Proposte Alunni</h3>
+            <h3 style="margin-top:0; color: var(--gray-800);">ðŸš€ Area Proposte Alunni</h3>
             <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
             
             <div class="interactive-grid">
@@ -485,10 +265,10 @@
                         <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
                     </select>
                 </div>
+               
                 <div class="input-group">
                     <label>Categoria Punti</label>
-                    <input type="number" id="puntiRichiesti" placeholder="N° Punti (min:1 max:100)" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">
-                </div>
+<input type="number" id="puntiRichiesti" placeholder="NÂ° Punti" min="1" max="100" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 100px;">                </div>
             </div>
             
             <div class="input-group">
@@ -496,58 +276,217 @@
                 <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
             </div>
             
-            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 📩</button>
+            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro ðŸ“©</button>
         </div>
-        <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
+        <div class="edit-section">
+            <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">âš™ï¸ ðŸ‘¨ðŸ« Area Segreta Docente</h3>
+            <div class="edit-controls">
+                <input type="password" id="adminPassword" placeholder="ðŸ”‘ Password Docente">
+                <button class="btn-primary" onclick="window.checkPassword()">ðŸ”“ Sblocca Modifiche</button>
+            </div>
+            
+            <div id="editContent" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
+            <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
+                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">â³ Proposte degli Alunni da Valutare</h4>
+                    <div id="pendingProposalsList">
+                        <div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>
+                    </div>
+                </div>
+                <input type="text" id="customReason" class="reason-input" placeholder="ðŸ“ Motivo personalizzato (es. ðŸŽ¸ Super Assolo al concerto!)">
+                <div class="edit-controls">
+                    <select id="tokenType" style="background: #f8fafc; border: 2px solid #cbd5e1;">
+                        <option value="base">âœ… Base (+1)</option>
+                        <option value="pro">ðŸŒŸ Pro (+3)</option>
+                        <option value="vip">ðŸ† VIP (+8/10/15)</option>
+                    </select>
+                    <input type="number" id="tokenAmount" value="1" style="width: 80px; border: 2px solid #cbd5e1; font-weight: bold;">
+                    <button class="btn-success" onclick="window.addTokenTyped()">âž• Assegna Manuale</button>
+                    <button class="btn-danger" onclick="window.removeTokenTyped()">âž– Rimuovi Manuale</button>
+                </div>
+                <div class="edit-controls" style="margin-top: 15px; justify-content: flex-end;">
+                      <button class="btn-danger" style="background: #dc2626;" onclick="window.resetData()">ðŸ—‘ï¸ AZZERA TUTTI I PUNTI DELL'ALUNNO ðŸ§¨</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section" style="border: 2px solid var(--success);">
+            <h2 class="base-header">ðŸŸ¢ âœ… LIVELLO BASE (Routine Settimanale) ðŸ“…</h2>
+            <div class="card-container">
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Studio settimanale eseguito correttamente')">
+                    <div class="card-title">ðŸ‘‚ Ascolto consigli docente</div>
+                    <div class="card-desc">Hai applicato subito i consigli della scorsa lezione (solo lezione individuale) ðŸ’¡</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Materiali OK')">
+                    <div class="card-title">ðŸŽ’ Ha tutti i materiali</div>
+                    <div class="card-desc">Strumento + Spartito ðŸ“„ + Leggio perfetti!</div>
+                    <div class="card-badge">+1</div>
+                </div>
+                <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Comportamento Orchestra OK')">
+                    <div class="card-title">ðŸŽ» Comportamento Orchestra</div>
+                    <div class="card-desc">Nessun disturbo durante le prove d'orchestra ðŸ¤«</div>
+                    <div class="card-badge">+1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section" style="border: 2px solid var(--azure);">
+            <h2 class="pro-header">ðŸ”µ ðŸŒŸ LIVELLO PRO (Costanza Mensile) ðŸš€</h2>
+            <div class="card-container">
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Studio Costante (Mese)')">
+                    <div class="card-title">ðŸ“š Sempre preparato</div>
+                    <div class="card-desc">Hai studiato in modo costante a ogni lezione del mese ðŸ’ª</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(2, 'pro', 'Frequenza Top (Mese)')">
+                    <div class="card-title">ðŸš¶â™‚ï¸ Frequenza costante</div>
+                    <div class="card-desc">1 Mese intero con massimo 3 assenze ðŸ“†</div>
+                    <div class="card-badge">+2</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Frequenza Top (Mese)')">
+                    <div class="card-title">ðŸ”¥ Frequenza TOP</div>
+                    <div class="card-desc">1 Mese intero con massimo 1 assenza ðŸŽ¯</div>
+                    <div class="card-badge">+3</div>
+                </div>
+                <div class="action-card style-pro" onclick="window.clickTask(3, 'pro', 'Comportamento Top (Mese)')">
+                    <div class="card-title">ðŸ˜‡ Comportamento mensile OK</div>
+                    <div class="card-desc">1 intero Mese senza penalitÃ  ðŸ‘¼</div>
+                    <div class="card-badge">+3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-section" style="border: 2px solid var(--purple);">
+            <h2 class="vip-header">ðŸŸ£ ðŸ† LIVELLO VIP (Brani Solista & Orchestra) ðŸ‘‘</h2>
+            <div class="card-container">
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Solista: Brano 1 OK')">
+                    <div class="card-title">ðŸŽµ Solista: Brano 1</div>
+                    <div class="card-desc">Primo brano da solista pronto per l'esecuzione ðŸŽ¤</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Solista: Brano 2 OK')">
+                    <div class="card-title">ðŸŽ¶ Solista: Brano 2</div>
+                    <div class="card-desc">Secondo brano da solista pronto per l'esecuzione ðŸŽ¸</div>
+                    <div class="card-badge">+10</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(15, 'vip', 'Solista: Brano 3 OK')">
+                    <div class="card-title">ðŸ¤˜ Solista: Brano 3</div>
+                    <div class="card-desc">Terzo brano da solista pronto per l'esecuzione ðŸŽ‡</div>
+                    <div class="card-badge">+15</div>
+                </div>
+                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 1 - O Fortuna OK')">
+                    <div class="card-title">ðŸŽ¼ Orchestra: Brano 1</div>
+                    <div class="card-desc">O Fortuna pronto per l'esecuzione ðŸŽ»</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 2 - YMCA OK')">
+                    <div class="card-title">ðŸ•º Orchestra: Brano 2</div>
+                    <div class="card-desc">YMCA pronto per l'esecuzione ðŸŽº</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(10, 'vip', 'Orchestra: Brano 3 OK')">
+                    <div class="card-title">ðŸ§žâ™‚ï¸ Orchestra: Brano 3</div>
+                    <div class="card-desc">Friend Like Me pronto per l'esecuzione âœ¨</div>
+                    <div class="card-badge">+10</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 4 OK')">
+                    <div class="card-title">ðŸ’ƒ Orchestra: Brano 4</div>
+                    <div class="card-desc">Mamma Mia pronto per l'esecuzione ðŸŽ¹</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
+                    <div class="card-title">â¤ï¸ Orchestra: Brano 5</div>
+                    <div class="card-desc">Can't Take My Eyes Off You pronto per l'esecuzione ðŸŽ·</div>
+                    <div class="card-badge">+8</div>
+                </div>
+                    <div class="action-card style-vip" onclick="window.clickTask(8, 'vip', 'Orchestra: Brano 5 OK')">
+                    <div class="card-title">ðŸŒ Orchestra: Brano 6</div>
+                    <div class="card-desc">Inno alla Gioia pronto per l'esecuzione ðŸ¥</div>
+                    <div class="card-badge">+8</div>
+                </div>
+
+            </div>
+        </div>
+ 
+        <div class="main-section" style="border: 2px solid var(--danger);">
+            <h2 class="penalty-header">ðŸ”´ âš ï¸ PENALITÃ€ (Attenzione!) ðŸš¨</h2>
+            <div class="card-container">
+                <div class="action-card style-penalty" onclick="window.clickPenalty(2, 'NO Studio a casa')">
+                    <div class="card-title">ðŸ’¤ Settimana senza studio</div>
+                    <div class="card-desc">Studio a casa assente o troppo scarso ðŸ“‰</div>
+                    <div class="card-badge">-2</div>
+                </div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(3, 'NO Materiale')">
+                    <div class="card-title">ðŸ¤·â™‚ï¸ Materiale Mancante</div>
+                    <div class="card-desc">Hai dimenticato lo Strumento, lo Spartito o il Leggio a casa ðŸ </div>
+                    <div class="card-badge">-3</div>
+                </div>
+                 <div class="action-card style-penalty" onclick="window.clickPenalty(5, 'Disturbo Orchestra')">
+                    <div class="card-title">ðŸ—£ï¸ Disturbo a Orchestra</div>
+                    <div class="card-desc">Ripetuto disturbo durante le prove ðŸ™‰</div>
+                    <div class="card-badge">-5</div>
+                </div>
+                <div class="action-card style-penalty" onclick="window.clickPenalty(4, 'Danni / Rispetto')">
+                    <div class="card-title">ðŸ’¥ Danni / Mancato Rispetto</div>
+                    <div class="card-desc">Caduta/danno a strumenti o ai locali della scuola ðŸ«</div>
+                    <div class="card-badge">-4</div>
+                </div>
+                                <div class="action-card style-penalty" onclick="window.clickPenalty(10, 'Brano non imparato')">
+                    <div class="card-title">ðŸ¤¦â™‚ï¸ Brano non imparato</div>
+                    <div class="card-desc">Non conosci il brano durante il concerto o il concorso ðŸ¥¶</div>
+                    <div class="card-badge">-10</div>
+                </div>
+            </div>
+        </div>
 
         <div class="main-section">
-            <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">🎁 🎉 TABELLA RICOMPENSE E VOTI 💯</h2>
+            <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">ðŸŽ ðŸŽ‰ TABELLA RICOMPENSE E VOTI ðŸ’¯</h2>
             <div style="overflow-x: auto;">
                 <table class="rewards-table">
                     <thead>
                         <tr>
-                            <th>🎯 Punti Accumulati</th>
-                            <th>📝 Voto sul Registro</th>
+                            <th>ðŸŽ¯ Punti Accumulati</th>
+                            <th>ðŸ“ Voto sul Registro</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>📉 0 - 49 punti</td>
+                            <td>ðŸ“‰ 0 - 49 punti</td>
                             <td style="color: var(--danger);"><strong>Voto 4</strong></td>
                         </tr>
                         <tr>
-                            <td>⚠️ 50 - 59 punti</td>
+                            <td>âš ï¸ 50 - 59 punti</td>
                             <td style="color: #ea580c;"><strong>Voto 5</strong></td>
                         </tr>
                         <tr>
-                            <td>👌 60 - 69 punti</td>
+                            <td>ðŸ‘Œ 60 - 69 punti</td>
                             <td style="color: #ca8a04;"><strong>Voto 6</strong></td>
                         </tr>
                         <tr>
-                            <td>🙂 70 - 79 punti</td>
+                            <td>ðŸ™‚ 70 - 79 punti</td>
                             <td style="color: #65a30d;"><strong>Voto 7</strong></td>
                         </tr>
                         <tr>
-                            <td>😎 80 - 89 punti</td>
+                            <td>ðŸ˜Ž 80 - 89 punti</td>
                             <td style="color: var(--success);"><strong>Voto 8</strong></td>
                         </tr>
                         <tr>
-                            <td>🤩 90 - 99 punti</td>
+                            <td>ðŸ¤© 90 - 99 punti</td>
                             <td style="color: var(--azure);"><strong>Voto 9</strong></td>
                         </tr>
                         <tr>
-                            <td>👑 100 punti in poi</td>
-                            <td style="color: var(--purple); font-size: 18px;"><strong>Voto 10 🌟</strong></td>
+                            <td>ðŸ‘‘ 100 punti in poi</td>
+                            <td style="color: var(--purple); font-size: 18px;"><strong>Voto 10 ðŸŒŸ</strong></td>
                         </tr>
                          <tr style="background: #fef9c3;">
-                            <td>🚀 <strong>Dal 100 in poi, ogni 5 punti:</strong></td>
-                            <td style="color: #b45309;"><strong>➕ (Un Più) sul registro, che supporta gli altri voti già ricevuti!</strong></td>
+                            <td>ðŸš€ <strong>Dal 100 in poi, ogni 5 punti:</strong></td>
+                            <td style="color: #b45309;"><strong>âž• (Un PiÃ¹) sul registro, che supporta gli altri voti giÃ  ricevuti!</strong></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="rewards-note">
-                <strong>💡 Attenzione:</strong> i punti possono essere sia guadagnati che persi! Impegnati costantemente, tieni d'occhio questo foglio per capire dove migliorare e vedrai che farai un percorso musicale straordinario! 🎷✨
+                <strong>ðŸ’¡ Attenzione:</strong> i punti possono essere sia guadagnati che persi! Impegnati costantemente, tieni d'occhio questo foglio per capire dove migliorare e vedrai che farai un percorso musicale straordinario! ðŸŽ·âœ¨
             </div>
         </div>
 
@@ -643,7 +582,7 @@
         
         window.clickTask = function(amount, type, description) {
             if (!isAdminUnlocked) {
-                alert("🔒 BLOCCATO! Solo il docente può assegnare punti.");
+                alert("ðŸ”’ BLOCCATO! Solo il docente puÃ² assegnare punti.");
                 return;
             }
             
@@ -658,11 +597,11 @@
 
         window.clickPenalty = function(amount, description) {
             if (!isAdminUnlocked) {
-                alert("🔒 BLOCCATO! Password richiesta per penalità.");
+                alert("ðŸ”’ BLOCCATO! Password richiesta per penalitÃ .");
                 return;
             }
             
-            if(confirm(`Confermi penalità: ${description} (-${amount})?`)) {
+            if(confirm(`Confermi penalitÃ : ${description} (-${amount})?`)) {
                 currentData.totalTokens -= amount;
                 currentData.penaltyTokens += amount;
                 addToHistory('penalty', -amount, description);
@@ -690,7 +629,7 @@
             else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
             
             addToHistory(type, -amount, customReason);
-            alert(`❌ Rimossi ${amount} punti`);
+            alert(`âŒ Rimossi ${amount} punti`);
         }
 
         window.resetData = function() {
@@ -710,96 +649,11 @@
                 document.getElementById('editContent').style.display = 'block';
                 document.getElementById('lockMessage').style.display = 'none';
                 document.getElementById('adminPassword').value = '';
-                alert("🔓 Sbloccato! Ora puoi assegnare i voti.");
+                alert("ðŸ”“ Sbloccato! Ora puoi assegnare i voti.");
             } else {
                 alert("Password errata!");
             }
         }
-
-        // --- SISTEMA RUOTA DELLA FORTUNA ---
-        let currentWheelRotation = 0;
-
-        window.giraRuota = function() {
-            if (!currentData) return;
-            if ((currentData.totalTokens || 0) < 3) {
-                alert("Non hai abbastanza punti! Te ne servono almeno 3 per poter girare.");
-                return;
-            }
-
-            const now = new Date().getTime();
-            const lastSpin = currentData.lastSpinTime || 0;
-            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
-
-            if (orePassate < 24) {
-                const oreMancanti = Math.ceil(24 - orePassate);
-                alert(`Hai già girato la ruota! Devi aspettare ancora ${oreMancanti} ore.`);
-                return;
-            }
-
-            document.getElementById("btnRuota").disabled = true;
-
-            // 1. Scalo subito i 3 punti (Anti-cheat se ricaricano la pagina)
-            currentData.totalTokens -= 3;
-            currentData.lastSpinTime = now;
-            addToHistory('penalty', -3, '🎟️ Biglietto Ruota della Fortuna');
-            saveDataToCloud();
-            updateDisplay();
-
-            // 2. Calcolo premio con le tue probabilità
-            const r = Math.floor(Math.random() * 100);
-            let prize = 0; let sliceIndex = 0;
-
-            if (r < 3) { prize = 1; sliceIndex = 0; }
-            else if (r < 10) { prize = 2; sliceIndex = 1; }
-            else if (r < 90) { prize = 3; sliceIndex = 2; }
-            else if (r < 97) { prize = 4; sliceIndex = 3; }
-            else { prize = 5; sliceIndex = 4; }
-
-            // 3. Animazione fisica della ruota
-            const wheel = document.getElementById("spinningWheel");
-            const spinAmount = 1800; // 5 giri completi di suspence
-            const baseTarget = -(sliceIndex * 72);
-            const randomOffset = Math.floor(Math.random() * 50) - 25; 
-            
-            const next360 = Math.ceil(currentWheelRotation / 360) * 360;
-            currentWheelRotation = next360 + spinAmount + baseTarget + randomOffset;
-            wheel.style.transform = `rotate(${currentWheelRotation}deg)`;
-
-            // 4. Consegna il premio a fine giro
-            setTimeout(() => {
-                currentData.totalTokens += prize;
-                currentData.baseTokens = (currentData.baseTokens || 0) + prize;
-                addToHistory('base', prize, `🎰 Vincita alla Ruota della Fortuna!`);
-                saveDataToCloud();
-                updateDisplay();
-                
-                alert(`🎉 La ruota si è fermata! Hai vinto ${prize} punti!`);
-                document.getElementById("btnRuota").disabled = false;
-                window.updateWheelTimer();
-            }, 3500); 
-        };
-
-        window.updateWheelTimer = function() {
-            const timerDiv = document.getElementById("ruotaTimer");
-            const btn = document.getElementById("btnRuota");
-            if (!timerDiv || !currentData) return;
-            
-            const now = new Date().getTime();
-            const lastSpin = currentData.lastSpinTime || 0;
-            const orePassate = (now - lastSpin) / (1000 * 60 * 60);
-            
-            if (orePassate < 24) {
-                const oreMancanti = Math.ceil(24 - orePassate);
-                timerDiv.textContent = `⏳ Prossimo giro disponibile tra ${oreMancanti} ore.`;
-                btn.style.opacity = "0.5";
-                btn.style.cursor = "not-allowed";
-            } else {
-                timerDiv.textContent = "✅ Puoi girare la ruota!";
-                btn.style.opacity = "1";
-                btn.style.cursor = "pointer";
-            }
-        };
-        // --- FINE RUOTA DELLA FORTUNA ---
 
         function updateDisplay() {
             const totalEl = document.getElementById('totalTokens');
@@ -812,10 +666,7 @@
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
             
             // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
-            aggiornaAvatar();
-            
-            // AGGIORNA IL TIMER DELLA RUOTA
-            window.updateWheelTimer();
+            aggiornaAvatar(); 
         }
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {
@@ -827,7 +678,7 @@
             let proposteCount = 0;
 
             if (!currentData.history || !currentData.history.length) { 
-                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
+                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! ðŸŽµ</div>'; 
                 if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
                 return; 
             }
@@ -836,7 +687,7 @@
                 let testo = item.note || item.description || "Nessuna nota";
                 let dataOra = item.date || item.time || "";
 
-                // SE LA PROPOSTA È IN ATTESA -> Va nel cassetto del Maestro!
+                // SE LA PROPOSTA Ãˆ IN ATTESA -> Va nel cassetto del Maestro!
                 if (item.status === "pending") {
                     proposteCount++;
                     htmlAttesa += `
@@ -844,29 +695,29 @@
                         <div>
                             <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">+${item.amount} PUNTI</span>
                             <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${testo}</span>
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">🕒 ${dataOra}</div>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">ðŸ•’ ${dataOra}</div>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✅ Accetta</button>
-                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
+                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">âœ… Accetta</button>
+                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">âŒ Rifiuta</button>
                         </div>
                     </div>`;
                 } 
                 // ALTRIMENTI -> Va nello storico pubblico dell'alunno
                 else {
-                    let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
-                    if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
-                    if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
-                    if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
+                    let cl = 'type-base', em = 'âœ…', col = 'var(--success)', sign='+';
+                    if(item.type=='pro'){cl='type-pro'; em='ðŸŒŸ'; col='var(--azure)';}
+                    if(item.type=='vip'){cl='type-vip'; em='ðŸ†'; col='var(--purple)';}
+                    if(item.type=='penalty'){cl='type-penalty'; em='âš ï¸'; col='var(--danger)'; sign='';}
                     
                     let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
                     let extraStyle = "";
 
                     if (item.status === "approved") {
-                        em = '✔️';
+                        em = 'âœ”ï¸';
                         extraStyle = "border-left: 4px solid #10b981;";
                     } else if (item.status === "rejected") {
-                        em = '❌';
+                        em = 'âŒ';
                         extraStyle = "opacity: 0.6; background-color: #fef2f2;";
                         amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
                     }
@@ -876,7 +727,7 @@
                             <span class="history-type ${cl}">${em}</span> 
                             <div style="margin-left:15px;">
                                 <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
-                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
+                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">ðŸ•’ ${dataOra}</div>
                             </div>
                         </div>
                         ${amountBox}
@@ -901,19 +752,19 @@
 
             // Calcolo dei livelli (se cambi i numeri nella legenda, cambiali anche qui!)
             if (totale >= 181) {
-                icon.innerText = "🐉"; 
+                icon.innerText = "ðŸ‰"; 
                 rank.innerText = "Livello Bonus Supremo!";
             } else if (totale >= 91) {
-                icon.innerText = "🎷👑";
+                icon.innerText = "ðŸŽ·ðŸ‘‘";
                 rank.innerText = "Livello 4: Falco del Sax";
             } else if (totale >= 61) {
-                icon.innerText = "🐥";
+                icon.innerText = "ðŸ¥";
                 rank.innerText = "Livello 3: Musicista in Erba";
             } else if (totale >= 31) {
-                icon.innerText = "🐣";
+                icon.innerText = "ðŸ£";
                 rank.innerText = "Livello 2: Pulcino Curioso";
             } else {
-                icon.innerText = "🥚";
+                icon.innerText = "ðŸ¥š";
                 rank.innerText = "Livello 1: Uovo Principiante";
             }
         }
@@ -940,11 +791,11 @@
                 return;
             }
 
-            const etichetta = tipo === 'auto' ? '🙋 Autocandidatura' : '🤝 Segnalazione';
+            const etichetta = tipo === 'auto' ? 'ðŸ™‹ Autocandidatura' : 'ðŸ¤ Segnalazione';
             
             const nuovaProposta = {
                 id: Date.now(),
-                type: "base", // Usiamo il tipo standard, conterà solo la quantità
+                type: "base", // Usiamo il tipo standard, conterÃ  solo la quantitÃ 
                 amount: puntiRichiesti,
                 status: "pending", // L'etichetta magica
                 note: `${etichetta}: ${motivo}`,
@@ -967,10 +818,10 @@
             }
         }
 
-        // 2. Il maestro valuta: Accetta (dà i punti) o Rifiuta (Elimina la voce)
+        // 2. Il maestro valuta: Accetta (dÃ  i punti) o Rifiuta (Elimina la voce)
         function valutaProposta(propostaId, azione) {
             if (!isAdminUnlocked) {
-                alert("❌ Errore: Sblocca l'Area Docente con la password prima di valutare!");
+                alert("âŒ Errore: Sblocca l'Area Docente con la password prima di valutare!");
                 return;
             }
 
@@ -988,18 +839,18 @@
             if (azione === 'accetta') {
                 // Cambia lo stato e aggiunge il segno di spunta
                 currentData.history[index].status = "approved";
-                currentData.history[index].note = "✔️ ACCETTATA - " + currentData.history[index].note;
+                currentData.history[index].note = "âœ”ï¸ ACCETTATA - " + currentData.history[index].note;
 
                 // Aggiunge fisicamente i punti al totale dell'alunno!
                 currentData.baseTokens = (currentData.baseTokens || 0) + puntiDaAggiungere;
                 currentData.totalTokens = (currentData.totalTokens || 0) + puntiDaAggiungere;
 
-                alert(`✅ Hai accettato la proposta e assegnato ${puntiDaAggiungere} punti!`);
+                alert(`âœ… Hai accettato la proposta e assegnato ${puntiDaAggiungere} punti!`);
                 
             } else if (azione === 'rifiuta') {
                 // ELIMINA TOTALMENTE la proposta dallo storico usando "splice"
                 currentData.history.splice(index, 1);
-                alert("❌ Proposta rifiutata ed eliminata dallo storico.");
+                alert("âŒ Proposta rifiutata ed eliminata dallo storico.");
             }
 
         // Usa la tua funzione nativa infallibile per salvare su Firebase!

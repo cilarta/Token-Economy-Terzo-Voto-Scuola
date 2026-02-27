@@ -279,6 +279,12 @@
             </div>
             
             <div id="editContent" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
+            <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
+                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">⏳ Proposte degli Alunni da Valutare</h4>
+                    <div id="pendingProposalsList">
+                        <div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>
+                    </div>
+                </div>
                 <input type="text" id="customReason" class="reason-input" placeholder="📝 Motivo personalizzato (es. 🎸 Super Assolo al concerto!)">
                 <div class="edit-controls">
                     <select id="tokenType" style="background: #f8fafc; border: 2px solid #cbd5e1;">
@@ -626,7 +632,7 @@
             }
         }
 
-        // --- SISTEMA PASSWORD ---
+// --- SISTEMA PASSWORD ---
 
         window.checkPassword = function() {
             const pwd = document.getElementById('adminPassword').value;
@@ -653,70 +659,84 @@
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
         }
 
-function updateHistory() {
-            const list = document.getElementById('historyList');
+        // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
+        function updateHistory() {
+            const list = document.getElementById('historyList'); // Lo storico pubblico
+            const pendingList = document.getElementById('pendingProposalsList'); // Il cassetto segreto del Maestro
+
+            let htmlStorico = '';
+            let htmlAttesa = '';
+            let proposteCount = 0;
+
             if (!currentData.history || !currentData.history.length) { 
-                list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
+                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
+                if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
                 return; 
             }
             
-            let html = '';
             currentData.history.forEach(item => {
-                // --- STILE ORIGINALE (Vecchio sistema) ---
-                let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
-                if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
-                if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
-                if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
-                
-                // Capisce se usare il nuovo formato data/testo o quello vecchio
                 let testo = item.note || item.description || "Nessuna nota";
                 let dataOra = item.date || item.time || "";
-                
-                // Box di default per i punti (quello che c'era già)
-                let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
-                let extraStyle = "";
 
-                // --- GESTIONE NUOVO SISTEMA PROPOSTE ---
+                // SE LA PROPOSTA È IN ATTESA -> Va nel cassetto del Maestro!
                 if (item.status === "pending") {
-                    em = '⏳';
-                    extraStyle = "background-color: #fffbeb; border: 2px dashed #f59e0b;"; // Sfondo giallino per evidenziarla
-                    // Sostituisce il box del punteggio con i bottoni Accetta/Rifiuta!
-                    amountBox = `
+                    proposteCount++;
+                    htmlAttesa += `
+                    <div style="background: white; border: 1px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <div>
+                            <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">${item.type.toUpperCase()}</span>
+                            <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${testo}</span>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">🕒 ${dataOra}</div>
+                        </div>
                         <div style="display: flex; gap: 8px;">
-                            <button style="cursor:pointer; background:white; border:2px solid #10b981; border-radius:8px; padding: 4px 8px; font-size:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" onclick="valutaProposta(${item.id}, 'accetta')" title="Accetta">+1 ✅</button>
-                            <button style="cursor:pointer; background:white; border:2px solid #ef4444; border-radius:8px; padding: 4px 8px; font-size:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" onclick="valutaProposta(${item.id}, 'rifiuta')" title="Rifiuta">❌</button>
+                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✅ Accetta</button>
+                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
                         </div>
-                    `;
-                } else if (item.status === "approved") {
-                    em = '✔️';
-                    extraStyle = "border-left: 4px solid #10b981;";
-                } else if (item.status === "rejected") {
-                    em = '❌';
-                    extraStyle = "opacity: 0.6; background-color: #fef2f2;";
-                    amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
-                }
+                    </div>`;
+                } 
+                // ALTRIMENTI -> Va nello storico pubblico dell'alunno
+                else {
+                    let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
+                    if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
+                    if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
+                    if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
+                    
+                    let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
+                    let extraStyle = "";
 
-                // Genera la riga HTML finale
-                html += `<div class="history-item" style="${extraStyle}">
-                    <div style="display: flex; align-items: center;">
-                        <span class="history-type ${cl}">${em}</span> 
-                        <div style="margin-left:15px;">
-                            <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
-                            <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
+                    if (item.status === "approved") {
+                        em = '✔️';
+                        extraStyle = "border-left: 4px solid #10b981;";
+                    } else if (item.status === "rejected") {
+                        em = '❌';
+                        extraStyle = "opacity: 0.6; background-color: #fef2f2;";
+                        amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
+                    }
+
+                    htmlStorico += `<div class="history-item" style="${extraStyle}">
+                        <div style="display: flex; align-items: center;">
+                            <span class="history-type ${cl}">${em}</span> 
+                            <div style="margin-left:15px;">
+                                <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
+                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
+                            </div>
                         </div>
-                    </div>
-                    ${amountBox}
-                </div>`;
+                        ${amountBox}
+                    </div>`;
+                }
             });
-            list.innerHTML = html;
+
+            // Scrive il risultato a schermo
+            if(list) list.innerHTML = htmlStorico || '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato nello storico.</div>';
+            if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
         }
         
-// Funzione per l'Avatar Evolutivo con i nuovi gradi
+        // Funzione per l'Avatar Evolutivo con i nuovi gradi
         function aggiornaAvatar() {
             const totale = vBase + vPro + vVip; // Calcola il totale dei punti
             const icon = document.getElementById('avatarIcon');
             const rank = document.getElementById('avatarRank');
-
+            
             if (totale >= 130) {
                 icon.innerText = "🎷👑";
                 rank.innerText = "Grado: Re del Sax (LIVELLO MASSIMO)";

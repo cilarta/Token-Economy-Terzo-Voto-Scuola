@@ -653,7 +653,7 @@
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
         }
 
-        function updateHistory() {
+function updateHistory() {
             const list = document.getElementById('historyList');
             if (!currentData.history || !currentData.history.length) { 
                 list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
@@ -662,25 +662,55 @@
             
             let html = '';
             currentData.history.forEach(item => {
+                // --- STILE ORIGINALE (Vecchio sistema) ---
                 let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
                 if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
                 if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
                 if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
                 
-                html += `<div class="history-item">
+                // Capisce se usare il nuovo formato data/testo o quello vecchio
+                let testo = item.note || item.description || "Nessuna nota";
+                let dataOra = item.date || item.time || "";
+                
+                // Box di default per i punti (quello che c'era già)
+                let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
+                let extraStyle = "";
+
+                // --- GESTIONE NUOVO SISTEMA PROPOSTE ---
+                if (item.status === "pending") {
+                    em = '⏳';
+                    extraStyle = "background-color: #fffbeb; border: 2px dashed #f59e0b;"; // Sfondo giallino per evidenziarla
+                    // Sostituisce il box del punteggio con i bottoni Accetta/Rifiuta!
+                    amountBox = `
+                        <div style="display: flex; gap: 8px;">
+                            <button style="cursor:pointer; background:white; border:2px solid #10b981; border-radius:8px; padding: 4px 8px; font-size:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" onclick="valutaProposta(${item.id}, 'accetta')" title="Accetta">+1 ✅</button>
+                            <button style="cursor:pointer; background:white; border:2px solid #ef4444; border-radius:8px; padding: 4px 8px; font-size:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);" onclick="valutaProposta(${item.id}, 'rifiuta')" title="Rifiuta">❌</button>
+                        </div>
+                    `;
+                } else if (item.status === "approved") {
+                    em = '✔️';
+                    extraStyle = "border-left: 4px solid #10b981;";
+                } else if (item.status === "rejected") {
+                    em = '❌';
+                    extraStyle = "opacity: 0.6; background-color: #fef2f2;";
+                    amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
+                }
+
+                // Genera la riga HTML finale
+                html += `<div class="history-item" style="${extraStyle}">
                     <div style="display: flex; align-items: center;">
                         <span class="history-type ${cl}">${em}</span> 
                         <div style="margin-left:15px;">
-                            <span style="font-weight:800; color: #1e293b; font-size: 14px;">${item.description}</span>
-                            <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${item.time}</div>
+                            <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
+                            <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
                         </div>
                     </div>
-                    <div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>
+                    ${amountBox}
                 </div>`;
             });
             list.innerHTML = html;
         }
-
+        
 // Funzione per l'Avatar Evolutivo con i nuovi gradi
         function aggiornaAvatar() {
             const totale = vBase + vPro + vVip; // Calcola il totale dei punti

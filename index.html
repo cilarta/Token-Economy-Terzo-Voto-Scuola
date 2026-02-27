@@ -215,27 +215,32 @@
         .btn-use:hover { background: #2563eb; }
         .btn-active { background: #10b981; color: white; cursor: default; }
 
-        /* VARIABILI TEMI DINAMICI - VIDEOGIOCHI */
+        /* VARIABILI TEMI DINAMICI - VIDEOGIOCHI (IMMAGINI REALI) */
         
-        /* TEMA 1: FORTNITE (Ex Dark) */
+        /* TEMA 1: FORTNITE */
         body.theme-dark {
-            /* Sfondo epico di Fortnite Stagione 5/Og */
-            background: url('https://images8.alphacoders.com/936/936087.jpg') no-repeat center center fixed;
+            /* Immagine sfondo Fortnite ufficiale */
+            background-image: url('https://cdn2.unrealengine.com/14br-consoles-1920x1080-1920x1080-432974386.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             background-size: cover;
             color: #f8fafc;
         }
         body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
-            /* Sfondo semitrasparente per far leggere il testo */
             background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(5px); border: 2px solid #8b5cf6; color: #f8fafc; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
         }
         body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #c7d2fe !important; }
         body.theme-dark .action-card { background: rgba(30, 41, 59, 0.9); border-color: #8b5cf6; color: #f8fafc; }
         body.theme-dark .history-item { background: rgba(15, 23, 42, 0.9); border-left-color: #8b5cf6; color: #f8fafc;}
         
-        /* TEMA 2: MINECRAFT (Ex Neon) */
+        /* TEMA 2: MINECRAFT */
         body.theme-neon {
-            /* Sfondo Notturno/Cava di Minecraft */
-            background: url('https://images3.alphacoders.com/132/1328014.png') no-repeat center center fixed;
+            /* Immagine sfondo paesaggio Minecraft HD */
+            background-image: url('https://w.wallhaven.cc/full/pk/wallhaven-pk39xp.png');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             background-size: cover;
             color: #ecfdf5;
         }
@@ -246,14 +251,17 @@
         body.theme-neon .action-card { background: rgba(2, 44, 34, 0.9); border-color: #10b981; color: #ecfdf5; }
         body.theme-neon .history-item { background: rgba(2, 44, 34, 0.9); border-left-color: #10b981; color: #ecfdf5; }
 
-        /* TEMA 3: ROBLOX (Ex Foresta) */
+        /* TEMA 3: ROBLOX */
         body.theme-forest {
-            /* Sfondo classico Roblox/Jailbreak */
-            background: url('https://images4.alphacoders.com/114/1149793.jpg') no-repeat center center fixed;
+            /* Immagine sfondo Roblox Avatar e mondo */
+            background-image: url('https://images.rbxcdn.com/bd4243ab98b3f11bc05273b5df5b565a.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             background-size: cover;
             color: #fffbeb;
         }
-        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-store {
+        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
             background: rgba(120, 53, 15, 0.85); backdrop-filter: blur(5px); border: 2px solid #f59e0b;
         }
         body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #fde68a !important; text-shadow: 1px 1px 2px #000; }

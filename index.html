@@ -181,6 +181,21 @@
         .rewards-table tr:hover { background-color: #e0f2fe; }
         .rewards-table tr:last-child td { border-bottom: none; }
         .rewards-note { margin-top: 25px; padding: 20px; background: linear-gradient(to right, #dbeafe, #eff6ff); border-left: 6px solid var(--primary); border-radius: 10px; color: #1e3a8a; font-size: 15px; line-height: 1.6; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+       
+        /* SEZIONE INTERATTIVA */
+        .interactive-card { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--purple); }
+        .interactive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--gray-700); }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 10px; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; }
+        
+        .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
+        .btn-send:hover { transform: scale(1.02); }
+
+        /* AVATAR EVOLUTIVO */
+        .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
+        .avatar-emoji { font-size: 50px; display: block; }
+        .avatar-rank { font-weight: 800; color: #166534; font-size: 14px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -219,7 +234,43 @@
             <h2 style="font-size: 18px; margin-bottom: 15px;">📜 📊 Registro Storico delle Attività 🕵️‍♂️</h2>
             <div class="history-list" id="historyList">⏳ Caricamento dati o seleziona un alunno...</div>
         </div>
+        
+        <div class="avatar-container">
+            <span class="avatar-emoji" id="avatarIcon">🥚</span>
+            <div class="avatar-rank" id="avatarRank">Grado: Uovo Novizio</div>
+            <small>Accumula punti per evolverti!</small>
+        </div>
 
+        <div class="interactive-card">
+            <h3 style="margin-top:0; color: var(--gray-800);">🚀 Area Proposte Alunni</h3>
+            <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
+            
+            <div class="interactive-grid">
+                <div class="input-group">
+                    <label>Tipo di Proposta</label>
+                    <select id="tipoProposta">
+                        <option value="auto">Bonus per me (Autocandidatura)</option>
+                        <option value="peer">Segnalazione Compagno (Peer-Feedback)</option>
+                    </select>
+                </div>
+               
+                <div class="input-group">
+                    <label>Categoria Punti</label>
+                    <select id="catPunti">
+                        <option value="BASE">Voto BASE</option>
+                        <option value="PRO">Voto PRO</option>
+                        <option value="VIP">Voto VIP</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Motivazione (Cosa hai fatto di speciale?)</label>
+                <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
+            </div>
+            
+            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 📩</button>
+        </div>
         <div class="edit-section">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨‍🏫 Area Segreta Docente</h3>
             <div class="edit-controls">
@@ -629,6 +680,44 @@
             });
             list.innerHTML = html;
         }
+
+        // Funzione per l'Avatar Evolutivo
+        function aggiornaAvatar() {
+            const totale = vBase + vPro + vVip; // Calcola il totale dei punti
+            const icon = document.getElementById('avatarIcon');
+            const rank = document.getElementById('avatarRank');
+
+            if (totale > 150) {
+                icon.innerText = "🦅";
+                rank.innerText = "Grado: Aquila Reale";
+            } else if (totale > 100) {
+                icon.innerText = "🦁";
+                rank.innerText = "Grado: Leone Coraggioso";
+            } else if (totale > 50) {
+                icon.innerText = "🐣";
+                rank.innerText = "Grado: Pulcino Esperto";
+            } else {
+                icon.innerText = "🥚";
+                rank.innerText = "Grado: Uovo Novizio";
+            }
+        }
+
+        // Funzione per inviare la proposta
+        function inviaProposta() {
+            const tipo = document.getElementById('tipoProposta').value;
+            const motivo = document.getElementById('motivo').value;
+            
+            if (motivo.trim() === "") {
+                alert("Per favore, scrivi una motivazione!");
+                return;
+            }
+            
+            alert("Ottimo lavoro! La tua proposta è stata inviata. Il maestro la valuterà presto! ⭐");
+            document.getElementById('motivo').value = ""; // Pulisce il campo
+        }
+
+        // Esegui l'aggiornamento avatar all'avvio
+        aggiornaAvatar();
     </script>
 </body>
 </html>

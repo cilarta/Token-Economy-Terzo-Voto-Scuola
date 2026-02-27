@@ -196,23 +196,30 @@
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
         .avatar-emoji { font-size: 85px; display: block; margin-bottom: 5px; }
         .avatar-rank { font-weight: 900; color: #166534; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
-                /* --- SISTEMA TROFEI --- */
+        /* --- SISTEMA TROFEI CON BARRE PROGRESSO --- */
         .trophies-container {
-            background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 2px dashed #fbbf24;
+            background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 2px dashed #fbbf24;
         }
         .trophies-grid {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 15px;
+        }
+        .trophy-wrapper {
+            position: relative; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #e5e7eb; cursor: help;
         }
         .trophy {
-            width: 45px; height: 45px; border-radius: 50%; background: #f3f4f6; border: 2px solid #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 20px; filter: grayscale(100%) opacity(0.5); transition: all 0.3s ease; position: relative; cursor: help;
+            width: 55px; height: 55px; border-radius: 50%; background: #f3f4f6; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 28px; filter: grayscale(100%) opacity(0.5); z-index: 2; transition: all 0.3s ease;
         }
-        .trophy.unlocked {
-            filter: grayscale(0%) opacity(1); background: linear-gradient(135deg, #fef08a, #f59e0b); border-color: #d97706; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); transform: scale(1.1);
+        .trophy-wrapper.unlocked .trophy {
+            filter: grayscale(0%) opacity(1); background: linear-gradient(135deg, #fef08a, #f59e0b); border-color: white; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); transform: scale(1.05);
         }
-        /* Tooltip per il nome del trofeo */
-        .trophy:hover::after {
-            content: attr(data-title); position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 5px 10px; border-radius: 6px; font-size: 11px; white-space: nowrap; z-index: 10; pointer-events: none; font-weight: bold;
+        .trophy-wrapper.unlocked {
+            background: #f59e0b; /* Bordo colorato pieno quando sbloccato */
         }
+        /* Tooltip per il nome e progresso */
+        .trophy-wrapper:hover::after {
+            content: attr(data-title); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; z-index: 10; pointer-events: none; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
 
     </style>
 </head>
@@ -801,21 +808,31 @@
                 rank.innerText = "Livello 1: Uovo Principiante";
             }
         }
-        // --- SISTEMA TROFEI AUTOMATICO ---
+        // --- SISTEMA TROFEI AUTOMATICO (CON PROGRESSO) ---
+        // Ogni trofeo ora ha una funzione "progress" che restituisce la % di completamento (da 0 a 100)
         const trofeiList = [
-            { id: 1, icon: '🥉', name: 'Primo Traguardo (30 pt totali)', condition: (d) => d.totalTokens >= 30 },
-            { id: 2, icon: '🥈', name: 'Metà dell\'Opera (60 pt totali)', condition: (d) => d.totalTokens >= 60 },
-            { id: 3, icon: '🥇', name: 'Cento e Lode (100 pt totali)', condition: (d) => d.totalTokens >= 100 },
-            { id: 4, icon: '💎', name: 'Leggenda Vivente (150 pt totali)', condition: (d) => d.totalTokens >= 150 },
-            { id: 5, icon: '✅', name: 'Affidabile (40 pt BASE + 0 Penalità)', condition: (d) => d.baseTokens >= 40 && d.penaltyTokens === 0 },
-            { id: 6, icon: '🚀', name: 'Professionista (6 voti PRO)', condition: (d) => calcolaVotiPro(d) >= 6 },
-            { id: 7, icon: '🌟', name: 'Solista Coraggioso (Primo voto VIP)', condition: (d) => d.vipTokens > 0 },
-            { id: 8, icon: '👑', name: 'Re dell\'Orchestra (40 pt VIP)', condition: (d) => d.vipTokens >= 40 },
-            { id: 9, icon: '👼', name: 'Angelo Custode (60 pt VIP)', condition: (d) => d.vipTokens >= 60 },
-            { id: 10, icon: '🦅', name: 'Fenice (100 pt totali)', condition: (d) => d.totalTokens >= 100 }
+            { id: 1, icon: '🥉', name: 'Primo Traguardo (30 pt)', 
+              condition: (d) => d.totalTokens >= 30, progress: (d) => Math.min(100, Math.max(0, ((d.totalTokens || 0) / 30) * 100)) },
+            { id: 2, icon: '🥈', name: 'Metà dell\'Opera (60 pt)', 
+              condition: (d) => d.totalTokens >= 60, progress: (d) => Math.min(100, Math.max(0, ((d.totalTokens || 0) / 60) * 100)) },
+            { id: 3, icon: '🥇', name: 'Cento e Lode (100 pt)', 
+              condition: (d) => d.totalTokens >= 100, progress: (d) => Math.min(100, Math.max(0, ((d.totalTokens || 0) / 100) * 100)) },
+            { id: 4, icon: '💎', name: 'Leggenda Vivente (150 pt)', 
+              condition: (d) => d.totalTokens >= 150, progress: (d) => Math.min(100, Math.max(0, ((d.totalTokens || 0) / 150) * 100)) },
+            { id: 5, icon: '✅', name: 'Affidabile (40 pt BASE)', 
+              condition: (d) => d.baseTokens >= 40 && d.penaltyTokens === 0, progress: (d) => d.penaltyTokens > 0 ? 0 : Math.min(100, Math.max(0, ((d.baseTokens || 0) / 40) * 100)) },
+            { id: 6, icon: '🚀', name: 'Professionista (6 voti PRO)', 
+              condition: (d) => calcolaVotiPro(d) >= 6, progress: (d) => Math.min(100, Math.max(0, (calcolaVotiPro(d) / 6) * 100)) },
+            { id: 7, icon: '🌟', name: 'Solista Coraggioso (1 voto VIP)', 
+              condition: (d) => d.vipTokens > 0, progress: (d) => (d.vipTokens || 0) > 0 ? 100 : 0 },
+            { id: 8, icon: '👑', name: 'Re dell\'Orchestra (40 pt VIP)', 
+              condition: (d) => d.vipTokens >= 40, progress: (d) => Math.min(100, Math.max(0, ((d.vipTokens || 0) / 40) * 100)) },
+            { id: 9, icon: '👼', name: 'Angelo Custode (60 pt VIP)', 
+              condition: (d) => d.vipTokens >= 60, progress: (d) => Math.min(100, Math.max(0, ((d.vipTokens || 0) / 60) * 100)) },
+            { id: 10, icon: '🦅', name: 'Fenice (100 pt totali)', 
+              condition: (d) => d.totalTokens >= 100, progress: (d) => Math.min(100, Math.max(0, ((d.totalTokens || 0) / 100) * 100)) }
         ];
 
-        // Funzione di supporto per contare quante volte ha preso un voto PRO
         function calcolaVotiPro(data) {
             if (!data.history) return 0;
             return data.history.filter(h => h.type === 'pro').length;
@@ -827,14 +844,28 @@
 
             let html = '';
             trofeiList.forEach(trofeo => {
-                // Controlla se la regola è soddisfatta usando i dati attuali
                 const isUnlocked = trofeo.condition(currentData);
-                const cssClass = isUnlocked ? 'trophy unlocked' : 'trophy';
+                let progresso = Math.round(trofeo.progress(currentData));
                 
-                html += `<div class="${cssClass}" data-title="${trofeo.name}">${trofeo.icon}</div>`;
+                // Se è sbloccato, forza al 100% visivo
+                if (isUnlocked) progresso = 100;
+                
+                const wrapperClass = isUnlocked ? 'trophy-wrapper unlocked' : 'trophy-wrapper';
+                // La barra di progresso è creata con un conic-gradient!
+                const progressStyle = isUnlocked ? '' : `background: conic-gradient(#3b82f6 ${progresso}%, #e5e7eb ${progresso}%);`;
+                
+                // Testo del tooltip con la percentuale aggiunta
+                const tooltipText = isUnlocked ? `${trofeo.name} - SBLOCCATO!` : `${trofeo.name} - ${progresso}%`;
+
+                html += `
+                <div class="${wrapperClass}" style="${progressStyle}" data-title="${tooltipText}">
+                    <div class="trophy">${trofeo.icon}</div>
+                </div>`;
             });
             grid.innerHTML = html;
         }
+        // --- FINE SISTEMA TROFEI AUTOMATICO ---
+
 
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 

@@ -215,55 +215,50 @@
         .btn-use:hover { background: #2563eb; }
         .btn-active { background: #10b981; color: white; cursor: default; }
 
-        /* ANIMAZIONE BASE PER TUTTI I GRADIENTI */
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* VARIABILI TEMI DINAMICI AGGIORNATI */
-        /* TEMA 1: COSMIC AURORA (Dark Animato) */
+        /* VARIABILI TEMI DINAMICI - VIDEOGIOCHI */
+        
+        /* TEMA 1: FORTNITE (Ex Dark) */
         body.theme-dark {
-            background: linear-gradient(-45deg, #0f172a, #312e81, #4c1d95, #1e1b4b);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
+            /* Sfondo epico di Fortnite Stagione 5/Og */
+            background: url('https://images8.alphacoders.com/936/936087.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #f8fafc;
         }
         body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
-            background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px); border-color: #6366f1; color: #f8fafc;
+            /* Sfondo semitrasparente per far leggere il testo */
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(5px); border: 2px solid #8b5cf6; color: #f8fafc; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
         }
-        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #e0e7ff !important; }
-        body.theme-dark .action-card { background: rgba(15, 23, 42, 0.9); color: #f8fafc; }
-        body.theme-dark .history-item { background: rgba(30, 41, 59, 0.9); border-color: #6366f1; }
+        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #c7d2fe !important; }
+        body.theme-dark .action-card { background: rgba(30, 41, 59, 0.9); border-color: #8b5cf6; color: #f8fafc; }
+        body.theme-dark .history-item { background: rgba(15, 23, 42, 0.9); border-left-color: #8b5cf6; color: #f8fafc;}
         
-        /* TEMA 2: CYBERPUNK (Neon Animato) */
+        /* TEMA 2: MINECRAFT (Ex Neon) */
         body.theme-neon {
-            background: linear-gradient(-45deg, #083344, #0369a1, #0d9488, #0284c7);
-            background-size: 400% 400%;
-            animation: gradientAnimation 12s ease infinite;
-            color: #e0f2fe;
+            /* Sfondo Notturno/Cava di Minecraft */
+            background: url('https://images3.alphacoders.com/132/1328014.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ecfdf5;
         }
         body.theme-neon .main-section, body.theme-neon .interactive-card, body.theme-neon .theme-store {
-            background: rgba(8, 47, 73, 0.85); backdrop-filter: blur(10px); border: 2px solid #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            background: rgba(6, 78, 59, 0.85); backdrop-filter: blur(5px); border: 2px solid #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
         }
-        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #67e8f9 !important; }
-        body.theme-neon .action-card { background: rgba(8, 47, 73, 0.9); border-color: #06b6d4; color: #cffafe; }
-        body.theme-neon .history-item { background: rgba(8, 47, 73, 0.9); border-left-color: #06b6d4; color: #cffafe; }
+        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #6ee7b7 !important; text-shadow: 1px 1px 2px #000; }
+        body.theme-neon .action-card { background: rgba(2, 44, 34, 0.9); border-color: #10b981; color: #ecfdf5; }
+        body.theme-neon .history-item { background: rgba(2, 44, 34, 0.9); border-left-color: #10b981; color: #ecfdf5; }
 
-        /* TEMA 3: LAVA FLOW (Rosso/Arancio Animato) */
+        /* TEMA 3: ROBLOX (Ex Foresta) */
         body.theme-forest {
-            background: linear-gradient(-45deg, #7f1d1d, #b91c1c, #ea580c, #c2410c);
-            background-size: 400% 400%;
-            animation: gradientAnimation 10s ease infinite;
-            color: #fff7ed;
+            /* Sfondo classico Roblox/Jailbreak */
+            background: url('https://images4.alphacoders.com/114/1149793.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fffbeb;
         }
-        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
-            background: rgba(127, 29, 29, 0.85); backdrop-filter: blur(10px); border-color: #fb923c;
+        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-store {
+            background: rgba(120, 53, 15, 0.85); backdrop-filter: blur(5px); border: 2px solid #f59e0b;
         }
-        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #fed7aa !important; }
-        body.theme-forest .action-card { background: rgba(153, 27, 27, 0.9); color: #fff7ed; border-color: #f97316;}
-        body.theme-forest .history-item { background: rgba(127, 29, 29, 0.9); border-color: #fb923c; color: #fff7ed;}
+        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #fde68a !important; text-shadow: 1px 1px 2px #000; }
+        body.theme-forest .action-card { background: rgba(69, 26, 3, 0.9); color: #fffbeb; border-color: #f59e0b;}
+        body.theme-forest .history-item { background: rgba(69, 26, 3, 0.9); border-left-color: #f59e0b; color: #fffbeb;}
 
         /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
@@ -953,10 +948,10 @@
         window.valutaProposta = valutaProposta;
         // --- SISTEMA NEGOZIO TEMI ---
         const themes = [
-            { id: 'default', name: 'Chiaro (Standard)', icon: '☀️', price: 0, class: '' },
-            { id: 'dark', name: 'Cosmic Aurora', icon: '🌌', price: 30, class: 'theme-dark' },
-            { id: 'forest', name: 'Lava Flow', icon: '🔥', price: 40, class: 'theme-forest' },
-            { id: 'neon', name: 'Cyberpunk', icon: '💎', price: 50, class: 'theme-neon' }
+            { id: 'default', name: 'Standard (Bianco)', icon: '📝', price: 0, class: '' },
+            { id: 'dark', name: 'Fortnite Battle Royale', icon: '🪂', price: 30, class: 'theme-dark' },
+            { id: 'forest', name: 'Roblox World', icon: '🧱', price: 40, class: 'theme-forest' },
+            { id: 'neon', name: 'Minecraft Survival', icon: '⛏️', price: 50, class: 'theme-neon' }
         ];
 
         function renderThemeStore() {

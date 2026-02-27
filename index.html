@@ -191,82 +191,6 @@
         
         .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
         .btn-send:hover { transform: scale(1.02); }
-                /* NEGOZIO TEMI */
-        .theme-store {
-            background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #14b8a6;
-        }
-        .theme-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px;
-        }
-        .theme-card {
-            border: 2px solid var(--gray-200); border-radius: 12px; padding: 15px 10px; text-align: center; transition: all 0.2s; background: #f8fafc;
-        }
-        .theme-card.owned { border-color: #10b981; background: #ecfdf5; }
-        .theme-card.active { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); transform: scale(1.02); }
-        .theme-icon { font-size: 30px; margin-bottom: 5px; display: block; }
-        .theme-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--gray-900); }
-        .theme-price { font-size: 13px; color: #ef4444; font-weight: bold; margin-bottom: 10px; }
-        .theme-btn {
-            padding: 8px 12px; font-size: 12px; border-radius: 6px; width: 100%; border: none; cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
-        .btn-buy { background: #f59e0b; color: white; }
-        .btn-buy:hover { background: #ea580c; }
-        .btn-use { background: #3b82f6; color: white; }
-        .btn-use:hover { background: #2563eb; }
-        .btn-active { background: #10b981; color: white; cursor: default; }
-
-        /* VARIABILI TEMI DINAMICI - VIDEOGIOCHI */
-        
-        /* TEMA 1: FORTNITE (Stile Battaglia) */
-        body.theme-dark {
-            background-color: transparent !important;
-            background-image: url('https://images.unsplash.com/photo-1589241062272-c0a1f436000f?q=80&w=1920&auto=format&fit=crop') !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
-            background-attachment: fixed !important;
-            background-size: cover !important;
-            color: #f8fafc;
-        }
-        body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(5px); border: 2px solid #8b5cf6; color: #f8fafc; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-        }
-        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #c7d2fe !important; }
-        body.theme-dark .action-card { background: rgba(30, 41, 59, 0.9); border-color: #8b5cf6; color: #f8fafc; }
-        body.theme-dark .history-item { background: rgba(15, 23, 42, 0.9); border-left-color: #8b5cf6; color: #f8fafc;}
-        
-        /* TEMA 2: MINECRAFT (Stile Cubico/Natura) */
-        body.theme-neon {
-            background-color: transparent !important;
-            background-image: url('https://images.unsplash.com/photo-1607513746994-51f730a44832?q=80&w=1920&auto=format&fit=crop') !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
-            background-attachment: fixed !important;
-            background-size: cover !important;
-            color: #ecfdf5;
-        }
-        body.theme-neon .main-section, body.theme-neon .interactive-card, body.theme-neon .theme-store {
-            background: rgba(6, 78, 59, 0.85); backdrop-filter: blur(5px); border: 2px solid #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-        }
-        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #6ee7b7 !important; text-shadow: 1px 1px 2px #000; }
-        body.theme-neon .action-card { background: rgba(2, 44, 34, 0.9); border-color: #10b981; color: #ecfdf5; }
-        body.theme-neon .history-item { background: rgba(2, 44, 34, 0.9); border-left-color: #10b981; color: #ecfdf5; }
-
-        /* TEMA 3: ROBLOX (Stile Creativo/Mondo) */
-        body.theme-forest {
-            background-color: transparent !important;
-            background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?q=80&w=1920&auto=format&fit=crop') !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
-            background-attachment: fixed !important;
-            background-size: cover !important;
-            color: #fffbeb;
-        }
-        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
-            background: rgba(120, 53, 15, 0.85); backdrop-filter: blur(5px); border: 2px solid #f59e0b;
-        }
-        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #fde68a !important; text-shadow: 1px 1px 2px #000; }
-        body.theme-forest .action-card { background: rgba(69, 26, 3, 0.9); color: #fffbeb; border-color: #f59e0b;}
-        body.theme-forest .history-item { background: rgba(69, 26, 3, 0.9); border-left-color: #f59e0b; color: #fffbeb;}
 
         /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
@@ -492,16 +416,6 @@
                 </div>
             </div>
         </div>
-            <!-- INIZIO NEGOZIO TEMI -->
-            <div class="theme-store">
-                <h3 style="margin-top:0; color: #0f766e;">🎨 Negozio Personalizzazioni</h3>
-                <p style="font-size: 13px; color: var(--gray-600);">Spendi i tuoi punti per sbloccare nuovi colori per il tuo registro!</p>
-                
-                <div class="theme-grid" id="themeGrid">
-                    <!-- Generato via JS -->
-                </div>
-            </div>
-            <!-- FINE NEGOZIO TEMI -->
 
         <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
         <div class="interactive-card">
@@ -954,93 +868,11 @@
         // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
         window.inviaProposta = inviaProposta;
         window.valutaProposta = valutaProposta;
-        // --- SISTEMA NEGOZIO TEMI ---
-        const themes = [
-            { id: 'default', name: 'Standard (Bianco)', icon: '📝', price: 0, class: '' },
-            { id: 'dark', name: 'Fortnite Battle Royale', icon: '🪂', price: 30, class: 'theme-dark' },
-            { id: 'forest', name: 'Roblox World', icon: '🧱', price: 40, class: 'theme-forest' },
-            { id: 'neon', name: 'Minecraft Survival', icon: '⛏️', price: 50, class: 'theme-neon' }
-        ];
-
-        function renderThemeStore() {
-            const grid = document.getElementById('themeGrid');
-            if (!grid || !currentData) return;
-
-            // Assicurati che l'array ownedThemes esista
-            if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
-            const activeTheme = currentData.activeTheme || 'default';
-
-            let html = '';
-            themes.forEach(theme => {
-                const isOwned = currentData.ownedThemes.includes(theme.id);
-                const isActive = activeTheme === theme.id;
-                
-                let cardClass = 'theme-card';
-                if (isActive) cardClass += ' active';
-                else if (isOwned) cardClass += ' owned';
-
-                let btnHtml = '';
-                if (isActive) {
-                    btnHtml = `<button class="theme-btn btn-active" disabled>In Uso ✔️</button>`;
-                } else if (isOwned) {
-                    btnHtml = `<button class="theme-btn btn-use" onclick="window.useTheme('${theme.id}')">Usa Tema</button>`;
-                } else {
-                    btnHtml = `<button class="theme-btn btn-buy" onclick="window.buyTheme('${theme.id}', ${theme.price})">Compra (-${theme.price})</button>`;
-                }
-
-                html += `
-                <div class="${cardClass}">
-                    <span class="theme-icon">${theme.icon}</span>
-                    <div class="theme-name">${theme.name}</div>
-                    ${!isOwned ? `<div class="theme-price">💎 ${theme.price} pt</div>` : '<div class="theme-price" style="color:#10b981;">Acquistato</div>'}
-                    ${btnHtml}
-                </div>`;
-            });
-            grid.innerHTML = html;
-            applyThemeClass(activeTheme);
-        }
-
-        window.buyTheme = function(themeId, price) {
-            if (!currentData) return;
-            if ((currentData.totalTokens || 0) < price) {
-                alert(`Non hai abbastanza punti! Ti servono ${price} punti per questo tema.`);
-                return;
-            }
-            if (confirm(`Vuoi comprare questo tema per ${price} punti?`)) {
-                currentData.totalTokens -= price;
-                if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
-                currentData.ownedThemes.push(themeId);
-                
-                addToHistory('penalty', -price, `🎨 Acquisto Tema nel Negozio`);
-                window.useTheme(themeId); // Lo imposta in automatico dopo l'acquisto
-            }
-        };
-
-        window.useTheme = function(themeId) {
-            if (!currentData) return;
-            currentData.activeTheme = themeId;
-            saveDataToCloud();
-            renderThemeStore();
-            updateDisplay();
-        };
-
-        function applyThemeClass(themeId) {
-            // Rimuove tutte le classi tema dal body
-            document.body.classList.remove('theme-dark', 'theme-forest', 'theme-neon');
-            
-            // Aggiunge la classe del tema attivo
-            const theme = themes.find(t => t.id === themeId);
-            if (theme && theme.class) {
-                document.body.classList.add(theme.class);
-            }
-        }
-        // --- FINE SISTEMA NEGOZIO TEMI ---
 
         // --- FINE NUOVO SISTEMA PROPOSTE ---        
         
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
-        renderThemeStore();
     </script>
 </body>
 </html>

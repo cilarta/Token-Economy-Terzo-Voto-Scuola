@@ -191,6 +191,59 @@
         
         .btn-send { width: 100%; background: linear-gradient(45deg, var(--purple), var(--azure)); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; }
         .btn-send:hover { transform: scale(1.02); }
+                /* NEGOZIO TEMI */
+        .theme-store {
+            background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #14b8a6;
+        }
+        .theme-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px;
+        }
+        .theme-card {
+            border: 2px solid var(--gray-200); border-radius: 12px; padding: 15px 10px; text-align: center; transition: all 0.2s; background: #f8fafc;
+        }
+        .theme-card.owned { border-color: #10b981; background: #ecfdf5; }
+        .theme-card.active { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); transform: scale(1.02); }
+        .theme-icon { font-size: 30px; margin-bottom: 5px; display: block; }
+        .theme-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--gray-900); }
+        .theme-price { font-size: 13px; color: #ef4444; font-weight: bold; margin-bottom: 10px; }
+        .theme-btn {
+            padding: 8px 12px; font-size: 12px; border-radius: 6px; width: 100%; border: none; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .btn-buy { background: #f59e0b; color: white; }
+        .btn-buy:hover { background: #ea580c; }
+        .btn-use { background: #3b82f6; color: white; }
+        .btn-use:hover { background: #2563eb; }
+        .btn-active { background: #10b981; color: white; cursor: default; }
+
+        /* VARIABILI TEMI DINAMICI */
+        body.theme-dark {
+            background: linear-gradient(135deg, #1e1e2f 0%, #000000 100%);
+            color: #f8fafc;
+        }
+        body.theme-dark .main-section, body.theme-dark .interactive-card, body.theme-dark .theme-store {
+            background: #2d2d44; border-color: #4b5563; color: #f8fafc;
+        }
+        body.theme-dark h2, body.theme-dark h3, body.theme-dark .card-title, body.theme-dark .theme-name { color: #f8fafc !important; }
+        body.theme-dark .action-card { background: #1e1e2f; color: #f8fafc; }
+        body.theme-dark .history-item { background: #1e1e2f; border-color: #4b5563; }
+        
+        body.theme-neon {
+            background: #0f172a; color: #0ea5e9;
+        }
+        body.theme-neon .main-section, body.theme-neon .interactive-card, body.theme-neon .theme-store {
+            background: #1e293b; border: 2px solid #0ea5e9; box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+        }
+        body.theme-neon h2, body.theme-neon h3, body.theme-neon .card-title, body.theme-neon .theme-name { color: #38bdf8 !important; }
+        body.theme-neon .action-card { background: #0f172a; border-color: #0ea5e9; color: #e2e8f0; }
+        body.theme-neon .history-item { background: #0f172a; border-left-color: #0ea5e9; color: #e2e8f0; }
+
+        body.theme-forest {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #064e3b;
+        }
+        body.theme-forest .main-section, body.theme-forest .interactive-card, body.theme-forest .theme-store {
+            background: rgba(255,255,255,0.9); border-color: #6ee7b7;
+        }
+        body.theme-forest h2, body.theme-forest h3, body.theme-forest .card-title, body.theme-forest .theme-name { color: #047857 !important; }
 
         /* AVATAR EVOLUTIVO */
         .avatar-container { text-align: center; padding: 15px; background: #f0fdf4; border-radius: 12px; margin-bottom: 20px; border: 2px dashed #bbf7d0; }
@@ -416,6 +469,16 @@
                 </div>
             </div>
         </div>
+            <!-- INIZIO NEGOZIO TEMI -->
+            <div class="theme-store">
+                <h3 style="margin-top:0; color: #0f766e;">🎨 Negozio Personalizzazioni</h3>
+                <p style="font-size: 13px; color: var(--gray-600);">Spendi i tuoi punti per sbloccare nuovi colori per il tuo registro!</p>
+                
+                <div class="theme-grid" id="themeGrid">
+                    <!-- Generato via JS -->
+                </div>
+            </div>
+            <!-- FINE NEGOZIO TEMI -->
 
         <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
         <div class="interactive-card">
@@ -868,11 +931,93 @@
         // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
         window.inviaProposta = inviaProposta;
         window.valutaProposta = valutaProposta;
+        // --- SISTEMA NEGOZIO TEMI ---
+        const themes = [
+            { id: 'default', name: 'Chiaro (Standard)', icon: '☀️', price: 0, class: '' },
+            { id: 'dark', name: 'Galassia Dark', icon: '🌙', price: 30, class: 'theme-dark' },
+            { id: 'forest', name: 'Foresta Magica', icon: '🌲', price: 40, class: 'theme-forest' },
+            { id: 'neon', name: 'Hacker Neon', icon: '💻', price: 50, class: 'theme-neon' }
+        ];
+
+        function renderThemeStore() {
+            const grid = document.getElementById('themeGrid');
+            if (!grid || !currentData) return;
+
+            // Assicurati che l'array ownedThemes esista
+            if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
+            const activeTheme = currentData.activeTheme || 'default';
+
+            let html = '';
+            themes.forEach(theme => {
+                const isOwned = currentData.ownedThemes.includes(theme.id);
+                const isActive = activeTheme === theme.id;
+                
+                let cardClass = 'theme-card';
+                if (isActive) cardClass += ' active';
+                else if (isOwned) cardClass += ' owned';
+
+                let btnHtml = '';
+                if (isActive) {
+                    btnHtml = `<button class="theme-btn btn-active" disabled>In Uso ✔️</button>`;
+                } else if (isOwned) {
+                    btnHtml = `<button class="theme-btn btn-use" onclick="window.useTheme('${theme.id}')">Usa Tema</button>`;
+                } else {
+                    btnHtml = `<button class="theme-btn btn-buy" onclick="window.buyTheme('${theme.id}', ${theme.price})">Compra (-${theme.price})</button>`;
+                }
+
+                html += `
+                <div class="${cardClass}">
+                    <span class="theme-icon">${theme.icon}</span>
+                    <div class="theme-name">${theme.name}</div>
+                    ${!isOwned ? `<div class="theme-price">💎 ${theme.price} pt</div>` : '<div class="theme-price" style="color:#10b981;">Acquistato</div>'}
+                    ${btnHtml}
+                </div>`;
+            });
+            grid.innerHTML = html;
+            applyThemeClass(activeTheme);
+        }
+
+        window.buyTheme = function(themeId, price) {
+            if (!currentData) return;
+            if ((currentData.totalTokens || 0) < price) {
+                alert(`Non hai abbastanza punti! Ti servono ${price} punti per questo tema.`);
+                return;
+            }
+            if (confirm(`Vuoi comprare questo tema per ${price} punti?`)) {
+                currentData.totalTokens -= price;
+                if (!currentData.ownedThemes) currentData.ownedThemes = ['default'];
+                currentData.ownedThemes.push(themeId);
+                
+                addToHistory('penalty', -price, `🎨 Acquisto Tema nel Negozio`);
+                window.useTheme(themeId); // Lo imposta in automatico dopo l'acquisto
+            }
+        };
+
+        window.useTheme = function(themeId) {
+            if (!currentData) return;
+            currentData.activeTheme = themeId;
+            saveDataToCloud();
+            renderThemeStore();
+            updateDisplay();
+        };
+
+        function applyThemeClass(themeId) {
+            // Rimuove tutte le classi tema dal body
+            document.body.classList.remove('theme-dark', 'theme-forest', 'theme-neon');
+            
+            // Aggiunge la classe del tema attivo
+            const theme = themes.find(t => t.id === themeId);
+            if (theme && theme.class) {
+                document.body.classList.add(theme.class);
+            }
+        }
+        // --- FINE SISTEMA NEGOZIO TEMI ---
 
         // --- FINE NUOVO SISTEMA PROPOSTE ---        
         
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
+        renderThemeStore();
     </script>
 </body>
 </html>

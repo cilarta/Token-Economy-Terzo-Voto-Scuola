@@ -812,9 +812,13 @@
                     alert("Errore nell'aggiornamento.");
                 }
             }
-        }
-        // --- FINE NUOVO SISTEMA PROPOSTE ---
-        
+        } // <-- LA PARENTESI DELLA FUNZIONE ORA SI CHIUDE QUI
+
+        // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
+        window.inviaProposta = inviaProposta;
+        window.valutaProposta = valutaProposta;
+
+        // --- FINE NUOVO SISTEMA PROPOSTE ---        
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
     </script>

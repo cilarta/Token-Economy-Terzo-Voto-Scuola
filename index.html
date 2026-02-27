@@ -217,18 +217,6 @@
             </div>
             <div style="text-align: right;">
                 <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
-                <div style="margin-top: 15px; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
-                    <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px;">🌟 Evoluzione Avatar:</strong>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                        <div>🥚 <b>0 - 30 pt</b>: Livello 1</div>
-                        <div>🐣 <b>31 - 60 pt</b>: Livello 2</div>
-                        <div>🐥 <b>61 - 90 pt</b>: Livello 3</div>
-                        <div>🎷👑 <b>91 - 180 pt</b>: Livello 4</div>
-                    </div>
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold;">
-                        🐉 181+ pt: Livello Bonus Supremo!
-                    </div>
-                </div>
                 <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
             </div>
         </header>
@@ -251,6 +239,21 @@
             <span class="avatar-emoji" id="avatarIcon">🥚</span>
             <div class="avatar-rank" id="avatarRank">Grado: Uovo Novizio</div>
             <small>Accumula punti per evolverti!</small>
+
+            <!-- INIZIO LEGENDA SPOSTATA -->
+            <div style="max-width: 500px; margin: 15px auto 0; font-size: 12px; color: #64748b; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
+                <strong style="color: #1e293b; display: block; margin-bottom: 8px; font-size: 13px; text-align: center;">🌟 Evoluzione Avatar:</strong>
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px;">
+                    <div>🥚 <b>0 - 30 pt</b>: Livello 1</div>
+                    <div>🐣 <b>31 - 60 pt</b>: Livello 2</div>
+                    <div>🐥 <b>61 - 90 pt</b>: Livello 3</div>
+                    <div>🎷👑 <b>91 - 180 pt</b>: Livello 4</div>
+                </div>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; color: #9333ea; font-weight: bold; text-align: center;">
+                    🐉 181+ pt: Livello Bonus Supremo!
+                </div>
+            </div>
+            <!-- FINE LEGENDA SPOSTATA -->
         </div>
 
         <div class="interactive-card">

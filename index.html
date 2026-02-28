@@ -935,7 +935,7 @@
                 </div>
             </div>
             
-            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt / -5 🎫)</button>
+            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">🎡 Gira la Ruota (-3 Punti)</button>
         </div>
 
         <div class="main-section" id="ricompenseSection">
@@ -1844,30 +1844,18 @@
             }
 
             const costoPunti = 3;
-            const costoTicket = 5;
-            if (currentData.tickets === undefined) currentData.tickets = 0;
-            let pagaConTicket = false;
 
-            // Controllo pagamento (Priorità ai Ticket)
-            if (currentData.tickets >= costoTicket) {
-                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per girare la ruota (invece dei Punti Voto)?`)) return;
-                pagaConTicket = true;
-            } else if (currentData.totalTokens >= costoPunti) {
-                if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota? (Non hai abbastanza Ticket gratuiti)`)) return;
-                pagaConTicket = false;
-            } else {
-                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto o ${costoTicket} Ticket 🎫.`);
+            // Controllo pagamento (solo Punti)
+            if (currentData.totalTokens < costoPunti) {
+                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto 💎.`);
                 return;
             }
+            if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota?`)) return;
 
-            // Scala i fondi
-            if (pagaConTicket) {
-                currentData.tickets -= costoTicket;
-                addToHistory("base", 0, `Spesi ${costoTicket} Ticket 🎫 per la Ruota`);
-            } else {
-                currentData.totalTokens -= costoPunti;
-                addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
-            }
+            currentData.totalTokens -= costoPunti;
+            currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - costoPunti);
+            addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
+
 
             // Aggiorna subito il tempo dell'ultimo giro
             currentData.lastSpinTime = now;

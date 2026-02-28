@@ -277,30 +277,115 @@
             70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-        /* RUOTA DELLA FORTUNA VERA */
-        .wheel-container { display: flex; flex-direction: column; align-items: center; background: #fffbeb; padding: 25px 20px; border-radius: 15px; margin-top: 20px; border: 3px solid #f59e0b; position: relative; overflow: hidden; }
-        .wheel-wrapper { position: relative; margin-top: 15px; margin-bottom: 20px; }
-        /* Il puntatore in alto */
-        .wheel-pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #ef4444; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3)); }
-        
-        /* La ruota divisa in 5 spicchi esatti (72 gradi l'uno) */
-        .wheel { width: 180px; height: 180px; border-radius: 50%; border: 6px solid #1e293b; position: relative;
-            background: conic-gradient(
-                #ef4444 0deg 72deg,    /* 1: Rosso (Perdita) */
-                #f97316 72deg 144deg,  /* 2: Arancione (Poco) */
-                #facc15 144deg 216deg, /* 3: Giallo (Neutro) */
-                #4ade80 216deg 288deg, /* 4: Verde (Buono) */
-                #0ea5e9 288deg 360deg  /* 5: Azzurro (Jackpot!) */
-            ); 
-            transition: transform 7s cubic-bezier(0.1, 0.7, 0.1, 1); 
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.25); 
+        /* RUOTA DELLA FORTUNA VERA (MAKEOVER 3D) */
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            padding: 30px 20px;
+            border-radius: 20px;
+            margin-top: 25px;
+            border: 4px solid #f59e0b;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2);
+        }
+        .wheel-wrapper {
+            position: relative;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15));
         }
         
-        /* I numeri stampati sugli spicchi */
-        .wheel-number { position: absolute; top: 15px; left: 50%; transform-origin: 50% 75px; font-size: 26px; font-weight: 900; color: white; transform: translateX(-50%); text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
-        .wheel-btn { background: linear-gradient(45deg, #f59e0b, #d97706); padding: 12px 25px; color: white; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-size: 16px; text-transform: uppercase; }
-        .wheel-btn:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; color: #9ca3af; }
-        .wheel-btn:hover:not(:disabled) { transform: scale(1.05); }
+        /* Puntatore a freccia stile Casinò */
+        .wheel-pointer {
+            width: 0; 
+            height: 0; 
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 35px solid #dc2626;
+            position: absolute;
+            top: -15px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
+        }
+        
+        /* Bordo bianco interno del puntatore per staccarlo dalla ruota */
+        .wheel-pointer::after {
+            content: '';
+            position: absolute;
+            top: -33px;
+            left: -12px;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 25px solid white;
+            z-index: 21;
+        }
+
+        /* La ruota più grande e lucida */
+        .wheel {
+            width: 260px; /* Molto più grande! */
+            height: 260px;
+            border-radius: 50%;
+            border: 8px solid #fcd34d; /* Bordo dorato chiaro */
+            position: relative;
+            background: conic-gradient(
+                #ef4444 0deg 72deg,      /* 1: Rosso */
+                #f97316 72deg 144deg,    /* 2: Arancione */
+                #eab308 144deg 216deg,   /* 3: Giallo */
+                #22c55e 216deg 288deg,   /* 4: Verde */
+                #0ea5e9 288deg 360deg    /* 5: Azzurro */
+            );
+            /* Effetto di luce centrale per renderla tonda e 3D */
+            box-shadow: 
+                0 0 0 4px #b45309, /* Anello esterno scuro */
+                inset 0 0 20px rgba(0,0,0,0.5), /* Ombra interna profonda */
+                inset 0 0 60px rgba(255,255,255,0.4); /* Riflesso luce */
+            transition: transform 7s cubic-bezier(0.2, 1, 0.3, 1); /* Curva più elastica (spring) */
+        }
+
+        /* I numeri stampati più leggibili */
+        .wheel-number {
+            position: absolute;
+            top: 25px; /* Spostati più in basso rispetto al bordo esterno */
+            left: 50%;
+            transform-origin: 50% 105px; /* Adattato al nuovo raggio di 130px */
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            transform: translateX(-50%);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8), -1px -1px 0 rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .wheel-btn {
+            background: linear-gradient(to bottom, #f59e0b, #b45309);
+            padding: 15px 30px;
+            color: white;
+            font-weight: 900;
+            border-radius: 30px;
+            border: 2px solid #fef3c7;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(180, 83, 9, 0.3), inset 0 2px 5px rgba(255,255,255,0.5);
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        .wheel-btn:disabled {
+            background: #d1d5db;
+            border-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .wheel-btn:hover:not(:disabled) {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 15px rgba(180, 83, 9, 0.4), inset 0 2px 5px rgba(255,255,255,0.5);
+        }
         /* =========================================
            SISTEMA CARTE COLLEZIONABILI E BUSTINE
            ========================================= */

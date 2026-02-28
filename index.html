@@ -301,6 +301,147 @@
         .wheel-btn { background: linear-gradient(45deg, #f59e0b, #d97706); padding: 12px 25px; color: white; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-size: 16px; text-transform: uppercase; }
         .wheel-btn:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; color: #9ca3af; }
         .wheel-btn:hover:not(:disabled) { transform: scale(1.05); }
+        /* =========================================
+           SISTEMA CARTE COLLEZIONABILI E BUSTINE
+           ========================================= */
+        .album-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 3px solid #8b5cf6; /* Viola magico */
+        }
+        
+        /* IL NEGOZIO BUSTINE */
+        .pack-shop {
+            background: linear-gradient(135deg, #f3e8ff, #e0e7ff);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px dashed #8b5cf6;
+        }
+        .btn-pack {
+            background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+        }
+        .btn-pack:hover:not(:disabled) { 
+            transform: scale(1.05) translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.6);
+        }
+        .btn-pack:disabled { 
+            background: #cbd5e1; 
+            cursor: not-allowed; 
+            box-shadow: none; 
+        }
+
+        /* LA GRIGLIA DELL'ALBUM (15 CARTE) */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .card-item {
+            aspect-ratio: 2.5 / 3.5; /* Proporzione classica carte stile Pokemon/Magic */
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* CARTA MANCANTE (Grigia e mezza trasparente) */
+        .card-item.locked {
+            filter: grayscale(100%);
+            opacity: 0.4;
+        }
+        
+        /* CARTA TROVATA (Colorata e brillante) */
+        .card-item.unlocked {
+            background: linear-gradient(135deg, #fdf4ff, #fffbeb);
+            border-color: #f59e0b;
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+            cursor: pointer;
+        }
+        .card-item.unlocked:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        .card-icon { font-size: 28px; margin-bottom: 4px; }
+        .card-id { font-size: 11px; font-weight: 900; color: #64748b; }
+        
+        /* BOLLINO ROSSO DEI DOPPIONI */
+        .duplicate-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 900;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* OVERLAY ESTRAZIONE (Pop-up a tutto schermo) */
+        #cardRevealOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 2000;
+            display: none; /* Nascosto di default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        .revealed-card {
+            width: 240px;
+            height: 336px;
+            background: linear-gradient(135deg, #ffffff, #fef3c7);
+            border: 10px solid #f59e0b;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+            transform: scale(0);
+            animation: popInCard 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            color: #1e293b;
+            box-shadow: 0 0 50px rgba(245, 158, 11, 0.8), inset 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+        .revealed-icon { font-size: 100px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+        .revealed-name { font-size: 22px; font-weight: 900; text-align: center; padding: 0 10px; line-height: 1.2; }
+        
+        @keyframes popInCard {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
 
     </style>
 </head>
@@ -335,6 +476,7 @@
         <div class="quick-nav">
             <a href="#storicoSection" class="nav-btn">📜 Storico</a>
             <a href="#trofeiSection" class="nav-btn">🏆 Trofei</a>
+            <a href="#carteSection" class="nav-btn" style="border-color: #8b5cf6; color: #6d28d9;">🃏 Carte</a>
             <a href="#docenteSection" class="nav-btn" style="border-color: #f59e0b; color: #b45309;">🔒 Docente</a>
             <a href="#votiSection" class="nav-btn">💯 Voti</a>
             <a href="#proposteSection" class="nav-btn">💬 Proposte</a>
@@ -384,6 +526,47 @@
                 </div>
             </div>
             <!-- FINE VETRINA TROFEI -->
+            </div>
+            <!-- FINE VETRINA TROFEI -->
+
+            <!-- ========================================= -->
+            <!-- INIZIO SISTEMA CARTE COLLEZIONABILI       -->
+            <!-- ========================================= -->
+            <div class="album-section" id="carteSection">
+                <h2 style="color: #6d28d9; border-bottom: 3px dashed #c4b5fd; margin-bottom: 15px; margin-top: 0; padding-bottom: 10px; font-size: 20px;">
+                    🃏 Album delle Figurine Musicali
+                </h2>
+                
+                <!-- IL NEGOZIO BUSTINE -->
+                <div class="pack-shop">
+                    <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">
+                        Colleziona le 15 Carte Segrete!
+                    </p>
+                    <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
+                        📦 Apri Bustina (-3 Punti)
+                    </button>
+                    <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
+                        Troverai doppioni? Scambiali con i tuoi compagni!
+                    </p>
+                </div>
+
+                <!-- LA GRIGLIA DELL'ALBUM (15 CARTE) -->
+                <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <h3 style="margin: 0; font-size: 14px; color: #475569;">La tua Collezione:</h3>
+                        <span id="albumProgressCount" style="background: #8b5cf6; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 12px;">0 / 15</span>
+                    </div>
+                    
+                    <div class="cards-grid" id="albumGrid">
+                        <!-- Le carte verranno generate dal JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <!-- ========================================= -->
+            <!-- FINE SISTEMA CARTE COLLEZIONABILI         -->
+            <!-- ========================================= -->
+
+            <div class="edit-section" id="docenteSection">
 
         <div class="edit-section" id="docenteSection">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
@@ -668,11 +851,29 @@
     </div>
 </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+<!-- OVERLAY ESTRAZIONE CARTE (Pop-up a tutto schermo) -->
+<div id="cardRevealOverlay">
+    <h2 style="font-size: 28px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px;">🎉 NUOVA CARTA! 🎉</h2>
+    
+    <div class="revealed-card" id="revealedCardBox">
+        <div class="revealed-icon" id="revealedCardIcon">❓</div>
+        <div class="revealed-name" id="revealedCardName">Caricamento...</div>
+    </div>
 
-        // FIREBASE CONFIG
+    <p id="duplicateMessage" style="color: #fca5a5; font-weight: bold; font-size: 18px; margin-top: 15px; display: none;">
+        ⚠️ Oh no, è un doppione!
+    </p>
+    
+    <button class="btn-pack" style="margin-top: 30px; background: #3b82f6; width: 200px;" onclick="document.getElementById('cardRevealOverlay').style.display='none'">
+        Metti nell'Album
+    </button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+    // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCK-zPKKAk1P5ZxqyJexmx6a9H6OIkw5JY",
             authDomain: "token-economy-sax-scuola.firebaseapp.com",

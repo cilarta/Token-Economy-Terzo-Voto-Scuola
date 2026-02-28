@@ -28,6 +28,41 @@
             padding: 20px; 
         }
         .container { max-width: 1200px; margin: 0 auto; }
+
+        html { scroll-behavior: smooth; } /* Fa scorrere la pagina dolcemente */
+
+        /* BARRA DI NAVIGAZIONE RAPIDA */
+        .quick-nav {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            margin-bottom: 20px;
+            /* Nasconde la barra di scorrimento su mobile */
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        .quick-nav::-webkit-scrollbar { display: none; }
+        
+        .nav-btn {
+            background: white;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .nav-btn:hover, .nav-btn:active {
+            background: var(--azure-bg);
+            color: var(--azure);
+            border-color: var(--azure);
+            transform: translateY(-2px);
+        }
         
         /* LOGIN OVERLAY SUPER COLORATO */
         #loginOverlay {
@@ -296,6 +331,17 @@
             </div>
         </header>
 
+        <!-- MENU DI NAVIGAZIONE RAPIDA -->
+        <div class="quick-nav">
+            <a href="#storicoSection" class="nav-btn">📜 Storico</a>
+            <a href="#trofeiSection" class="nav-btn">🏆 Trofei</a>
+            <a href="#docenteSection" class="nav-btn" style="border-color: #f59e0b; color: #b45309;">🔒 Docente</a>
+            <a href="#votiSection" class="nav-btn">💯 Voti</a>
+            <a href="#proposteSection" class="nav-btn">💬 Proposte</a>
+            <a href="#ruotaSection" class="nav-btn">🎡 Ruota</a>
+            <a href="#ricompenseSection" class="nav-btn">🎁 Ricompense</a>
+        </div>
+
         <div id="lockMessage">🔒 <strong>Modalità sola lettura attiva!</strong><br>👨🏫 Inserisci la password per assegnare i punti.</div>
 
         <div class="status">
@@ -304,8 +350,7 @@
             <div class="status-item"><span>🏆 Voto VIP:</span><span id="vipTokens" style="color:var(--purple);">0</span></div>
             <div class="status-item"><span>⚠️ Penalità:</span><span id="penaltyTokens" style="color:var(--danger);">0</span></div>
         </div>
-
-        <div class="main-section" style="background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
+        <div class="main-section" id="storicoSection" style="background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
             <h2 style="font-size: 18px; margin-bottom: 15px;">📜 📊 Registro Storico delle Attività 🕵️♂️</h2>
             <div class="history-list" id="historyList">⏳ Caricamento dati o seleziona un alunno...</div>
         </div>
@@ -331,7 +376,7 @@
             <!-- FINE LEGENDA SPOSTATA -->
         </div>
             <!-- INIZIO VETRINA TROFEI -->
-            <div class="trophies-container">
+            <div class="trophies-container" id="trofeiSection">
                 <h3 style="margin: 0; font-size: 15px; color: #b45309;">🏆 La mia Bacheca Trofei</h3>
                 <div class="trophies-grid" id="trophiesGrid">
                     <!-- I trofei verranno generati dal JavaScript -->
@@ -339,7 +384,7 @@
             </div>
             <!-- FINE VETRINA TROFEI -->
 
-        <div class="edit-section">
+        <div class="edit-section"> id="docenteSection">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
             <div class="edit-controls">
                 <input type="password" id="adminPassword" placeholder="🔑 Password Docente">
@@ -370,7 +415,7 @@
             </div>
         </div>
 
-        <div class="main-section" style="border: 2px solid var(--success);">
+        <div class="main-section" id="votiSection" style="border: 2px solid var(--success);">
             <h2 class="base-header">🟢 ✅ LIVELLO BASE (Routine Settimanale) 📅</h2>
             <div class="card-container">
                 <div class="action-card style-base" onclick="window.clickTask(1, 'base', 'Studio settimanale eseguito correttamente')">
@@ -501,7 +546,7 @@
         </div>
 
         <!-- INIZIO AREA PROPOSTE SPOSTATA QUI -->
-        <div class="interactive-card">
+        <div class="interactive-card"> id="proposteSection">
             <h3 style="margin-top:0; color: var(--gray-800);">🚀 Area Proposte Alunni</h3>
             <p style="font-size: 13px; color: var(--gray-600);">Richiedi un bonus per te o segnala un compagno meritevole!</p>
             
@@ -528,7 +573,7 @@
         </div>
         <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
         <!-- RUOTA DELLA FORTUNA -->
-        <div class="wheel-container">
+        <div class="wheel-container"> id="ruotaSection">
             <h3 style="margin-top: 0; color: #b45309; text-transform: uppercase; font-size: 20px;">🎰 Tenta la Fortuna!</h3>
             <p style="font-size: 13px; margin-bottom: 5px; color: #78350f; text-align: center;">
                 Spendi <b>3 Punti</b> per girare (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
@@ -550,7 +595,7 @@
             <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt)</button>
         </div>
 
-        <div class="main-section">
+        <div class="main-section"> id="ricompenseSection">
             <h2 style="color: #ea580c; border-bottom: 3px dashed #fdba74;">🎁 🎉 TABELLA RICOMPENSE E VOTI 💯</h2>
             <div style="overflow-x: auto;">
                 <table class="rewards-table">

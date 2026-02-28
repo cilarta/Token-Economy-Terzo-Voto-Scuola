@@ -543,7 +543,7 @@
                         Colleziona le 15 Carte Segrete!
                     </p>
                     <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
-                        📦 Apri Bustina (-3 Punti)
+                        📦 Apri Bustina (-1 Punti)
                     </button>
                     <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
                         Troverai doppioni? Scambiali con i tuoi compagni!
@@ -1319,8 +1319,8 @@
                 return;
             }
 
-            // 1. Controlla se l'alunno ha abbastanza punti (Costo: 3)
-            const costoBustina = 3;
+            // 1. Controlla se l'alunno ha abbastanza punti (Costo: 1)
+            const costoBustina = 1;
             if (currentData.totalTokens < costoBustina) {
                 alert(`Punti insufficienti! Ti servono almeno ${costoBustina} punti per aprire una bustina.`);
                 return;

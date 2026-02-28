@@ -560,19 +560,6 @@
             0% { transform: scale(0) rotate(-20deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-        /* STILE PER I TICKET GIORNALIERI */
-        .ticket-display {
-            font-size: 16px;
-            color: #b45309;
-            font-weight: 900;
-            background: linear-gradient(135deg, #fef3c7, #fde047);
-            padding: 8px 15px;
-            border-radius: 12px;
-            border: 2px dashed #f59e0b;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: inline-block;
-            margin-right: 10px;
-        }
 
     </style>
 </head>
@@ -597,11 +584,8 @@
             </p>
 
             </div>
-            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-                <div style="display: flex; align-items: center;">
-                    <div class="ticket-display" title="Ticket Gratuiti Giornalieri">🎫 <span id="ticketCount">0</span></div>
-                    <div class="token-display" style="margin: 0;">💎 <span id="totalTokens">...</span> pt</div>
-                </div>
+            <div style="text-align: right;">
+                <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
                 <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
             </div>
         </header>
@@ -671,24 +655,18 @@
                     🃏 Album delle Figurine Musicali
                 </h2>
                 
-                    <!-- IL NEGOZIO BUSTINE -->
-                    <div class="pack-shop">
-                        <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">Colleziona le 15 Carte Segrete!</p>
-                        
-                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                            <!-- Bottone Punti -->
-                            <button id="buyPackBtnPoints" class="btn-pack" style="background: linear-gradient(45deg, #3b82f6, #1d4ed8);" onclick="window.compraBustina('punti')">
-                                💎 Apri (1 Punto)
-                            </button>
-                            
-                            <!-- Bottone Ticket -->
-                            <button id="buyPackBtnTickets" class="btn-pack" style="background: linear-gradient(45deg, #f59e0b, #b45309);" onclick="window.compraBustina('ticket')">
-                                🎫 Apri (3 Ticket)
-                            </button>
-                        </div>
-                        
-                        <p style="font-size: 11px; color: #64748b; margin-top: 8px;">Troverai doppioni? Scambiali con i tuoi compagni!</p>
-                    </div>
+                <!-- IL NEGOZIO BUSTINE -->
+                <div class="pack-shop">
+                    <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">
+                        Colleziona le 15 Carte Segrete!
+                    </p>
+                    <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
+                        📦 Apri Bustina (-1 Punti)
+                    </button>
+                    <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
+                        Troverai doppioni? Scambiali con i tuoi compagni!
+                    </p>
+                </div>
 
                 <!-- LA GRIGLIA DELL'ALBUM (15 CARTE) -->
                 <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 15px;">
@@ -726,9 +704,7 @@
                         <option value="base">✅ Base (+1)</option>
                         <option value="pro">🌟 Pro (+3)</option>
                         <option value="vip">🏆 VIP (+8/10/15)</option>
-                        <option value="ticket">🎫 Ticket Gioco</option>
                     </select>
-
                     <input type="number" id="tokenAmount" value="1" style="width: 80px; border: 2px solid #cbd5e1; font-weight: bold;">
                     <button class="btn-success" onclick="window.addTokenTyped()">➕ Assegna Manuale</button>
                     <button class="btn-danger" onclick="window.removeTokenTyped()">➖ Rimuovi Manuale</button>
@@ -919,7 +895,7 @@
         <div class="wheel-container" id="ruotaSection">
             <h3 style="margin-top: 0; color: #b45309; text-transform: uppercase; font-size: 20px;">🎰 Tenta la Fortuna!</h3>
             <p style="font-size: 13px; margin-bottom: 5px; color: #78350f; text-align: center;">
-                Costo: <b>3 Punti Voto</b> oppure <b>5 Ticket 🎫</b> (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
+                Spendi <b>3 Punti</b> per girare (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
             </p>
             
             <div class="wheel-wrapper">
@@ -935,7 +911,7 @@
                 </div>
             </div>
             
-            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt / -5 🎫)</button>
+            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt)</button>
         </div>
 
         <div class="main-section" id="ricompenseSection">
@@ -1246,18 +1222,7 @@
             const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
             const type = document.getElementById('tokenType').value;
             const customReason = document.getElementById('customReason').value.trim() || "Assegnazione manuale";
-            
-            if (type === "ticket") {
-                if (currentData.tickets === undefined) currentData.tickets = 0;
-                currentData.tickets += amount;
-                addToHistory("base", 0, `🎫 +${amount} Ticket: ${customReason}`);
-                saveDataToCloud();
-                updateDisplay();
-                alert(`Hai assegnato ${amount} Ticket all'alunno!`);
-            } else {
-                window.clickTask(amount, type, customReason); 
-            }
-            
+            window.clickTask(amount, type, customReason); 
             document.getElementById('customReason').value = "";
         }
 
@@ -1266,37 +1231,19 @@
             const type = document.getElementById('tokenType').value;
             const customReason = document.getElementById('customReason').value.trim() || "Rimozione manuale";
             
-            if (type === "ticket") {
-                if (currentData.tickets === undefined) currentData.tickets = 0;
-                currentData.tickets = Math.max(0, currentData.tickets - amount);
-                addToHistory("penalty", 0, `🎫 -${amount} Ticket Rimosso: ${customReason}`);
-                alert(`❌ Rimossi ${amount} Ticket`);
-            } else {
-                currentData.totalTokens -= amount;
-                if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
-                else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
-                else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
-                
-                addToHistory(type, -amount, customReason);
-                alert(`❌ Rimossi ${amount} punti`);
-            }
+            currentData.totalTokens -= amount;
+            if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
+            else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
+            else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
             
-            saveDataToCloud();
-            updateDisplay();
+            addToHistory(type, -amount, customReason);
+            alert(`❌ Rimossi ${amount} punti`);
         }
 
         window.resetData = function() {
             if (confirm('SICURO? Cancella tutti i voti di QUESTO alunno.')) {
-                // Manteniamo le carte e le skin, resettiamo solo i punti e i ticket
-                currentData.totalTokens = 0;
-                currentData.baseTokens = 0;
-                currentData.proTokens = 0;
-                currentData.vipTokens = 0;
-                currentData.penaltyTokens = 0;
-                currentData.tickets = 0;
-                currentData.history = [];
+                currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
                 saveDataToCloud();
-                updateDisplay();
             }
         }
             // ==========================================
@@ -1434,104 +1381,6 @@
             aggiornaTrofei();
             aggiornaStriscia();
             aggiornaAlbumCarte();
-        // QUESTA È LA FUNZIONE COLLEGATA AL PULSANTE!
-        window.compraBustina = function(metodoPagamento) {
-            if (!currentData) return;
-
-            // 0. Controllo Tempo (Max 1 bustina ogni 12 ore)
-            const oraAttuale = new Date().getTime();
-            const dodiciOreInMs = 12 * 60 * 60 * 1000;
-
-            if (currentData.lastPackTime && (oraAttuale - currentData.lastPackTime) < dodiciOreInMs) {
-                const oreMancanti = Math.ceil((dodiciOreInMs - (oraAttuale - currentData.lastPackTime)) / (1000 * 60 * 60));
-                alert(`⏳ Hai già aperto una bustina di recente! Devi aspettare ancora circa ${oreMancanti} ore.`);
-                return;
-            }
-
-            const costoPunti = 1;
-            const costoTicket = 3;
-            if (currentData.tickets === undefined) currentData.tickets = 0;
-
-            // 1. Controllo e pagamento in base al tasto premuto
-            if (metodoPagamento === 'ticket') {
-                if (currentData.tickets < costoTicket) {
-                    alert(`Fondi insufficienti! Ti servono almeno ${costoTicket} Ticket 🎫.`);
-                    return;
-                }
-                currentData.tickets -= costoTicket;
-                addToHistory("base", 0, `Acquisto Bustina (Spesi ${costoTicket} Ticket)`);
-            } else if (metodoPagamento === 'punti') {
-                if (currentData.totalTokens < costoPunti) {
-                    alert(`Fondi insufficienti! Ti serve almeno ${costoPunti} Punto Voto 💎.`);
-                    return;
-                }
-                currentData.totalTokens -= costoPunti;
-                currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - costoPunti);
-                addToHistory("base", -costoPunti, `Acquisto Bustina (Speso ${costoPunti} Punto Voto)`);
-            } else {
-                return;
-            }
-
-            // 2. Salva il momento esatto dell'acquisto
-            currentData.lastPackTime = oraAttuale;
-
-            // 3. Estrazione basata sulle probabilità
-            // Comune 40%, Rara 25%, Epica 20%, Leggendaria 15%
-            const prob = Math.random() * 100;
-            let targetRarity = "Comune";
-            if (prob > 40 && prob <= 65) targetRarity = "Rara";
-            else if (prob > 65 && prob <= 85) targetRarity = "Epica";
-            else if (prob > 85) targetRarity = "Leggendaria";
-
-            const cartePossibili = CARDS_DATABASE.filter(c => c.rarity === targetRarity);
-            const randomIndex = Math.floor(Math.random() * cartePossibili.length);
-            const cartaEstratta = cartePossibili[randomIndex];
-
-            // 4. Salva la carta nell'inventario
-            if (!currentData.cards) currentData.cards = {};
-            let isDoppione = false;
-            if (currentData.cards[cartaEstratta.id]) {
-                currentData.cards[cartaEstratta.id].quantita += 1;
-                isDoppione = true;
-            } else {
-                currentData.cards[cartaEstratta.id] = { quantita: 1 };
-            }
-
-            saveDataToCloud();
-            aggiornaAlbumCarte();
-            updateDisplay();
-
-            // 5. Mostra l'animazione a schermo intero
-            const overlay = document.getElementById("cardRevealOverlay");
-            document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
-            document.getElementById("revealedCardName").textContent = cartaEstratta.name;
-            document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
-            const popBox = document.getElementById("revealedCardBox");
-            popBox.className = `revealed-card rarity-${cartaEstratta.rarity}`;
-            overlay.style.display = "flex";
-        };
-
-            // --- GESTIONE TICKET GIORNALIERI E DAILY LOGIN ---
-            if (currentData.tickets === undefined) currentData.tickets = 0;
-            
-            // Ottieni la data di oggi in formato stringa "GG/MM/AAAA" per controllare la mezzanotte
-            const oggi = new Date().toLocaleDateString('it-IT');
-            
-            // Se l'alunno non ha fatto il login oggi, diamo il premio
-            if (currentData.lastDailyLogin !== oggi) {
-                currentData.tickets += 1;
-                currentData.lastDailyLogin = oggi;
-                saveDataToCloud(); // Salviamo subito il ticket
-                
-                // Mostra un bel pop-up di bentornato (con un piccolo ritardo per farlo notare)
-                setTimeout(() => {
-                    alert(`Bentornato! 🎁 Hai ricevuto 1 🎫 Ticket Giornaliero Gratuito!\nI Ticket ti servono per aprire bustine e girare la Ruota senza spendere i tuoi punti voto.`);
-                }, 1000);
-            }
-
-            // Aggiorna la scritta nell'header
-            const ticketEl = document.getElementById("ticketCount");
-            if (ticketEl) ticketEl.textContent = currentData.tickets;
         }
             // ==========================================
         // LOGICA SISTEMA CARTE COLLEZIONABILI
@@ -1579,6 +1428,154 @@
 
             grid.innerHTML = html;
             progress.textContent = `${carteSbloccate} / 15`;
+        }
+
+        // QUESTA È LA FUNZIONE COLLEGATA AL PULSANTE!
+        window.compraBustina = function() {
+            if (!currentData) return;
+
+            // 0. Controllo Tempo (Max 1 bustina ogni 12 ore)
+            const oraAttuale = new Date().getTime();
+            const dodiciOreInMs = 12 * 60 * 60 * 1000;
+
+            if (currentData.lastPackTime && (oraAttuale - currentData.lastPackTime) < dodiciOreInMs) {
+                const oreMancanti = Math.ceil((dodiciOreInMs - (oraAttuale - currentData.lastPackTime)) / (1000 * 60 * 60));
+                alert(`⏳ Hai già aperto una bustina di recente! Devi aspettare ancora circa ${oreMancanti} ore.`);
+                return;
+            }
+
+            // 1. Controlla se l'alunno ha abbastanza punti (Costo: 1)
+            const costoBustina = 1;
+            if (currentData.totalTokens < costoBustina) {
+                alert(`Punti insufficienti! Ti servono almeno ${costoBustina} punti per aprire una bustina.`);
+                return;
+            }
+
+            // Chiede conferma
+            if (!confirm(`Vuoi spendere ${costoBustina} punti per aprire una bustina?`)) return;
+
+            // 2. Scala i punti e registra il tempo dell'acquisto
+            currentData.totalTokens -= costoBustina;
+            currentData.lastPackTime = oraAttuale; // <--- Salva il momento esatto dell'acquisto
+            
+            // 3. Estrazione basata sulle probabilità richieste:
+            // Comune 40%, Rara 25%, Epica 20%, Leggendaria 15%
+            const prob = Math.random() * 100;
+            let targetRarity = "Comune"; // da 0 a 40 (40%)
+            
+            if (prob > 40 && prob <= 65) targetRarity = "Rara";           // da 40 a 65 (25%)
+            else if (prob > 65 && prob <= 85) targetRarity = "Epica";     // da 65 a 85 (20%)
+            else if (prob > 85) targetRarity = "Leggendaria";             // da 85 a 100 (15%)
+
+            // Filtra il mazzo per prendere solo le carte di quella rarità
+            const cartePossibili = CARDS_DATABASE.filter(c => c.rarity === targetRarity);
+            
+            // Sceglie a caso una tra quelle selezionate
+            const randomIndex = Math.floor(Math.random() * cartePossibili.length);
+            const cartaEstratta = cartePossibili[randomIndex];
+
+
+            // 4. Salva la carta nell'inventario dell'alunno
+            if (!currentData.cards) currentData.cards = {};
+            
+            let isDoppione = false;
+            if (currentData.cards[cartaEstratta.id]) {
+                currentData.cards[cartaEstratta.id].quantita += 1;
+                isDoppione = true;
+            } else {
+                currentData.cards[cartaEstratta.id] = { quantita: 1 };
+            }
+
+            // Registra l'azione nello storico
+            addToHistory("base", -costoBustina, `Acquisto Bustina (Trovato: ${cartaEstratta.name})`);
+            
+            // Salva nel cloud e aggiorna la grafica
+            saveDataToCloud();
+            aggiornaAlbumCarte();
+
+            // 5. Mostra l'animazione a schermo intero!
+            const overlay = document.getElementById("cardRevealOverlay");
+            document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
+            document.getElementById("revealedCardName").textContent = cartaEstratta.name;
+            document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
+                        // Colora il pop-up in base alla rarità
+            const popBox = document.getElementById("revealedCardBox");
+            popBox.className = `revealed-card rarity-${cartaEstratta.rarity}`;
+
+            overlay.style.display = "flex";
+        };
+
+
+        // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
+        function updateHistory() {
+            const list = document.getElementById('historyList'); // Lo storico pubblico
+            const pendingList = document.getElementById('pendingProposalsList'); // Il cassetto segreto del Maestro
+
+            let htmlStorico = '';
+            let htmlAttesa = '';
+            let proposteCount = 0;
+
+            if (!currentData.history || !currentData.history.length) { 
+                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
+                if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
+                return; 
+            }
+            
+            currentData.history.forEach(item => {
+                let testo = item.note || item.description || "Nessuna nota";
+                let dataOra = item.date || item.time || "";
+
+                // SE LA PROPOSTA È IN ATTESA -> Va nel cassetto del Maestro!
+                if (item.status === "pending") {
+                    proposteCount++;
+                    htmlAttesa += `
+                    <div style="background: white; border: 1px solid #f59e0b; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <div>
+                            <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: bold;">+${item.amount} PUNTI</span>
+                            <span style="font-size: 14px; font-weight: bold; margin-left: 8px; color: #1e293b;">${testo}</span>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">🕒 ${dataOra}</div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button style="cursor:pointer; background:#10b981; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'accetta')">✅ Accetta</button>
+                            <button style="cursor:pointer; background:#ef4444; color:white; border:none; border-radius:6px; padding: 6px 12px; font-weight:bold;" onclick="valutaProposta(${item.id}, 'rifiuta')">❌ Rifiuta</button>
+                        </div>
+                    </div>`;
+                } 
+                // ALTRIMENTI -> Va nello storico pubblico dell'alunno
+                else {
+                    let cl = 'type-base', em = '✅', col = 'var(--success)', sign='+';
+                    if(item.type=='pro'){cl='type-pro'; em='🌟'; col='var(--azure)';}
+                    if(item.type=='vip'){cl='type-vip'; em='🏆'; col='var(--purple)';}
+                    if(item.type=='penalty'){cl='type-penalty'; em='⚠️'; col='var(--danger)'; sign='';}
+                    
+                    let amountBox = `<div style="font-weight:900; font-size:18px; color:${col}; background: white; padding: 4px 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">${sign}${item.amount}</div>`;
+                    let extraStyle = "";
+
+                    if (item.status === "approved") {
+                        em = '✔️';
+                        extraStyle = "border-left: 4px solid #10b981;";
+                    } else if (item.status === "rejected") {
+                        em = '❌';
+                        extraStyle = "opacity: 0.6; background-color: #fef2f2;";
+                        amountBox = `<div style="font-weight:900; font-size:12px; color:#ef4444; background: white; padding: 4px 10px; border-radius: 8px;">Rifiutata</div>`;
+                    }
+
+                    htmlStorico += `<div class="history-item" style="${extraStyle}">
+                        <div style="display: flex; align-items: center;">
+                            <span class="history-type ${cl}">${em}</span> 
+                            <div style="margin-left:15px;">
+                                <span style="font-weight:800; color: #1e293b; font-size: 14px;">${testo}</span>
+                                <div style="font-size:12px; color:#64748b; margin-top: 2px;">🕒 ${dataOra}</div>
+                            </div>
+                        </div>
+                        ${amountBox}
+                    </div>`;
+                }
+            });
+
+            // Scrive il risultato a schermo
+            if(list) list.innerHTML = htmlStorico || '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato nello storico.</div>';
+            if(pendingList) pendingList.innerHTML = proposteCount > 0 ? htmlAttesa : '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
         }
         
 // Funzione per l'Avatar Evolutivo collegata a Firebase
@@ -1830,48 +1827,20 @@
         }
         // --- RUOTA DELLA FORTUNA ---
         window.giraLaRuota = function() {
-            if (!currentData) return;
+            if (!currentData || currentData.totalTokens < 3) {
+                alert("Non hai abbastanza punti! Ti servono almeno 3 punti per girare la ruota.");
+                return;
+            }
 
-            // Controllo Tempo: 1 giro ogni 24 ore
             const now = Date.now();
             if (currentData.lastSpinTime) {
                 const oreTrascorse = (now - currentData.lastSpinTime) / (1000 * 60 * 60);
                 if (oreTrascorse < 24) {
                     const oreRimanenti = Math.ceil(24 - oreTrascorse);
-                    alert(`Hai già girato la ruota! Torna tra circa ${oreRimanenti} ore.`);
+                    alert(`Hai già girato la ruota oggi! Torna tra circa ${oreRimanenti} ore.`);
                     return;
                 }
             }
-
-            const costoPunti = 3;
-            const costoTicket = 5;
-            if (currentData.tickets === undefined) currentData.tickets = 0;
-            let pagaConTicket = false;
-
-            // Controllo pagamento (Priorità ai Ticket)
-            if (currentData.tickets >= costoTicket) {
-                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per girare la ruota (invece dei Punti Voto)?`)) return;
-                pagaConTicket = true;
-            } else if (currentData.totalTokens >= costoPunti) {
-                if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota? (Non hai abbastanza Ticket gratuiti)`)) return;
-                pagaConTicket = false;
-            } else {
-                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto o ${costoTicket} Ticket 🎫.`);
-                return;
-            }
-
-            // Scala i fondi
-            if (pagaConTicket) {
-                currentData.tickets -= costoTicket;
-                addToHistory("base", 0, `Spesi ${costoTicket} Ticket 🎫 per la Ruota`);
-            } else {
-                currentData.totalTokens -= costoPunti;
-                addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
-            }
-
-            // Aggiorna subito il tempo dell'ultimo giro
-            currentData.lastSpinTime = now;
-            updateDisplay();
 
             currentData.totalTokens -= 3;
             currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - 3);

@@ -382,7 +382,40 @@
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 8px 15px rgba(245, 158, 11, 0.4);
         }
-        
+                /* COLORI DELLE RARITÀ DELLE CARTE */
+        .rarity-Comune { 
+            border-color: #94a3b8 !important; 
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0) !important;
+            box-shadow: 0 4px 8px rgba(148, 163, 184, 0.3) !important;
+        }
+        .rarity-Rara { 
+            border-color: #3b82f6 !important; 
+            background: linear-gradient(135deg, #eff6ff, #bfdbfe) !important;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+        }
+        .rarity-Epica { 
+            border-color: #a855f7 !important; 
+            background: linear-gradient(135deg, #faf5ff, #e9d5ff) !important;
+            box-shadow: 0 4px 8px rgba(168, 85, 247, 0.4) !important;
+        }
+        .rarity-Leggendaria { 
+            border-color: #f59e0b !important; 
+            background: linear-gradient(135deg, #fffbeb, #fef08a) !important;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(245, 158, 11, 0.3) !important;
+        }
+
+        .card-rarity-label {
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+        .text-Comune { color: #64748b; }
+        .text-Rara { color: #2563eb; }
+        .text-Epica { color: #9333ea; }
+        .text-Leggendaria { color: #d97706; text-shadow: 1px 1px 0px rgba(255,255,255,0.8); }
+
         .card-icon { font-size: 28px; margin-bottom: 4px; }
         .card-id { font-size: 11px; font-weight: 900; color: #64748b; }
         
@@ -1292,11 +1325,18 @@
                     ? `<div class="duplicate-badge">${myCardData.quantita}</div>` 
                     : "";
 
+                // Aggiunge lo stile della rarità solo se la carta è stata sbloccata
+                const rarityClass = posseduta ? `rarity-${carta.rarity}` : "";
+                const rarityLabel = posseduta 
+                    ? `<div class="card-rarity-label text-${carta.rarity}">${carta.rarity}</div>` 
+                    : `<div class="card-rarity-label" style="color:#cbd5e1;">???</div>`;
+
                 html += `
-                    <div class="card-item ${stateClass}" title="${posseduta ? carta.name : 'Carta Sconosciuta'}" onclick="window.apriMenuScambio(${carta.id}, '${carta.name.replace(/'/g, "\\'")}', '${carta.icon}')">
+                    <div class="card-item ${stateClass} ${rarityClass}" title="${posseduta ? carta.name : 'Carta Sconosciuta'}" ${posseduta ? `onclick="window.apriMenuScambio(${carta.id}, '${carta.name.replace(/'/g, "\\'")}', '${carta.icon}')"` : ""}>
                         ${badgeHtml}
                         <div class="card-icon">${displayIcon}</div>
                         <div class="card-id">#${carta.id}</div>
+                        ${rarityLabel}
                     </div>
                 `;
             });
@@ -1373,7 +1413,10 @@
             document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
             document.getElementById("revealedCardName").textContent = cartaEstratta.name;
             document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
-            
+                        // Colora il pop-up in base alla rarità
+            const popBox = document.getElementById("revealedCardBox");
+            popBox.className = `revealed-card rarity-${cartaEstratta.rarity}`;
+
             overlay.style.display = "flex";
         };
 

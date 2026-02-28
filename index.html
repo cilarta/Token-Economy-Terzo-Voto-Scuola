@@ -677,7 +677,7 @@
                         Colleziona le 15 Carte Segrete!
                     </p>
                     <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
-                        📦 Apri Bustina (-1 Punti)
+                        📦 Apri Bustina (-1 Pt / -3 🎫)
                     </button>
                     <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
                         Troverai doppioni? Scambiali con i tuoi compagni!
@@ -911,7 +911,7 @@
         <div class="wheel-container" id="ruotaSection">
             <h3 style="margin-top: 0; color: #b45309; text-transform: uppercase; font-size: 20px;">🎰 Tenta la Fortuna!</h3>
             <p style="font-size: 13px; margin-bottom: 5px; color: #78350f; text-align: center;">
-                Spendi <b>3 Punti</b> per girare (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
+                Costo: <b>3 Punti Voto</b> oppure <b>5 Ticket 🎫</b> (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
             </p>
             
             <div class="wheel-wrapper">
@@ -927,7 +927,7 @@
                 </div>
             </div>
             
-            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt)</button>
+            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt / -5 🎫)</button>
         </div>
 
         <div class="main-section" id="ricompenseSection">
@@ -1482,18 +1482,33 @@
                 return;
             }
 
-            // 1. Controlla se l'alunno ha abbastanza punti (Costo: 1)
-            const costoBustina = 1;
-            if (currentData.totalTokens < costoBustina) {
-                alert(`Punti insufficienti! Ti servono almeno ${costoBustina} punti per aprire una bustina.`);
+            const costoPunti = 1;
+            const costoTicket = 3;
+            if (currentData.tickets === undefined) currentData.tickets = 0;
+
+            let pagaConTicket = false;
+
+            // 1. Controlla come può pagare (Priorità ai Ticket)
+            if (currentData.tickets >= costoTicket) {
+                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per aprire la bustina (invece dei Punti)?`)) return;
+                pagaConTicket = true;
+            } else if (currentData.totalTokens >= costoPunti) {
+                if (!confirm(`Vuoi spendere ${costoPunti} Punti Voto per aprire una bustina? (Ti mancano i Ticket gratuiti)`)) return;
+                pagaConTicket = false;
+            } else {
+                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti o ${costoTicket} Ticket 🎫.`);
                 return;
             }
 
-            // Chiede conferma
-            if (!confirm(`Vuoi spendere ${costoBustina} punti per aprire una bustina?`)) return;
-
-            // 2. Scala i punti e registra il tempo dell'acquisto
-            currentData.totalTokens -= costoBustina;
+            // 2. Scala i fondi scelti e registra il tempo dell'acquisto
+            if (pagaConTicket) {
+                currentData.tickets -= costoTicket;
+                addToHistory("base", 0, `Acquisto Bustina (Spesi 3 Ticket)`); // Segnamo 0 punti per non alterare il voto
+            } else {
+                currentData.totalTokens -= costoPunti;
+                addToHistory("base", -costoPunti, `Acquisto Bustina (Speso 1 Punto Voto)`);
+            }
+            
             currentData.lastPackTime = oraAttuale; // <--- Salva il momento esatto dell'acquisto
             
             // 3. Estrazione basata sulle probabilità richieste:
@@ -1865,19 +1880,48 @@
         }
         // --- RUOTA DELLA FORTUNA ---
         window.giraLaRuota = function() {
-            if (!currentData || currentData.totalTokens < 3) {
-                alert("Non hai abbastanza punti! Ti servono almeno 3 punti per girare la ruota.");
-                return;
-            }
+            if (!currentData) return;
 
+            // Controllo Tempo: 1 giro ogni 24 ore
             const now = Date.now();
             if (currentData.lastSpinTime) {
                 const oreTrascorse = (now - currentData.lastSpinTime) / (1000 * 60 * 60);
                 if (oreTrascorse < 24) {
                     const oreRimanenti = Math.ceil(24 - oreTrascorse);
-                    alert(`Hai già girato la ruota oggi! Torna tra circa ${oreRimanenti} ore.`);
+                    alert(`Hai già girato la ruota! Torna tra circa ${oreRimanenti} ore.`);
                     return;
                 }
+            }
+
+            const costoPunti = 3;
+            const costoTicket = 5;
+            if (currentData.tickets === undefined) currentData.tickets = 0;
+            let pagaConTicket = false;
+
+            // Controllo pagamento (Priorità ai Ticket)
+            if (currentData.tickets >= costoTicket) {
+                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per girare la ruota (invece dei Punti Voto)?`)) return;
+                pagaConTicket = true;
+            } else if (currentData.totalTokens >= costoPunti) {
+                if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota? (Non hai abbastanza Ticket gratuiti)`)) return;
+                pagaConTicket = false;
+            } else {
+                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto o ${costoTicket} Ticket 🎫.`);
+                return;
+            }
+
+            // Scala i fondi
+            if (pagaConTicket) {
+                currentData.tickets -= costoTicket;
+                addToHistory("base", 0, `Spesi ${costoTicket} Ticket 🎫 per la Ruota`);
+            } else {
+                currentData.totalTokens -= costoPunti;
+                addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
+            }
+
+            // Aggiorna subito il tempo dell'ultimo giro
+            currentData.lastSpinTime = now;
+            updateDisplay();
             }
 
             currentData.totalTokens -= 3;

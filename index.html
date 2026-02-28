@@ -560,6 +560,19 @@
             0% { transform: scale(0) rotate(-20deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
+        /* STILE PER I TICKET GIORNALIERI */
+        .ticket-display {
+            font-size: 16px;
+            color: #b45309;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fef3c7, #fde047);
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 2px dashed #f59e0b;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-right: 10px;
+        }
 
     </style>
 </head>
@@ -584,8 +597,11 @@
             </p>
 
             </div>
-            <div style="text-align: right;">
-                <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                <div style="display: flex; align-items: center;">
+                    <div class="ticket-display" title="Ticket Gratuiti Giornalieri">🎫 <span id="ticketCount">0</span></div>
+                    <div class="token-display" style="margin: 0;">💎 <span id="totalTokens">...</span> pt</div>
+                </div>
                 <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
             </div>
         </header>
@@ -1381,6 +1397,28 @@
             aggiornaTrofei();
             aggiornaStriscia();
             aggiornaAlbumCarte();
+
+            // --- GESTIONE TICKET GIORNALIERI E DAILY LOGIN ---
+            if (currentData.tickets === undefined) currentData.tickets = 0;
+            
+            // Ottieni la data di oggi in formato stringa "GG/MM/AAAA" per controllare la mezzanotte
+            const oggi = new Date().toLocaleDateString('it-IT');
+            
+            // Se l'alunno non ha fatto il login oggi, diamo il premio
+            if (currentData.lastDailyLogin !== oggi) {
+                currentData.tickets += 1;
+                currentData.lastDailyLogin = oggi;
+                saveDataToCloud(); // Salviamo subito il ticket
+                
+                // Mostra un bel pop-up di bentornato (con un piccolo ritardo per farlo notare)
+                setTimeout(() => {
+                    alert(`Bentornato! 🎁 Hai ricevuto 1 🎫 Ticket Giornaliero Gratuito!\nI Ticket ti servono per aprire bustine e girare la Ruota senza spendere i tuoi punti voto.`);
+                }, 1000);
+            }
+
+            // Aggiorna la scritta nell'header
+            const ticketEl = document.getElementById("ticketCount");
+            if (ticketEl) ticketEl.textContent = currentData.tickets;
         }
             // ==========================================
         // LOGICA SISTEMA CARTE COLLEZIONABILI

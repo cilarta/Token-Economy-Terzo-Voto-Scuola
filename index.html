@@ -671,18 +671,24 @@
                     🃏 Album delle Figurine Musicali
                 </h2>
                 
-                <!-- IL NEGOZIO BUSTINE -->
-                <div class="pack-shop">
-                    <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">
-                        Colleziona le 15 Carte Segrete!
-                    </p>
-                    <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
-                        📦 Apri Bustina (-1 Pt / -3 🎫)
-                    </button>
-                    <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
-                        Troverai doppioni? Scambiali con i tuoi compagni!
-                    </p>
-                </div>
+                    <!-- IL NEGOZIO BUSTINE -->
+                    <div class="pack-shop">
+                        <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">Colleziona le 15 Carte Segrete!</p>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <!-- Bottone Punti -->
+                            <button id="buyPackBtnPoints" class="btn-pack" style="background: linear-gradient(45deg, #3b82f6, #1d4ed8);" onclick="window.compraBustina('punti')">
+                                💎 Apri (1 Punto)
+                            </button>
+                            
+                            <!-- Bottone Ticket -->
+                            <button id="buyPackBtnTickets" class="btn-pack" style="background: linear-gradient(45deg, #f59e0b, #b45309);" onclick="window.compraBustina('ticket')">
+                                🎫 Apri (3 Ticket)
+                            </button>
+                        </div>
+                        
+                        <p style="font-size: 11px; color: #64748b; margin-top: 8px;">Troverai doppioni? Scambiali con i tuoi compagni!</p>
+                    </div>
 
                 <!-- LA GRIGLIA DELL'ALBUM (15 CARTE) -->
                 <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 15px;">
@@ -1500,7 +1506,7 @@
         }
 
         // QUESTA È LA FUNZIONE COLLEGATA AL PULSANTE!
-        window.compraBustina = function() {
+        window.compraBustina = function(metodoPagamento) {
             if (!currentData) return;
 
             // 0. Controllo Tempo (Max 1 bustina ogni 12 ore)
@@ -1517,30 +1523,27 @@
             const costoTicket = 3;
             if (currentData.tickets === undefined) currentData.tickets = 0;
 
-            let pagaConTicket = false;
-
-            // 1. Controlla come può pagare (Priorità ai Ticket)
-            if (currentData.tickets >= costoTicket) {
-                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per aprire la bustina (invece dei Punti)?`)) return;
-                pagaConTicket = true;
-            } else if (currentData.totalTokens >= costoPunti) {
-                if (!confirm(`Vuoi spendere ${costoPunti} Punti Voto per aprire una bustina? (Ti mancano i Ticket gratuiti)`)) return;
-                pagaConTicket = false;
-            } else {
-                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti o ${costoTicket} Ticket 🎫.`);
-                return;
-            }
-
-            // 2. Scala i fondi scelti e registra il tempo dell'acquisto
-            if (pagaConTicket) {
+            // 1. Controllo e pagamento in base al tasto premuto (parametro 'metodoPagamento')
+            if (metodoPagamento === 'ticket') {
+                if (currentData.tickets < costoTicket) {
+                    alert(`Fondi insufficienti! Ti servono almeno ${costoTicket} Ticket 🎫.`);
+                    return;
+                }
                 currentData.tickets -= costoTicket;
-                addToHistory("base", 0, `Acquisto Bustina (Spesi 3 Ticket)`); // Segnamo 0 punti per non alterare il voto
-            } else {
+            } else if (metodoPagamento === 'punti') {
+                if (currentData.totalTokens < costoPunti) {
+                    alert(`Fondi insufficienti! Ti serve almeno ${costoPunti} Punto Voto 💎.`);
+                    return;
+                }
                 currentData.totalTokens -= costoPunti;
-                addToHistory("base", -costoPunti, `Acquisto Bustina (Speso 1 Punto Voto)`);
+                // Scaliamo i token base per mantenere i conti allineati
+                currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - costoPunti);
+            } else {
+                return; // Sicurezza: se non è né ticket né punti, blocca tutto.
             }
-            
-            currentData.lastPackTime = oraAttuale; // <--- Salva il momento esatto dell'acquisto
+
+            // 2. Salva il momento esatto dell'acquisto
+            currentData.lastPackTime = oraAttuale; 
             
             // 3. Estrazione basata sulle probabilità richieste:
             // Comune 40%, Rara 25%, Epica 20%, Leggendaria 15%
@@ -1558,7 +1561,6 @@
             const randomIndex = Math.floor(Math.random() * cartePossibili.length);
             const cartaEstratta = cartePossibili[randomIndex];
 
-
             // 4. Salva la carta nell'inventario dell'alunno
             if (!currentData.cards) currentData.cards = {};
             
@@ -1570,39 +1572,30 @@
                 currentData.cards[cartaEstratta.id] = { quantita: 1 };
             }
 
-            // Registra l'azione nello storico
-            addToHistory("base", -costoBustina, `Acquisto Bustina (Trovato: ${cartaEstratta.name})`);
+            // Registra l'azione nello storico RIMUOVENDO LA VARIABILE BUGGATA (costoBustina)
+            if (metodoPagamento === 'ticket') {
+                addToHistory("base", 0, `Acquisto Bustina con Ticket (Trovato: ${cartaEstratta.name})`);
+            } else {
+                addToHistory("base", -costoPunti, `Acquisto Bustina (Trovato: ${cartaEstratta.name})`);
+            }
             
             // Salva nel cloud e aggiorna la grafica
             saveDataToCloud();
             aggiornaAlbumCarte();
+            updateDisplay(); // <- Ricarica subito la grafica di ticket e punti per far vedere che sono stati scalati
 
             // 5. Mostra l'animazione a schermo intero!
             const overlay = document.getElementById("cardRevealOverlay");
             document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
             document.getElementById("revealedCardName").textContent = cartaEstratta.name;
             document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
-                        // Colora il pop-up in base alla rarità
+            
+            // Colora il pop-up in base alla rarità
             const popBox = document.getElementById("revealedCardBox");
             popBox.className = `revealed-card rarity-${cartaEstratta.rarity}`;
 
             overlay.style.display = "flex";
         };
-
-
-        // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
-        function updateHistory() {
-            const list = document.getElementById('historyList'); // Lo storico pubblico
-            const pendingList = document.getElementById('pendingProposalsList'); // Il cassetto segreto del Maestro
-
-            let htmlStorico = '';
-            let htmlAttesa = '';
-            let proposteCount = 0;
-
-            if (!currentData.history || !currentData.history.length) { 
-                if(list) list.innerHTML = '<div style="padding:15px; color:#64748b; font-style: italic;">Nessun dato registrato. Inizia a guadagnare punti! 🎵</div>'; 
-                if(pendingList) pendingList.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
-                return; 
             }
             
             currentData.history.forEach(item => {

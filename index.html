@@ -566,8 +566,6 @@
             <!-- FINE SISTEMA CARTE COLLEZIONABILI         -->
             <!-- ========================================= -->
 
-            <div class="edit-section" id="docenteSection">
-
         <div class="edit-section" id="docenteSection">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
             <div class="edit-controls">
@@ -576,7 +574,7 @@
             </div>
             
             <div id="editContent" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
-            <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
+                <div id="boxProposteInAttesa" style="margin-top: 15px; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px;">
                     <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0;">⏳ Proposte degli Alunni da Valutare</h4>
                     <div id="pendingProposalsList">
                         <div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>
@@ -596,6 +594,25 @@
                 <div class="edit-controls" style="margin-top: 15px; justify-content: flex-end;">
                       <button class="btn-danger" style="background: #dc2626;" onclick="window.resetData()">🗑️ AZZERA TUTTI I PUNTI DELL'ALUNNO 🧨</button>
                 </div>
+
+                <!-- ========================================== -->
+                <!-- NUOVO: ABBINAMENTO NICKNAME -> NOME REALE  -->
+                <!-- ========================================== -->
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 2px dashed #fcd34d;">
+                    <h4 style="color: #b45309; margin-bottom: 10px; margin-top: 0; font-size: 16px;">
+                        👥 Associa Nickname al Nome Reale (Per Scambi)
+                    </h4>
+                    <p style="font-size: 12px; color: #78350f; margin-bottom: 10px;">
+                        Associa il nickname attualmente loggato (<b id="currentNickToPair">...</b>) al suo nome reale pubblico.
+                    </p>
+                    <div class="edit-controls">
+                        <input type="text" id="realNameInput" placeholder="Es. Marco Rossi" style="width: 200px; border: 2px solid #fbbf24; border-radius: 10px; padding: 10px; font-weight: bold;">
+                        <button class="btn-primary" style="background: #8b5cf6;" onclick="window.salvaNomeReale()">
+                            Salva Nome Pubblico
+                        </button>
+                    </div>
+                </div>
+                <!-- ========================================== -->
             </div>
         </div>
 

@@ -242,11 +242,29 @@
             70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-        /* RUOTA DELLA FORTUNA */
-        .wheel-container { display: flex; flex-direction: column; align-items: center; background: #fffbeb; padding: 20px; border-radius: 15px; margin-top: 20px; border: 3px solid #f59e0b; position: relative; overflow: hidden; }
-        .wheel { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #b45309; background: conic-gradient(#fde047 0% 25%, #fef08a 25% 50%, #fde047 50% 75%, #fef08a 75% 100%); display: flex; justify-content: center; align-items: center; font-size: 30px; margin-bottom: 15px; transition: transform 7s cubic-bezier(0.1, 0.7, 0.1, 1); box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.2); }
-        .wheel-btn { background: linear-gradient(45deg, #f59e0b, #d97706); padding: 10px 20px; color: white; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-size: 16px; }
-        .wheel-btn:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; }
+        /* RUOTA DELLA FORTUNA VERA */
+        .wheel-container { display: flex; flex-direction: column; align-items: center; background: #fffbeb; padding: 25px 20px; border-radius: 15px; margin-top: 20px; border: 3px solid #f59e0b; position: relative; overflow: hidden; }
+        .wheel-wrapper { position: relative; margin-top: 15px; margin-bottom: 20px; }
+        /* Il puntatore in alto */
+        .wheel-pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #ef4444; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3)); }
+        
+        /* La ruota divisa in 5 spicchi esatti (72 gradi l'uno) */
+        .wheel { width: 180px; height: 180px; border-radius: 50%; border: 6px solid #b45309; position: relative;
+            background: conic-gradient(
+                #fde047 0deg 72deg, 
+                #fef08a 72deg 144deg, 
+                #fcd34d 144deg 216deg, 
+                #fef08a 216deg 288deg, 
+                #fde047 288deg 360deg
+            ); 
+            transition: transform 7s cubic-bezier(0.1, 0.7, 0.1, 1); 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.25); 
+        }
+        
+        /* I numeri stampati sugli spicchi */
+        .wheel-number { position: absolute; top: 15px; left: 50%; transform-origin: 50% 75px; /* 75px è la metà di 180-30(padding) */ font-size: 24px; font-weight: 900; color: #78350f; transform: translateX(-50%); }
+        .wheel-btn { background: linear-gradient(45deg, #f59e0b, #d97706); padding: 12px 25px; color: white; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-size: 16px; text-transform: uppercase; }
+        .wheel-btn:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; color: #9ca3af; }
         .wheel-btn:hover:not(:disabled) { transform: scale(1.05); }
 
     </style>
@@ -511,11 +529,24 @@
         <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
         <!-- RUOTA DELLA FORTUNA -->
         <div class="wheel-container">
-            <h3 style="margin-top: 0; color: #b45309; text-transform: uppercase;">🎰 Tenta la Fortuna!</h3>
-            <p style="font-size: 13px; margin-bottom: 15px; color: #78350f; text-align: center;">
-                Spendi <b>3 Punti</b> per girare (Max 1 giro al giorno).<br>Puoi vincere da 1 a 5 punti base extra!
+            <h3 style="margin-top: 0; color: #b45309; text-transform: uppercase; font-size: 20px;">🎰 Tenta la Fortuna!</h3>
+            <p style="font-size: 13px; margin-bottom: 5px; color: #78350f; text-align: center;">
+                Spendi <b>3 Punti</b> per girare (Max 1 giro al giorno).<br>Il numero su cui si ferma il cursore è il tuo premio!
             </p>
-            <div class="wheel" id="spinWheel">🎁</div>
+            
+            <div class="wheel-wrapper">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="spinWheel">
+                    <!-- I numeri posizionati a raggiera (360/5 = 72 gradi l'uno) -->
+                    <!-- Il centro dello spicchio è a metà dei 72 gradi -->
+                    <div class="wheel-number" style="transform: translateX(-50%) rotate(36deg);">1</div>
+                    <div class="wheel-number" style="transform: translateX(-50%) rotate(108deg);">2</div>
+                    <div class="wheel-number" style="transform: translateX(-50%) rotate(180deg);">3</div>
+                    <div class="wheel-number" style="transform: translateX(-50%) rotate(252deg);">4</div>
+                    <div class="wheel-number" style="transform: translateX(-50%) rotate(324deg);">5</div>
+                </div>
+            </div>
+            
             <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt)</button>
         </div>
 
@@ -1076,7 +1107,6 @@
                 return;
             }
 
-            // CONTROLLO 24 ORE
             const now = Date.now();
             if (currentData.lastSpinTime) {
                 const oreTrascorse = (now - currentData.lastSpinTime) / (1000 * 60 * 60);
@@ -1087,11 +1117,8 @@
                 }
             }
 
-            // Paga 3 punti
             currentData.totalTokens -= 3;
             currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - 3);
-            
-            // Salva l'ora della giocata
             currentData.lastSpinTime = now;
             
             saveDataToCloud();
@@ -1101,50 +1128,63 @@
             const wheel = document.getElementById('spinWheel');
             btn.disabled = true;
 
-            // Logica delle probabilità segrete (100 estrazioni totali)
             const random100 = Math.floor(Math.random() * 100) + 1;
             let premioEstratto;
+            
+            // Gradi inversi: per far finire lo spicchio sotto la freccia (che sta a 0 gradi), 
+            // dobbiamo sottrarre la posizione dello spicchio da 360.
+            let rotazioneFinale; 
 
-            if (random100 <= 3) {
-                premioEstratto = 1; // 3%
-            } else if (random100 <= 10) {
-                premioEstratto = 2; // 7%
-            } else if (random100 <= 90) {
-                premioEstratto = 3;  // 80% (Rimborso del costo)
-            } else if (random100 <= 97) {
-                premioEstratto = 4; // 7%
-            } else {
-                premioEstratto = 5;  // 3%
+            if (random100 <= 3) { 
+                premioEstratto = 1; 
+                rotazioneFinale = 360 - 36; 
+            } else if (random100 <= 10) { 
+                premioEstratto = 2; 
+                rotazioneFinale = 360 - 108; 
+            } else if (random100 <= 90) { 
+                premioEstratto = 3; 
+                rotazioneFinale = 360 - 180; 
+            } else if (random100 <= 97) { 
+                premioEstratto = 4; 
+                rotazioneFinale = 360 - 252; 
+            } else { 
+                premioEstratto = 5; 
+                rotazioneFinale = 360 - 324; 
             }
 
-            // Fai girare la ruota visivamente (tanti giri veloci a caso)
-            const extraSpins = 360 * (10 + Math.floor(Math.random() * 5)); // Tra 10 e 15 giri completi
-            const randomStop = Math.floor(Math.random() * 360); // Si ferma in un punto a caso
-            const totalRotation = extraSpins + randomStop;
+            // Aggiungiamo un pizzico di casualità interna allo spicchio (+/- 15 gradi)
+            // per non farla fermare sempre identicamente al centro perfetto dello spicchio
+            const randomOffset = Math.floor(Math.random() * 30) - 15;
+            rotazioneFinale += randomOffset;
+
+            // Facciamo 10 giri completi veloci (3600 gradi) + la posizione del premio
+            const extraSpins = 360 * 10; 
+            const totalRotation = extraSpins + rotazioneFinale;
             
             wheel.style.transform = `rotate(${totalRotation}deg)`;
 
-            // Aspetta 7 secondi per la suspense
             setTimeout(() => {
-                alert(`🎉 La ruota si è fermata! Hai vinto ${premioEstratto} Punti!`);
+                alert(`🎉 La ruota si è fermata sull'${premioEstratto}! Hai vinto ${premioEstratto} Punti!`);
                 
-                // Aggiunge la vincita
                 currentData.totalTokens += premioEstratto;
                 currentData.baseTokens += premioEstratto;
-                addToHistory('base', premioEstratto, "Vincita Ruota della Fortuna");
+                addToHistory('base', premioEstratto, `Ruota: Vinti ${premioEstratto} punti`);
                 
                 saveDataToCloud();
                 updateDisplay();
                 updateHistory();
                 
-                // Resetta la ruota (invisibilmente) per il prossimo giro di domani
+                // Resetta silenziosamente la ruota per il prossimo utilizzo
                 wheel.style.transition = "none";
-                wheel.style.transform = `rotate(0deg)`;
+                // Modulo 360 per lasciarla visivamente nella stessa posizione, 
+                // ma senza le migliaia di gradi accumulati
+                wheel.style.transform = `rotate(${totalRotation % 360}deg)`; 
                 setTimeout(() => { wheel.style.transition = "transform 7s cubic-bezier(0.1, 0.7, 0.1, 1)"; }, 50);
                 
                 btn.disabled = false;
             }, 7000);
         };
+
 
         // Rende le funzioni visibili al di fuori del modulo (E FUORI DALLA FUNZIONE)
         window.inviaProposta = inviaProposta;

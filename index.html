@@ -898,6 +898,31 @@
             totalTokens: 0, baseTokens: 0,
             proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: []
         };
+            // ==========================================
+        // IL MAZZO DELLE 15 CARTE COLLEZIONABILI
+        // ==========================================
+        const CARDS_DATABASE = [
+            { id: 1, name: "Sassofono d'Oro", icon: "🎷", rarity: "Comune" },
+            { id: 2, name: "Nota Magica", icon: "🎵", rarity: "Comune" },
+            { id: 3, name: "Leggio Spezzato", icon: "🎼", rarity: "Comune" },
+            { id: 4, name: "Ancia di Cristallo", icon: "🪄", rarity: "Comune" },
+            { id: 5, name: "Chiave di Violino", icon: "𝄞", rarity: "Comune" },
+            { id: 6, name: "Metronomo Impazzito", icon: "⏱️", rarity: "Comune" },
+            { id: 7, name: "Spartito Antico", icon: "📜", rarity: "Rara" },
+            { id: 8, name: "Maestro Severo", icon: "👨‍🏫", rarity: "Rara" },
+            { id: 9, name: "Pubblico in Delirio", icon: "👏", rarity: "Rara" },
+            { id: 10, name: "Cuffie Isolate", icon: "🎧", rarity: "Rara" },
+            { id: 11, name: "Microfono Vintage", icon: "🎙️", rarity: "Epica" },
+            { id: 12, name: "Pianoforte a Coda", icon: "🎹", rarity: "Epica" },
+            { id: 13, name: "Luce da Palco", icon: "💡", rarity: "Epica" },
+            { id: 14, name: "Stella Nascente", icon: "⭐", rarity: "Leggendaria" },
+            { id: 15, name: "Disco di Platino", icon: "💿", rarity: "Leggendaria" }
+        ];
+
+        // Assicuriamoci che currentData abbia lo spazio per salvare le carte
+        // Aggiorniamo l'inizializzazione:
+        if (!currentData.cards) currentData.cards = {}; 
+
 
         // --- SISTEMA LOGIN MULTI-UTENTE ---
         
@@ -1091,7 +1116,97 @@
             aggiornaAvatar(); 
             aggiornaTrofei();
             aggiornaStriscia();
+            aggiornaAlbumCarte();
         }
+            // ==========================================
+        // LOGICA SISTEMA CARTE COLLEZIONABILI
+        // ==========================================
+
+        function aggiornaAlbumCarte() {
+            const grid = document.getElementById("albumGrid");
+            const progress = document.getElementById("albumProgressCount");
+            if (!grid || !currentData) return;
+
+            // Se l'alunno non ha ancora la sezione carte nel DB, creiamola vuota
+            if (!currentData.cards) currentData.cards = {};
+
+            let carteSbloccate = 0;
+            let html = "";
+
+            // Cicliamo su tutte le 15 carte del gioco
+            CARDS_DATABASE.forEach(carta => {
+                const myCardData = currentData.cards[carta.id];
+                const posseduta = myCardData && myCardData.quantita > 0;
+                
+                if (posseduta) carteSbloccate++;
+
+                const stateClass = posseduta ? "unlocked" : "locked";
+                const displayIcon = posseduta ? carta.icon : "❓";
+                const badgeHtml = (posseduta && myCardData.quantita > 1) 
+                    ? `<div class="duplicate-badge">${myCardData.quantita}</div>` 
+                    : "";
+
+                html += `
+                    <div class="card-item ${stateClass}" title="${posseduta ? carta.name : 'Carta Sconosciuta'}">
+                        ${badgeHtml}
+                        <div class="card-icon">${displayIcon}</div>
+                        <div class="card-id">#${carta.id}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            progress.textContent = `${carteSbloccate} / 15`;
+        }
+
+        // QUESTA È LA FUNZIONE COLLEGATA AL PULSANTE!
+        window.compraBustina = function() {
+            if (!currentData) return;
+
+            // 1. Controlla se l'alunno ha abbastanza punti (Costo: 3)
+            const costoBustina = 3;
+            if (currentData.totalTokens < costoBustina) {
+                alert(`Punti insufficienti! Ti servono almeno ${costoBustina} punti per aprire una bustina.`);
+                return;
+            }
+
+            // Chiede conferma (per evitare click per sbaglio)
+            if (!confirm(`Vuoi spendere ${costoBustina} punti per aprire una bustina?`)) return;
+
+            // 2. Scala i punti
+            currentData.totalTokens -= costoBustina;
+            
+            // 3. Estrai una carta casuale tra le 15
+            const randomIndex = Math.floor(Math.random() * CARDS_DATABASE.length);
+            const cartaEstratta = CARDS_DATABASE[randomIndex];
+
+            // 4. Salva la carta nell'inventario dell'alunno
+            if (!currentData.cards) currentData.cards = {};
+            
+            let isDoppione = false;
+            if (currentData.cards[cartaEstratta.id]) {
+                currentData.cards[cartaEstratta.id].quantita += 1;
+                isDoppione = true;
+            } else {
+                currentData.cards[cartaEstratta.id] = { quantita: 1 };
+            }
+
+            // Registra l'azione nello storico
+            addToHistory("base", -costoBustina, `Acquisto Bustina (Trovato: ${cartaEstratta.name})`);
+            
+            // Salva nel cloud e aggiorna la grafica
+            saveDataToCloud();
+            aggiornaAlbumCarte();
+
+            // 5. Mostra l'animazione a schermo intero!
+            const overlay = document.getElementById("cardRevealOverlay");
+            document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
+            document.getElementById("revealedCardName").textContent = cartaEstratta.name;
+            document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
+            
+            overlay.style.display = "flex";
+        };
+
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {
             const list = document.getElementById('historyList'); // Lo storico pubblico

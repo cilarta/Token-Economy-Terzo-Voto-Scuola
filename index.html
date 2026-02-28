@@ -935,7 +935,7 @@
                 </div>
             </div>
             
-            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">🎡 Gira la Ruota (-3 Punti)</button>
+            <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt / -5 🎫)</button>
         </div>
 
         <div class="main-section" id="ricompenseSection">
@@ -1088,7 +1088,7 @@
             { id: 5, name: "Chiave di Violino", icon: "𝄞", rarity: "Comune" },
             { id: 6, name: "Metronomo Impazzito", icon: "⏱️", rarity: "Comune" },
             { id: 7, name: "Spartito Antico", icon: "📜", rarity: "Rara" },
-            { id: 8, name: "Maestro Severo", icon: "👨‍🏫", rarity: "Rara" },
+            { id: 8, name: "Maestro Severo", icon: "👨🏫", rarity: "Rara" },
             { id: 9, name: "Pubblico in Delirio", icon: "👏", rarity: "Rara" },
             { id: 10, name: "Cuffie Isolate", icon: "🎧", rarity: "Rara" },
             { id: 11, name: "Microfono Vintage", icon: "🎙️", rarity: "Epica" },
@@ -1225,9 +1225,6 @@
             else if (type === 'vip') currentData.vipTokens += amount;
 
             addToHistory(type, amount, description);
-            saveDataToCloud();
-            updateDisplay();
-            updateHistory();
         }
 
         window.clickPenalty = function(amount, description) {
@@ -1240,9 +1237,6 @@
                 currentData.totalTokens -= amount;
                 currentData.penaltyTokens += amount;
                 addToHistory('penalty', -amount, description);
-                saveDataToCloud();
-                updateDisplay();
-                updateHistory();
             }
         }
 
@@ -1259,7 +1253,6 @@
                 addToHistory("base", 0, `🎫 +${amount} Ticket: ${customReason}`);
                 saveDataToCloud();
                 updateDisplay();
-                updateHistory();
                 alert(`Hai assegnato ${amount} Ticket all'alunno!`);
             } else {
                 window.clickTask(amount, type, customReason); 
@@ -1290,7 +1283,6 @@
             
             saveDataToCloud();
             updateDisplay();
-            updateHistory();
         }
 
         window.resetData = function() {
@@ -1852,18 +1844,30 @@
             }
 
             const costoPunti = 3;
+            const costoTicket = 5;
+            if (currentData.tickets === undefined) currentData.tickets = 0;
+            let pagaConTicket = false;
 
-            // Controllo pagamento (solo Punti)
-            if (currentData.totalTokens < costoPunti) {
-                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto 💎.`);
+            // Controllo pagamento (Priorità ai Ticket)
+            if (currentData.tickets >= costoTicket) {
+                if (!confirm(`Hai ${currentData.tickets} Ticket! Vuoi usare ${costoTicket} 🎫 per girare la ruota (invece dei Punti Voto)?`)) return;
+                pagaConTicket = true;
+            } else if (currentData.totalTokens >= costoPunti) {
+                if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota? (Non hai abbastanza Ticket gratuiti)`)) return;
+                pagaConTicket = false;
+            } else {
+                alert(`Fondi insufficienti! Ti servono almeno ${costoPunti} Punti Voto o ${costoTicket} Ticket 🎫.`);
                 return;
             }
-            if (!confirm(`Vuoi usare ${costoPunti} Punti Voto per girare la ruota?`)) return;
 
-            currentData.totalTokens -= costoPunti;
-            currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - costoPunti);
-            addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
-
+            // Scala i fondi
+            if (pagaConTicket) {
+                currentData.tickets -= costoTicket;
+                addToHistory("base", 0, `Spesi ${costoTicket} Ticket 🎫 per la Ruota`);
+            } else {
+                currentData.totalTokens -= costoPunti;
+                addToHistory("base", -costoPunti, `Spesi ${costoPunti} Punti Voto per la Ruota`);
+            }
 
             // Aggiorna subito il tempo dell'ultimo giro
             currentData.lastSpinTime = now;

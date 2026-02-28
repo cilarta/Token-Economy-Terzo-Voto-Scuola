@@ -1309,6 +1309,16 @@
         window.compraBustina = function() {
             if (!currentData) return;
 
+            // 0. Controllo Tempo (Max 1 bustina ogni 12 ore)
+            const oraAttuale = new Date().getTime();
+            const dodiciOreInMs = 12 * 60 * 60 * 1000;
+
+            if (currentData.lastPackTime && (oraAttuale - currentData.lastPackTime) < dodiciOreInMs) {
+                const oreMancanti = Math.ceil((dodiciOreInMs - (oraAttuale - currentData.lastPackTime)) / (1000 * 60 * 60));
+                alert(`⏳ Hai già aperto una bustina di recente! Devi aspettare ancora circa ${oreMancanti} ore.`);
+                return;
+            }
+
             // 1. Controlla se l'alunno ha abbastanza punti (Costo: 3)
             const costoBustina = 3;
             if (currentData.totalTokens < costoBustina) {
@@ -1316,11 +1326,12 @@
                 return;
             }
 
-            // Chiede conferma (per evitare click per sbaglio)
+            // Chiede conferma
             if (!confirm(`Vuoi spendere ${costoBustina} punti per aprire una bustina?`)) return;
 
-            // 2. Scala i punti
+            // 2. Scala i punti e registra il tempo dell'acquisto
             currentData.totalTokens -= costoBustina;
+            currentData.lastPackTime = oraAttuale; // <--- Salva il momento esatto dell'acquisto
             
             // 3. Estrai una carta casuale tra le 15
             const randomIndex = Math.floor(Math.random() * CARDS_DATABASE.length);
@@ -1352,6 +1363,7 @@
             
             overlay.style.display = "flex";
         };
+
 
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
         function updateHistory() {

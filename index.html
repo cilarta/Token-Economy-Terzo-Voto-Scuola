@@ -1225,6 +1225,9 @@
             else if (type === 'vip') currentData.vipTokens += amount;
 
             addToHistory(type, amount, description);
+            saveDataToCloud();
+            updateDisplay();
+            updateHistory();
         }
 
         window.clickPenalty = function(amount, description) {
@@ -1237,6 +1240,9 @@
                 currentData.totalTokens -= amount;
                 currentData.penaltyTokens += amount;
                 addToHistory('penalty', -amount, description);
+                saveDataToCloud();
+                updateDisplay();
+                updateHistory();
             }
         }
 
@@ -1253,6 +1259,7 @@
                 addToHistory("base", 0, `🎫 +${amount} Ticket: ${customReason}`);
                 saveDataToCloud();
                 updateDisplay();
+                updateHistory();
                 alert(`Hai assegnato ${amount} Ticket all'alunno!`);
             } else {
                 window.clickTask(amount, type, customReason); 
@@ -1283,6 +1290,7 @@
             
             saveDataToCloud();
             updateDisplay();
+            updateHistory();
         }
 
         window.resetData = function() {

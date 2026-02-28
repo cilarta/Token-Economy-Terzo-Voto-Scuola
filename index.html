@@ -720,7 +720,9 @@
                         <option value="base">✅ Base (+1)</option>
                         <option value="pro">🌟 Pro (+3)</option>
                         <option value="vip">🏆 VIP (+8/10/15)</option>
+                        <option value="ticket">🎫 Ticket Gioco</option>
                     </select>
+
                     <input type="number" id="tokenAmount" value="1" style="width: 80px; border: 2px solid #cbd5e1; font-weight: bold;">
                     <button class="btn-success" onclick="window.addTokenTyped()">➕ Assegna Manuale</button>
                     <button class="btn-danger" onclick="window.removeTokenTyped()">➖ Rimuovi Manuale</button>
@@ -1238,7 +1240,18 @@
             const amount = parseInt(document.getElementById('tokenAmount').value) || 1;
             const type = document.getElementById('tokenType').value;
             const customReason = document.getElementById('customReason').value.trim() || "Assegnazione manuale";
-            window.clickTask(amount, type, customReason); 
+            
+            if (type === "ticket") {
+                if (currentData.tickets === undefined) currentData.tickets = 0;
+                currentData.tickets += amount;
+                addToHistory("base", 0, `🎫 +${amount} Ticket: ${customReason}`);
+                saveDataToCloud();
+                updateDisplay();
+                alert(`Hai assegnato ${amount} Ticket all'alunno!`);
+            } else {
+                window.clickTask(amount, type, customReason); 
+            }
+            
             document.getElementById('customReason').value = "";
         }
 
@@ -1247,19 +1260,37 @@
             const type = document.getElementById('tokenType').value;
             const customReason = document.getElementById('customReason').value.trim() || "Rimozione manuale";
             
-            currentData.totalTokens -= amount;
-            if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
-            else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
-            else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
+            if (type === "ticket") {
+                if (currentData.tickets === undefined) currentData.tickets = 0;
+                currentData.tickets = Math.max(0, currentData.tickets - amount);
+                addToHistory("penalty", 0, `🎫 -${amount} Ticket Rimosso: ${customReason}`);
+                alert(`❌ Rimossi ${amount} Ticket`);
+            } else {
+                currentData.totalTokens -= amount;
+                if (type === 'base') currentData.baseTokens = Math.max(0, currentData.baseTokens - amount);
+                else if (type === 'pro') currentData.proTokens = Math.max(0, currentData.proTokens - amount);
+                else if (type === 'vip') currentData.vipTokens = Math.max(0, currentData.vipTokens - amount);
+                
+                addToHistory(type, -amount, customReason);
+                alert(`❌ Rimossi ${amount} punti`);
+            }
             
-            addToHistory(type, -amount, customReason);
-            alert(`❌ Rimossi ${amount} punti`);
+            saveDataToCloud();
+            updateDisplay();
         }
 
         window.resetData = function() {
             if (confirm('SICURO? Cancella tutti i voti di QUESTO alunno.')) {
-                currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
+                // Manteniamo le carte e le skin, resettiamo solo i punti e i ticket
+                currentData.totalTokens = 0;
+                currentData.baseTokens = 0;
+                currentData.proTokens = 0;
+                currentData.vipTokens = 0;
+                currentData.penaltyTokens = 0;
+                currentData.tickets = 0;
+                currentData.history = [];
                 saveDataToCloud();
+                updateDisplay();
             }
         }
             // ==========================================

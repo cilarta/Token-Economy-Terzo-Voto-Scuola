@@ -297,6 +297,23 @@
         </header>
 
         <div id="lockMessage">🔒 <strong>Modalità sola lettura attiva!</strong><br>👨🏫 Inserisci la password per assegnare i punti.</div>
+        <!-- OBIETTIVO COOPERATIVO DI CLASSE -->
+        <div class="main-section" style="background: linear-gradient(135deg, #1e3a8a, #312e81); border: 3px solid #60a5fa; margin-bottom: 20px; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+            <h2 style="color: white; border-bottom: 2px dashed #60a5fa; margin-bottom: 15px; padding-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 10px; margin-top: 0;">
+                🌟 Obiettivo Cooperativo di Classe
+            </h2>
+            <p style="font-size: 13px; color: #bfdbfe; margin-bottom: 12px; line-height: 1.4;">
+                I punti di <b>tutti gli alunni</b> si sommano in questa barra. Raggiungiamo il traguardo insieme per un premio speciale!
+            </p>
+            <div style="background: rgba(0,0,0,0.3); height: 28px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #93c5fd; box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);">
+                <div id="classProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f59e0b, #fde047); transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 900; color: #78350f; font-size: 14px; text-shadow: 1px 1px 0px rgba(255,255,255,0.6);">0%</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-top: 8px; color: #bfdbfe;">
+                <span>0 pt</span>
+                <span id="classProgressText">Calcolo in corso...</span>
+                <span>1000 pt</span>
+            </div>
+        </div>
 
         <div class="status">
             <div class="status-item"><span>✅ Voto BASE:</span><span id="baseTokens" style="color:var(--success);">0</span></div>
@@ -651,11 +668,13 @@
             
             // Avvia Sync
             startSync();
+            window.startClassSync(); // <--- INCOLLATO QUI (SUBITO SOTTO STARTSYNC)
         }
 
         window.logout = function() {
             location.reload(); 
         }
+
 
         function startSync() {
             onValue(dbRef, (snapshot) => {
@@ -672,9 +691,52 @@
             });
         }
 
+        // --- SISTEMA OBIETTIVO DI CLASSE (INCOLLATO QUI) ---
+        const CLASS_GOAL = 1000; 
+        
+        window.startClassSync = function() {
+            const allStudentsRef = ref(db, 'sax_students'); // <-- Modificato con il tuo nome cartella "sax_students"
+            
+            onValue(allStudentsRef, (snapshot) => {
+                const data = snapshot.val();
+                let classTotal = 0;
+                
+                if (data) {
+                    for (const key in data) {
+                        if (data[key] && typeof data[key].totalTokens === 'number') {
+                            classTotal += Math.max(0, data[key].totalTokens);
+                        }
+                    }
+                }
+                
+                const bar = document.getElementById('classProgressBar');
+                const text = document.getElementById('classProgressText');
+                
+                if (bar && text) {
+                    let percent = Math.floor((classTotal / CLASS_GOAL) * 100);
+                    if (percent > 100) percent = 100;
+                    
+                    bar.style.width = percent + '%';
+                    bar.style.minWidth = percent > 0 ? '10%' : '0%'; // Evita che lo 0% esca fuori dalla barra
+                    bar.textContent = percent + '%';
+                    text.textContent = `${classTotal} / ${CLASS_GOAL} Punti Totali Classe`;
+                    
+                    if (percent >= 100) {
+                        bar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+                        bar.style.color = '#064e3b';
+                    } else {
+                        bar.style.background = 'linear-gradient(90deg, #f59e0b, #fde047)';
+                        bar.style.color = '#78350f';
+                    }
+                }
+            });
+        };
+        // --- FINE OBIETTIVO DI CLASSE ---
+
         function saveDataToCloud() {
             if(dbRef) set(dbRef, currentData).catch((e) => alert("Errore Cloud: " + e));
         }
+
 
         // --- FUNZIONI CORE ---
 

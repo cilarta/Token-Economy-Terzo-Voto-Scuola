@@ -951,6 +951,12 @@
             currentStudentId = rawName.replace(/[^a-zA-Z0-9]/g, ''); 
             
             document.getElementById('displayStudentName').textContent = rawName;
+
+            // Mostra il nickname anche nel pannellino di abbinamento nomi (Docente)
+            if (document.getElementById('currentNickToPair')) {
+                document.getElementById('currentNickToPair').textContent = currentStudentId;
+            }
+
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
 
@@ -1102,6 +1108,34 @@
                 saveDataToCloud();
             }
         }
+            // ==========================================
+        // SISTEMA ABBINAMENTO NICKNAME -> NOMI REALI
+        // ==========================================
+        window.salvaNomeReale = function() {
+            if (!isAdminUnlocked) {
+                alert("BLOCCATO! Solo il docente può associare i nomi.");
+                return;
+            }
+            
+            const realName = document.getElementById("realNameInput").value.trim();
+            if (!realName || !currentStudentId) {
+                alert("Inserisci un nome reale valido e assicurati che un alunno sia loggato.");
+                return;
+            }
+
+            // Salva in un "nodo" globale di Firebase così tutti possono leggerlo
+            const directoryRef = ref(db, 'classDirectory/' + currentStudentId);
+            set(directoryRef, {
+                realName: realName,
+                nickname: currentStudentId
+            }).then(() => {
+                alert(`✅ Perfetto! Il nickname "${currentStudentId}" è stato associato a "${realName}".`);
+                document.getElementById("realNameInput").value = "";
+            }).catch((e) => {
+                alert("Errore nel salvataggio: " + e);
+            });
+        };
+
 
 // --- SISTEMA PASSWORD ---
 

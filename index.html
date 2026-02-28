@@ -1434,6 +1434,82 @@
             aggiornaTrofei();
             aggiornaStriscia();
             aggiornaAlbumCarte();
+        // QUESTA È LA FUNZIONE COLLEGATA AL PULSANTE!
+        window.compraBustina = function(metodoPagamento) {
+            if (!currentData) return;
+
+            // 0. Controllo Tempo (Max 1 bustina ogni 12 ore)
+            const oraAttuale = new Date().getTime();
+            const dodiciOreInMs = 12 * 60 * 60 * 1000;
+
+            if (currentData.lastPackTime && (oraAttuale - currentData.lastPackTime) < dodiciOreInMs) {
+                const oreMancanti = Math.ceil((dodiciOreInMs - (oraAttuale - currentData.lastPackTime)) / (1000 * 60 * 60));
+                alert(`⏳ Hai già aperto una bustina di recente! Devi aspettare ancora circa ${oreMancanti} ore.`);
+                return;
+            }
+
+            const costoPunti = 1;
+            const costoTicket = 3;
+            if (currentData.tickets === undefined) currentData.tickets = 0;
+
+            // 1. Controllo e pagamento in base al tasto premuto
+            if (metodoPagamento === 'ticket') {
+                if (currentData.tickets < costoTicket) {
+                    alert(`Fondi insufficienti! Ti servono almeno ${costoTicket} Ticket 🎫.`);
+                    return;
+                }
+                currentData.tickets -= costoTicket;
+                addToHistory("base", 0, `Acquisto Bustina (Spesi ${costoTicket} Ticket)`);
+            } else if (metodoPagamento === 'punti') {
+                if (currentData.totalTokens < costoPunti) {
+                    alert(`Fondi insufficienti! Ti serve almeno ${costoPunti} Punto Voto 💎.`);
+                    return;
+                }
+                currentData.totalTokens -= costoPunti;
+                currentData.baseTokens = Math.max(0, (currentData.baseTokens || 0) - costoPunti);
+                addToHistory("base", -costoPunti, `Acquisto Bustina (Speso ${costoPunti} Punto Voto)`);
+            } else {
+                return;
+            }
+
+            // 2. Salva il momento esatto dell'acquisto
+            currentData.lastPackTime = oraAttuale;
+
+            // 3. Estrazione basata sulle probabilità
+            // Comune 40%, Rara 25%, Epica 20%, Leggendaria 15%
+            const prob = Math.random() * 100;
+            let targetRarity = "Comune";
+            if (prob > 40 && prob <= 65) targetRarity = "Rara";
+            else if (prob > 65 && prob <= 85) targetRarity = "Epica";
+            else if (prob > 85) targetRarity = "Leggendaria";
+
+            const cartePossibili = CARDS_DATABASE.filter(c => c.rarity === targetRarity);
+            const randomIndex = Math.floor(Math.random() * cartePossibili.length);
+            const cartaEstratta = cartePossibili[randomIndex];
+
+            // 4. Salva la carta nell'inventario
+            if (!currentData.cards) currentData.cards = {};
+            let isDoppione = false;
+            if (currentData.cards[cartaEstratta.id]) {
+                currentData.cards[cartaEstratta.id].quantita += 1;
+                isDoppione = true;
+            } else {
+                currentData.cards[cartaEstratta.id] = { quantita: 1 };
+            }
+
+            saveDataToCloud();
+            aggiornaAlbumCarte();
+            updateDisplay();
+
+            // 5. Mostra l'animazione a schermo intero
+            const overlay = document.getElementById("cardRevealOverlay");
+            document.getElementById("revealedCardIcon").textContent = cartaEstratta.icon;
+            document.getElementById("revealedCardName").textContent = cartaEstratta.name;
+            document.getElementById("duplicateMessage").style.display = isDoppione ? "block" : "none";
+            const popBox = document.getElementById("revealedCardBox");
+            popBox.className = `revealed-card rarity-${cartaEstratta.rarity}`;
+            overlay.style.display = "flex";
+        };
 
             // --- GESTIONE TICKET GIORNALIERI E DAILY LOGIN ---
             if (currentData.tickets === undefined) currentData.tickets = 0;

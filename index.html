@@ -1333,9 +1333,22 @@
             currentData.totalTokens -= costoBustina;
             currentData.lastPackTime = oraAttuale; // <--- Salva il momento esatto dell'acquisto
             
-            // 3. Estrai una carta casuale tra le 15
-            const randomIndex = Math.floor(Math.random() * CARDS_DATABASE.length);
-            const cartaEstratta = CARDS_DATABASE[randomIndex];
+            // 3. Estrazione basata sulle probabilità richieste:
+            // Comune 40%, Rara 25%, Epica 20%, Leggendaria 15%
+            const prob = Math.random() * 100;
+            let targetRarity = "Comune"; // da 0 a 40 (40%)
+            
+            if (prob > 40 && prob <= 65) targetRarity = "Rara";           // da 40 a 65 (25%)
+            else if (prob > 65 && prob <= 85) targetRarity = "Epica";     // da 65 a 85 (20%)
+            else if (prob > 85) targetRarity = "Leggendaria";             // da 85 a 100 (15%)
+
+            // Filtra il mazzo per prendere solo le carte di quella rarità
+            const cartePossibili = CARDS_DATABASE.filter(c => c.rarity === targetRarity);
+            
+            // Sceglie a caso una tra quelle selezionate
+            const randomIndex = Math.floor(Math.random() * cartePossibili.length);
+            const cartaEstratta = cartePossibili[randomIndex];
+
 
             // 4. Salva la carta nell'inventario dell'alunno
             if (!currentData.cards) currentData.cards = {};

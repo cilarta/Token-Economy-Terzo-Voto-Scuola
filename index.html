@@ -96,6 +96,8 @@
         h1 { font-size: 26px; margin-bottom: 5px; color: #1e3a8a; text-shadow: 1px 1px 0px white; }
         .student-name-display { color: #4338ca; font-weight: 900; font-size: 1.4em; background: rgba(255,255,255,0.6); padding: 5px 15px; border-radius: 10px; display: inline-block; margin-top: 5px;}
         .token-display { font-size: 28px; color: #b91c1c; font-weight: 900; margin: 10px 0; background: white; padding: 10px 20px; border-radius: 12px; border: 2px dashed #b91c1c; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .ticket-display { font-size: 18px; color: #d97706; font-weight: 900; margin: 4px 0; background: white; padding: 7px 18px; border-radius: 12px; border: 2px dashed #d97706; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+
         
         /* LAYOUT GRIGLIE */
         .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-top: 15px; }
@@ -586,6 +588,7 @@
             </div>
             <div style="text-align: right;">
                 <div class="token-display">💎 Punteggio: <span id="totalTokens">...</span></div>
+                <div class="ticket-display">🎟️ Ticket: <span id="totalTickets">0</span> / 3</div>
                 <button class="btn-logout" onclick="window.logout()">🚪 Esci / Cambia Alunno</button>
             </div>
         </header>
@@ -660,9 +663,14 @@
                     <p style="font-size: 14px; color: #4f46e5; font-weight: bold; margin-bottom: 10px;">
                         Colleziona le 15 Carte Segrete!
                     </p>
-                    <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
-                        📦 Apri Bustina (-1 Punti)
-                    </button>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;">
+                        <button id="buyPackBtn" class="btn-pack" onclick="window.compraBustina()">
+                            📦 Apri con Punti (-1 Pt)
+                        </button>
+                        <button id="buyPackTicketBtn" class="btn-pack" style="background: linear-gradient(45deg, #d97706, #f59e0b);" onclick="window.compraBustinaConTicket()">
+                            🎟️ Apri con Ticket (-3 🎟️)
+                        </button>
+                    </div>
                     <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
                         Troverai doppioni? Scambiali con i tuoi compagni!
                     </p>
@@ -1051,8 +1059,11 @@
         let dbRef = null; 
         let currentData = {
             totalTokens: 0, baseTokens: 0,
-            proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: []
+            proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [],
+            tickets: 0, lastDailyTicket: null
         };
+        let dailyTicketChecked = false;
+
             // ==========================================
         // IL MAZZO DELLE 15 CARTE COLLEZIONABILI
         // ==========================================
@@ -1117,12 +1128,14 @@
                 if (data) {
                     currentData = data;
                     if (!currentData.history) currentData.history = [];
+                    if (typeof currentData.tickets === 'undefined') currentData.tickets = 0;
                 } else { 
-                    currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
+                    currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [], tickets: 0, lastDailyTicket: null };
                     saveDataToCloud(); 
                 }
                 updateDisplay();
                 updateHistory();
+                checkDailyTicket();
             });
         }
 
@@ -1242,7 +1255,12 @@
 
         window.resetData = function() {
             if (confirm('SICURO? Cancella tutti i voti di QUESTO alunno.')) {
-                currentData = { totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [] };
+                currentData = {
+                    totalTokens: 0, baseTokens: 0, proTokens: 0, vipTokens: 0, penaltyTokens: 0, history: [],
+                    tickets: currentData.tickets || 0,
+                    lastDailyTicket: currentData.lastDailyTicket || null,
+                    cards: currentData.cards || {}
+                };
                 saveDataToCloud();
             }
         }
@@ -1376,6 +1394,12 @@
             document.getElementById('vipTokens').textContent = currentData.vipTokens || 0;
             document.getElementById('penaltyTokens').textContent = currentData.penaltyTokens || 0;
             
+            const ticketCount = currentData.tickets || 0;
+            const ticketEl = document.getElementById('totalTickets');
+            if (ticketEl) ticketEl.textContent = ticketCount;
+            const buyPackTicketBtn = document.getElementById('buyPackTicketBtn');
+            if (buyPackTicketBtn) buyPackTicketBtn.disabled = ticketCount < 3;
+
             // AGGIUNGI QUESTA RIGA: fa evolvere l'avatar in automatico!
             aggiornaAvatar(); 
             aggiornaTrofei();
@@ -1504,6 +1528,86 @@
 
             overlay.style.display = "flex";
         };
+        // --- SISTEMA TICKET GIORNALIERO ---
+        function checkDailyTicket() {
+            if (dailyTicketChecked) return;
+            dailyTicketChecked = true;
+
+            const today = new Date();
+            const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+            if (typeof currentData.tickets === 'undefined') currentData.tickets = 0;
+
+            if (currentData.lastDailyTicket !== todayStr) {
+                currentData.tickets += 1;
+                currentData.lastDailyTicket = todayStr;
+                saveDataToCloud();
+                setTimeout(function() {
+                    const notif = document.createElement('div');
+                    notif.style.cssText = 'position:fixed;top:20px;right:20px;background:linear-gradient(45deg,#d97706,#f59e0b);color:white;padding:15px 22px;border-radius:14px;font-weight:bold;font-size:15px;z-index:9999;box-shadow:0 6px 20px rgba(217,119,6,0.5);';
+                    notif.innerHTML = '🎟️ <b>+1 Ticket del Giorno!</b><br><small style="font-weight:normal;font-size:12px;">Con 3 ticket puoi aprire una bustina!</small>';
+                    document.body.appendChild(notif);
+                    setTimeout(function() { notif.remove(); }, 5000);
+                }, 1000);
+            }
+        }
+
+        // --- ACQUISTO BUSTINA CON TICKET ---
+        window.compraBustinaConTicket = function() {
+            if (!currentData) return;
+
+            const costoTicket = 3;
+            const ticketAttuali = currentData.tickets || 0;
+
+            if (ticketAttuali < costoTicket) {
+                alert('Ticket insufficienti! Hai ' + ticketAttuali + ' ticket su ' + costoTicket + ' necessari.\nRicevi 1 ticket gratis al primo accesso di ogni giorno!');
+                return;
+            }
+
+            const oraAttuale = new Date().getTime();
+            const dodiciOreInMs = 12 * 60 * 60 * 1000;
+            if (currentData.lastPackTime && (oraAttuale - currentData.lastPackTime) < dodiciOreInMs) {
+                const oreMancanti = Math.ceil((dodiciOreInMs - (oraAttuale - currentData.lastPackTime)) / (1000 * 60 * 60));
+                alert('Hai già aperto una bustina di recente! Aspetta ancora circa ' + oreMancanti + ' ore.');
+                return;
+            }
+
+            if (!confirm('Vuoi spendere ' + costoTicket + ' ticket per aprire una bustina?')) return;
+
+            currentData.tickets -= costoTicket;
+            currentData.lastPackTime = oraAttuale;
+
+            const prob = Math.random() * 100;
+            let targetRarity = 'Comune';
+            if (prob > 40 && prob <= 65) targetRarity = 'Rara';
+            else if (prob > 65 && prob <= 85) targetRarity = 'Epica';
+            else if (prob > 85) targetRarity = 'Leggendaria';
+
+            const cartePossibili = CARDS_DATABASE.filter(function(c) { return c.rarity === targetRarity; });
+            const cartaEstratta = cartePossibili[Math.floor(Math.random() * cartePossibili.length)];
+
+            if (!currentData.cards) currentData.cards = {};
+            let isDoppione = false;
+            if (currentData.cards[cartaEstratta.id]) {
+                currentData.cards[cartaEstratta.id].quantita += 1;
+                isDoppione = true;
+            } else {
+                currentData.cards[cartaEstratta.id] = { quantita: 1 };
+            }
+
+            addToHistory('base', 0, 'Bustina con Ticket (Trovato: ' + cartaEstratta.name + ')');
+            saveDataToCloud();
+            aggiornaAlbumCarte();
+
+            const overlay = document.getElementById('cardRevealOverlay');
+            document.getElementById('revealedCardIcon').textContent = cartaEstratta.icon;
+            document.getElementById('revealedCardName').textContent = cartaEstratta.name;
+            document.getElementById('duplicateMessage').style.display = isDoppione ? 'block' : 'none';
+            document.getElementById('revealedCardBox').className = 'revealed-card rarity-' + cartaEstratta.rarity;
+            overlay.style.display = 'flex';
+        };
+
+        // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---
 
 
         // --- FUNZIONE CHE SMISTA STORICO E PROPOSTE IN ATTESA ---

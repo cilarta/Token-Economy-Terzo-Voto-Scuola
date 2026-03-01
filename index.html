@@ -674,6 +674,10 @@
                     <p style="font-size: 11px; color: #64748b; margin-top: 8px;">
                         Troverai doppioni? Scambiali con i tuoi compagni!
                     </p>
+                    <div id="packCooldownBox" style="display:none; margin-top: 10px; background: rgba(139, 92, 246, 0.08); border-radius: 10px; padding: 8px 16px; border: 2px dashed #8b5cf6;">
+                        <div style="font-size: 12px; font-weight: bold; color: #4f46e5; margin-bottom: 3px;">⏳ Prossima bustina disponibile alle ore <b id="packUnlockTime">--:--</b></div>
+                        <div style="font-size: 22px; font-weight: 900; font-family: monospace; letter-spacing: 3px; color: #6d28d9;" id="packCountdown">00:00:00</div>
+                    </div>
                 </div>
 
                 <!-- LA GRIGLIA DELL'ALBUM (15 CARTE) -->
@@ -921,6 +925,10 @@
             </div>
             
             <button class="wheel-btn" id="spinBtn" onclick="window.giraLaRuota()">Gira la Ruota (-3 Pt)</button>
+            <div id="wheelCooldownBox" style="display:none; margin-top: 14px; background: rgba(0,0,0,0.12); border-radius: 12px; padding: 10px 20px; text-align: center; border: 2px dashed #d97706;">
+                <div style="font-size: 13px; font-weight: bold; color: #78350f; margin-bottom: 4px;">⏳ Potrai giocare di nuovo alle ore <b id="wheelUnlockTime">--:--</b></div>
+                <div style="font-size: 26px; font-weight: 900; font-family: monospace; letter-spacing: 3px; color: #b45309;" id="wheelCountdown">00:00:00</div>
+            </div>
         </div>
 
         <div class="main-section" id="ricompenseSection">
@@ -1064,6 +1072,8 @@
             tickets: 0, lastDailyTicket: null
         };
         let dailyTicketChecked = false;
+        let _countdownInterval = null;
+
 
             // ==========================================
         // IL MAZZO DELLE 15 CARTE COLLEZIONABILI
@@ -1137,6 +1147,8 @@
                 updateDisplay();
                 updateHistory();
                 checkDailyTicket();
+                avviaTimerCountdown();
+
             });
         }
 
@@ -1568,6 +1580,64 @@
                     setTimeout(function() { notif.remove(); }, 5000);
                 }, 1000);
             }
+        }
+        // --- COUNTDOWN TIMER RUOTA E BUSTINE ---
+        function avviaTimerCountdown() {
+            if (_countdownInterval) clearInterval(_countdownInterval);
+
+            function tick() {
+                const ora = Date.now();
+
+                // RUOTA (24 ore)
+                const wheelBox = document.getElementById('wheelCooldownBox');
+                const wheelBtn = document.getElementById('spinBtn');
+                if (currentData && currentData.lastSpinTime) {
+                    const rim = (24 * 3600 * 1000) - (ora - currentData.lastSpinTime);
+                    if (rim > 0) {
+                        if (wheelBox) wheelBox.style.display = 'block';
+                        if (wheelBtn) wheelBtn.disabled = true;
+                        const sb = new Date(currentData.lastSpinTime + 24 * 3600 * 1000);
+                        const wuEl = document.getElementById('wheelUnlockTime');
+                        const wcEl = document.getElementById('wheelCountdown');
+                        if (wuEl) wuEl.textContent = String(sb.getHours()).padStart(2,'0') + ':' + String(sb.getMinutes()).padStart(2,'0');
+                        const ts = Math.floor(rim / 1000);
+                        if (wcEl) wcEl.textContent = String(Math.floor(ts/3600)).padStart(2,'0') + ':' + String(Math.floor((ts%3600)/60)).padStart(2,'0') + ':' + String(ts%60).padStart(2,'0');
+                    } else {
+                        if (wheelBox) wheelBox.style.display = 'none';
+                        if (wheelBtn) wheelBtn.disabled = false;
+                    }
+                } else {
+                    if (wheelBox) wheelBox.style.display = 'none';
+                }
+
+                // BUSTINE (12 ore)
+                const packBox = document.getElementById('packCooldownBox');
+                const packBtn = document.getElementById('buyPackBtn');
+                const packTicketBtn = document.getElementById('buyPackTicketBtn');
+                if (currentData && currentData.lastPackTime) {
+                    const rimP = (12 * 3600 * 1000) - (ora - currentData.lastPackTime);
+                    if (rimP > 0) {
+                        if (packBox) packBox.style.display = 'block';
+                        if (packBtn) packBtn.disabled = true;
+                        if (packTicketBtn) packTicketBtn.disabled = true;
+                        const sbP = new Date(currentData.lastPackTime + 12 * 3600 * 1000);
+                        const puEl = document.getElementById('packUnlockTime');
+                        const pcEl = document.getElementById('packCountdown');
+                        if (puEl) puEl.textContent = String(sbP.getHours()).padStart(2,'0') + ':' + String(sbP.getMinutes()).padStart(2,'0');
+                        const tsP = Math.floor(rimP / 1000);
+                        if (pcEl) pcEl.textContent = String(Math.floor(tsP/3600)).padStart(2,'0') + ':' + String(Math.floor((tsP%3600)/60)).padStart(2,'0') + ':' + String(tsP%60).padStart(2,'0');
+                    } else {
+                        if (packBox) packBox.style.display = 'none';
+                        if (packBtn) packBtn.disabled = false;
+                        if (packTicketBtn) packTicketBtn.disabled = (currentData.tickets || 0) < 3;
+                    }
+                } else {
+                    if (packBox) packBox.style.display = 'none';
+                }
+            }
+
+            tick();
+            _countdownInterval = setInterval(tick, 1000);
         }
 
         // --- ACQUISTO BUSTINA CON TICKET ---

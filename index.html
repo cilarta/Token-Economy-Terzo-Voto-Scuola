@@ -562,6 +562,60 @@
             0% { transform: scale(0) rotate(-20deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
+/* ==================== MAPPA AVVENTURA ==================== */
+.mappa-avventura { background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 3px solid #f59e0b; }
+.mappa-avventura h2 { color: #b45309; font-size: 20px; margin-bottom: 5px; }
+.adventure-path { display: flex; align-items: center; overflow-x: auto; padding: 20px 5px 45px; -ms-overflow-style: none; scrollbar-width: none; }
+.adventure-path::-webkit-scrollbar { display: none; }
+.map-node { display: flex; flex-direction: column; align-items: center; min-width: 105px; opacity: 0.28; filter: grayscale(90%); transition: all 0.4s ease; flex-shrink: 0; }
+.map-node.reached { opacity: 0.65; filter: grayscale(15%); }
+.map-node.current { opacity: 1; filter: none; transform: scale(1.12); }
+.map-island { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.12); position: relative; margin-bottom: 8px; }
+.map-node.current .map-island { animation: mapPulse 2s infinite; }
+@keyframes mapPulse { 0%,100% { box-shadow: 0 0 0 3px #f59e0b, 0 6px 15px rgba(245,158,11,0.35); } 50% { box-shadow: 0 0 0 8px #fcd34d, 0 6px 15px rgba(245,158,11,0.15); } }
+.map-player { position: absolute; top: -20px; font-size: 18px; animation: mapBounce 1s ease-in-out infinite; }
+@keyframes mapBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+.map-check { position: absolute; bottom: -6px; right: -6px; font-size: 16px; }
+.map-label { font-size: 11px; font-weight: 800; color: #374151; text-align: center; max-width: 90px; line-height: 1.3; }
+.map-range { font-size: 10px; color: #9ca3af; margin-top: 2px; }
+.map-connector { font-size: 22px; padding-bottom: 30px; flex-shrink: 0; margin: 0 2px; color: #d1d5db; transition: color 0.4s; }
+.map-connector.done { color: #f59e0b; }
+
+/* ==================== BOSS DI CLASSE ==================== */
+.boss-widget { text-align: center; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.25); border-radius: 12px; border: 2px solid rgba(239,68,68,0.4); }
+.boss-emoji-display { font-size: 75px; display: block; filter: drop-shadow(0 0 12px rgba(239,68,68,0.7)); transition: all 0.5s; }
+.boss-name-display { font-size: 16px; font-weight: 900; color: #fca5a5; margin: 6px 0 12px; letter-spacing: 1px; text-transform: uppercase; }
+.boss-hp-bg { background: rgba(0,0,0,0.4); border-radius: 20px; height: 26px; overflow: hidden; border: 2px solid rgba(255,255,255,0.15); }
+.boss-hp-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #f97316); border-radius: 20px; transition: width 1.2s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-weight: 900; font-size: 12px; color: white; }
+.boss-hp-info { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px; }
+.boss-sconfitto-msg { font-size: 24px; font-weight: 900; color: #fcd34d; animation: pulse 1.5s infinite; padding: 10px; display: none; }
+
+/* ==================== MERCATO CARTE ==================== */
+.mercato-section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 3px solid #0ea5e9; }
+.mercato-form-box { background: linear-gradient(135deg, #e0f2fe, #eff6ff); padding: 15px; border-radius: 12px; margin-bottom: 18px; border: 2px dashed #7dd3fc; }
+.offerta-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; background: #f0f9ff; border-radius: 10px; margin-bottom: 8px; border: 2px solid #bae6fd; transition: background 0.2s; gap: 10px; flex-wrap: wrap; }
+.offerta-row:hover { background: #e0f2fe; }
+.offerta-info { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 150px; }
+.offerta-icon { font-size: 26px; }
+.offerta-text strong { color: #1e293b; display: block; font-size: 14px; }
+.offerta-text span { color: #64748b; font-size: 12px; }
+.offerta-prezzo { font-weight: 900; color: #b91c1c; background: #fee2e2; padding: 4px 10px; border-radius: 8px; font-size: 15px; }
+.btn-compra-merc { background: linear-gradient(45deg, #0ea5e9, #38bdf8); color: white; border: none; padding: 7px 14px; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 13px; transition: transform 0.2s; }
+.btn-compra-merc:hover:not(:disabled) { transform: scale(1.05); }
+.btn-compra-merc:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-ritira-merc { background: linear-gradient(45deg, #ef4444, #f87171); color: white; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 13px; }
+.btn-vendi-merc { background: linear-gradient(45deg, #0ea5e9, #0369a1); color: white; border: none; padding: 9px 18px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 14px; transition: transform 0.2s; }
+.btn-vendi-merc:hover { transform: translateY(-2px); }
+
+/* ==================== REGALO TRA COMPAGNI ==================== */
+.regalo-section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 3px solid #f43f5e; }
+.regalo-form-box { background: linear-gradient(135deg, #fff1f2, #ffe4e6); padding: 15px; border-radius: 12px; border: 2px dashed #fda4af; margin-bottom: 15px; }
+.regalo-form-box input { border: 2px solid #fda4af; background: white; padding: 10px; border-radius: 8px; font-size: 14px; width: 100%; margin-bottom: 10px; color: #1e293b; }
+.btn-manda-regalo { background: linear-gradient(45deg, #f43f5e, #fb7185); color: white; border: none; padding: 11px 20px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 14px; width: 100%; transition: transform 0.2s; }
+.btn-manda-regalo:hover:not(:disabled) { transform: translateY(-2px); }
+.btn-manda-regalo:disabled { background: #d1d5db; cursor: not-allowed; }
+.regalo-status { text-align: center; padding: 8px 12px; border-radius: 8px; margin-top: 8px; font-size: 13px; font-weight: bold; display: none; }
+.regalo-ricevuto-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; background: #fff1f2; border-radius: 8px; margin-bottom: 6px; border-left: 4px solid #f43f5e; font-size: 13px; }
 
     </style>
 </head>
@@ -604,6 +658,11 @@
             <a href="#classeSection" class="nav-btn" style="border-color: #10b981; color: #047857;">🤝 Classe</a>
             <a href="#ruotaSection" class="nav-btn">🎡 Ruota</a>
             <a href="#ricompenseSection" class="nav-btn">🎁 Ricompense</a>
+            <a href="#mappaSection" class="nav-btn" style="border-color:#f59e0b;color:#b45309;">🗺️ Mappa</a>
+            <a href="#mercatoSection" class="nav-btn" style="border-color:#0ea5e9;color:#0369a1;">🏪 Mercato</a>
+            <a href="#regaloSection" class="nav-btn" style="border-color:#f43f5e;color:#be123c;">🎁 Regalo</a>
+        </div>
+
         </div>
 
         <div id="lockMessage">🔒 <strong>Modalità sola lettura attiva!</strong><br>👨🏫 Inserisci la password per assegnare i punti.</div>
@@ -639,6 +698,13 @@
             </div>
             <!-- FINE LEGENDA SPOSTATA -->
         </div>
+            <!-- MAPPA AVVENTURA -->
+        <div class="mappa-avventura" id="mappaSection">
+            <h2>🗺️ La tua Mappa Avventura</h2>
+            <p style="font-size:12px;color:#9ca3af;margin-bottom:3px;">Scorri per vedere il percorso completo →</p>
+            <div class="adventure-path" id="adventurePath"></div>
+        </div>
+
             <!-- INIZIO VETRINA TROFEI -->
             <div class="trophies-container" id="trofeiSection">
                 <h3 style="margin: 0; font-size: 15px; color: #b45309;">🏆 La mia Bacheca Trofei</h3>
@@ -695,6 +761,51 @@
             <!-- ========================================= -->
             <!-- FINE SISTEMA CARTE COLLEZIONABILI         -->
             <!-- ========================================= -->
+        <!-- ===== MERCATO CARTE ===== -->
+        <div class="mercato-section" id="mercatoSection">
+            <h2 style="color:#0369a1;font-size:20px;margin-bottom:15px;">🏪 Mercato Carte</h2>
+
+            <!-- FORM VENDITA -->
+            <div class="mercato-form-box">
+                <h4 style="color:#0369a1;margin:0 0 12px;font-size:15px;">📦 Metti in vendita un tuo doppione</h4>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                    <select id="mercatoCardSelect" style="flex:1;min-width:180px;border:2px solid #7dd3fc;border-radius:8px;padding:9px;font-size:14px;background:white;">
+                        <option value="">-- Scegli una carta --</option>
+                    </select>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <label style="font-size:13px;font-weight:bold;color:#0369a1;">💎 Prezzo:</label>
+                        <input type="number" id="mercatoPrezzo" min="1" max="50" value="2" style="width:65px;border:2px solid #7dd3fc;border-radius:8px;padding:8px;font-size:14px;background:white;">
+                        <span style="font-size:12px;color:#64748b;">pt</span>
+                    </div>
+                    <button class="btn-vendi-merc" onclick="window.mettiInVendita()">🏷️ Vendi</button>
+                </div>
+            </div>
+
+            <!-- LISTA OFFERTE -->
+            <h4 style="color:#0369a1;margin-bottom:10px;font-size:15px;">🛒 Offerte dei Compagni</h4>
+            <div id="mercatoListaOfferte">
+                <p style="color:#9ca3af;font-size:13px;font-style:italic;">Nessuna carta in vendita al momento.</p>
+            </div>
+        </div>
+        <!-- ===== REGALO TRA COMPAGNI ===== -->
+        <div class="regalo-section" id="regaloSection">
+            <h2 style="color:#be123c;font-size:20px;margin-bottom:15px;">🎁 Regala un Punto a un Compagno</h2>
+            <div class="regalo-form-box">
+                <p style="font-size:13px;color:#9f1239;margin-bottom:12px;">
+                    Puoi mandare <strong>1 punto</strong> a un compagno, <strong>una volta a settimana</strong>. 💝
+                </p>
+                <input type="text" id="regaloNickDest" placeholder="✍️ Nickname del compagno (es. marcoRock)">
+                <input type="text" id="regaloMsg" placeholder="💬 Messaggio (es. Bravo oggi!)">
+                <button class="btn-manda-regalo" id="btnMandaRegalo" onclick="window.mandaRegalo()">🎁 Manda 1 Punto!</button>
+                <div class="regalo-status" id="regaloStatus"></div>
+            </div>
+            <div>
+                <h4 style="font-size:13px;color:#be123c;margin-bottom:8px;">📬 Regali ricevuti (ultimi 5):</h4>
+                <div id="regaliRicevutiList">
+                    <p style="color:#9ca3af;font-size:13px;font-style:italic;">Nessun regalo ricevuto.</p>
+                </div>
+            </div>
+        </div>
 
         <div class="edit-section" id="docenteSection">
             <h3 style="margin-bottom:15px; color: #b45309; font-size: 20px;">⚙️ 👨🏫 Area Segreta Docente</h3>
@@ -985,6 +1096,17 @@
         <!-- OBIETTIVO COOPERATIVO DI CLASSE -->
         <div class="main-section" id="classeSection" style="background: linear-gradient(135deg, #1e3a8a, #312e81); border: 3px solid #60a5fa; margin-bottom: 20px; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
             <h2 style="color: white; border-bottom: 2px dashed #60a5fa; margin-bottom: 15px; padding-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 10px; margin-top: 0;">
+          <!-- BOSS WIDGET -->
+            <div class="boss-widget" id="bossWidget">
+                <span class="boss-emoji-display" id="bossEmoji">🐉</span>
+                <div class="boss-name-display" id="bossNome">IL GRANDE MAESTRO STONATO</div>
+                <div class="boss-hp-bg">
+                    <div class="boss-hp-fill" id="bossHpFill" style="width:100%;">1000 / 1000 ❤️</div>
+                </div>
+                <div class="boss-hp-info">Danni inflitti dalla classe: <strong id="bossClassePunti">0</strong> pt su 1000</div>
+                <div class="boss-sconfitto-msg" id="bossSconfitto">🎉 BOSS SCONFITTO! Aspettate il premio! 🏆</div>
+            </div>
+        
                 🌟 Obiettivo Cooperativo di Classe
             </h2>
             <p style="font-size: 13px; color: #bfdbfe; margin-bottom: 12px; line-height: 1.4;">
@@ -1043,7 +1165,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+    import { getDatabase, ref, set, get, push, update, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
     // FIREBASE CONFIG
         const firebaseConfig = {
@@ -1125,7 +1247,10 @@
             
             // Avvia Sync
             startSync();
-            window.startClassSync(); // <--- INCOLLATO QUI (SUBITO SOTTO STARTSYNC)
+            window.startClassSync();
+            avviaListenerMercato();
+            caricaRegaliRicevuti();
+            caricaSelectDoppioni();
         }
 
         window.logout = function() {
@@ -1189,6 +1314,7 @@
                         bar.style.background = 'linear-gradient(90deg, #f59e0b, #fde047)';
                         bar.style.color = '#78350f';
                     }
+                                    updateBoss(classTotal);
                 }
             });
         };
@@ -1777,6 +1903,7 @@
             
             const icon = document.getElementById('avatarIcon');
             const rank = document.getElementById('avatarRank');
+            renderMappa(currentData.totalTokens || 0);
 
             if (!icon || !rank) return; // Evita errori se mancano i pezzi HTML
 
@@ -2134,6 +2261,221 @@
         
         // Esegui l'aggiornamento avatar all'avvio
         aggiornaAvatar();
+    // ==================== MAPPA AVVENTURA ====================
+const MAPPA_LIVELLI = [
+    { min: 0,   max: 30,   emoji: '🥚', nome: 'Spiaggia del Principiante', color: '#fef9c3', border: '#fcd34d' },
+    { min: 31,  max: 60,   emoji: '🐣', nome: 'Foresta del Ritmo',          color: '#dcfce7', border: '#86efac' },
+    { min: 61,  max: 90,   emoji: '🐥', nome: 'Castello della Melodia',     color: '#dbeafe', border: '#93c5fd' },
+    { min: 91,  max: 180,  emoji: '🎷', nome: 'Torre del Virtuoso',          color: '#ede9fe', border: '#c4b5fd' },
+    { min: 181, max: 9999, emoji: '🐉', nome: 'Vetta del Maestro Supremo',  color: '#fce7f3', border: '#f9a8d4' },
+];
+function renderMappa(punti) {
+    const container = document.getElementById('adventurePath');
+    if (!container) return;
+    let html = '';
+    MAPPA_LIVELLI.forEach((liv, i) => {
+        const raggiunto = punti >= liv.min;
+        const corrente  = punti >= liv.min && punti <= liv.max;
+        html += `
+        <div class="map-node ${raggiunto ? 'reached' : ''} ${corrente ? 'current' : ''}">
+            <div class="map-island" style="background:${liv.color};border-color:${liv.border}">
+                <span>${liv.emoji}</span>
+                ${corrente ? '<div class="map-player">⭐</div>' : ''}
+                ${raggiunto && !corrente ? '<div class="map-check">✅</div>' : ''}
+            </div>
+            <div class="map-label">${liv.nome}</div>
+            <div class="map-range">${liv.min}–${liv.max === 9999 ? '∞' : liv.max} pt</div>
+        </div>
+        ${i < MAPPA_LIVELLI.length - 1 ? `<div class="map-connector ${punti > liv.max ? 'done' : ''}">→</div>` : ''}`;
+    });
+    container.innerHTML = html;
+}
+
+// ==================== BOSS DI CLASSE ====================
+const BOSS_STAGES = [
+    { da: 0,   emoji: '🐉', nome: 'IL GRANDE MAESTRO STONATO',    colore: '#ef4444' },
+    { da: 200, emoji: '😤', nome: 'IL MAESTRO STONATO ARRABBIATO', colore: '#f97316' },
+    { da: 500, emoji: '😰', nome: 'QUASI SCONFITTO...',            colore: '#eab308' },
+    { da: 800, emoji: '💫', nome: 'UN ULTIMO SFORZO!!!',           colore: '#22c55e' },
+];
+function updateBoss(classePunti) {
+    const hpRimanenti = Math.max(0, 1000 - classePunti);
+    const percentuale = Math.max(0, (hpRimanenti / 1000) * 100);
+    const stage = [...BOSS_STAGES].reverse().find(s => classePunti >= s.da) || BOSS_STAGES[0];
+    const emoji  = document.getElementById('bossEmoji');
+    const nome   = document.getElementById('bossNome');
+    const fill   = document.getElementById('bossHpFill');
+    const infoPt = document.getElementById('bossClassePunti');
+    const sconf  = document.getElementById('bossSconfitto');
+    if (!emoji) return;
+    infoPt.textContent = classePunti;
+    if (classePunti >= 1000) {
+        emoji.textContent = '💀';
+        nome.textContent  = 'BOSS SCONFITTO!';
+        fill.style.width  = '0%';
+        fill.textContent  = '';
+        sconf.style.display = 'block';
+    } else {
+        emoji.textContent = stage.emoji;
+        nome.textContent  = stage.nome;
+        fill.style.width  = percentuale + '%';
+        fill.style.background = `linear-gradient(90deg, ${stage.colore}, #fbbf24)`;
+        fill.textContent  = `${hpRimanenti} / 1000 ❤️`;
+        sconf.style.display = 'none';
+    }
+}
+
+// ==================== MERCATO CARTE ====================
+function caricaSelectDoppioni() {
+    const sel = document.getElementById('mercatoCardSelect');
+    if (!sel || !currentStudentId) return;
+    sel.innerHTML = '<option value="">-- Scegli una carta --</option>';
+    const cards = currentData.cards || {};
+    let trovati = 0;
+    CARDS_DATABASE.forEach(carta => {
+        const q = cards[carta.id] ? (cards[carta.id].quantita || 0) : 0;
+        if (q >= 2) {
+            const opt = document.createElement('option');
+            opt.value = carta.id;
+            opt.textContent = `${carta.icon} ${carta.name} (hai ${q} copie)`;
+            sel.appendChild(opt);
+            trovati++;
+        }
+    });
+    if (trovati === 0) {
+        const opt = document.createElement('option');
+        opt.disabled = true;
+        opt.textContent = 'Nessun doppione disponibile';
+        sel.appendChild(opt);
+    }
+}
+function avviaListenerMercato() {
+    const mercatoRef = ref(db, 'mercato');
+    onValue(mercatoRef, snap => {
+        const lista = document.getElementById('mercatoListaOfferte');
+        if (!lista) return;
+        const dati = snap.val();
+        if (!dati) { lista.innerHTML = '<p style="color:#9ca3af;font-size:13px;font-style:italic;">Nessuna carta in vendita.</p>'; return; }
+        let html = '';
+        Object.entries(dati).forEach(([offId, off]) => {
+            const mia = off.venditore === currentStudentId;
+            html += `<div class="offerta-row">
+                <div class="offerta-info">
+                    <span class="offerta-icon">${off.emoji}</span>
+                    <div class="offerta-text"><strong>${off.nome}</strong><span>Vende: ${off.venditore} • ${off.rarita}</span></div>
+                </div>
+                <div class="offerta-prezzo">💎 ${off.prezzo} pt</div>
+                ${mia
+                    ? `<button class="btn-ritira-merc" onclick="window.ritiraOfferta('${offId}',${off.cartaId})">❌ Ritira</button>`
+                    : `<button class="btn-compra-merc" onclick="window.compraDalMercato('${offId}',${off.prezzo},${off.cartaId},'${off.venditore}')">🛒 Compra</button>`
+                }
+            </div>`;
+        });
+        lista.innerHTML = html || '<p style="color:#9ca3af;font-size:13px;font-style:italic;">Nessuna carta in vendita.</p>';
+    });
+}
+window.mettiInVendita = function() {
+    if (!isAdminUnlocked) { alert('⚠️ Il docente deve sbloccare prima la pagina!'); return; }
+    const cartaId = parseInt(document.getElementById('mercatoCardSelect').value);
+    const prezzo  = parseInt(document.getElementById('mercatoPrezzo').value);
+    if (!cartaId) { alert('Seleziona una carta!'); return; }
+    if (!prezzo || prezzo < 1 || prezzo > 50) { alert('Prezzo non valido (1–50 pt)!'); return; }
+    const carta = CARDS_DATABASE.find(c => c.id === cartaId);
+    if (!carta) return;
+    const q = currentData.cards[cartaId] ? currentData.cards[cartaId].quantita : 0;
+    if (q < 2) { alert('Non hai doppioni di questa carta!'); return; }
+    currentData.cards[cartaId].quantita -= 1;
+    saveDataToCloud();
+    push(ref(db, 'mercato'), {
+        venditore: currentStudentId,
+        cartaId:   cartaId,
+        nome:      carta.name,
+        emoji:     carta.icon,
+        rarita:    carta.rarity,
+        prezzo:    prezzo,
+        ts:        Date.now()
+    }).then(() => {
+        alert(`✅ "${carta.name}" messa in vendita per ${prezzo} punti!`);
+        caricaSelectDoppioni();
+    });
+};
+window.compraDalMercato = function(offId, prezzo, cartaId, venditore) {
+    if (!isAdminUnlocked) { alert('⚠️ Il docente deve sbloccare prima la pagina!'); return; }
+    if (currentData.totalTokens < prezzo) { alert(`❌ Ti servono ${prezzo} pt, ne hai ${currentData.totalTokens}.`); return; }
+    const carta = CARDS_DATABASE.find(c => c.id === cartaId);
+    if (!confirm(`Acquistare "${carta ? carta.name : 'carta'}" per ${prezzo} punti?`)) return;
+    get(ref(db, `sax_students/${venditore}/totalTokens`)).then(snapVend => {
+        const ptVend = snapVend.val() || 0;
+        const countAcq = currentData.cards[cartaId] ? (currentData.cards[cartaId].quantita || 0) : 0;
+        const updates = {};
+        updates[`sax_students/${currentStudentId}/totalTokens`]                    = currentData.totalTokens - prezzo;
+        updates[`sax_students/${currentStudentId}/cards/${cartaId}`]               = { quantita: countAcq + 1 };
+        updates[`sax_students/${venditore}/totalTokens`]                           = ptVend + prezzo;
+        updates[`mercato/${offId}`]                                                 = null;
+        update(ref(db), updates).then(() => {
+            alert(`✅ Carta "${carta ? carta.name : ''}" acquistata!`);
+        });
+    });
+};
+window.ritiraOfferta = function(offId, cartaId) {
+    if (!confirm('Ritirare questa carta dal mercato?')) return;
+    const q = currentData.cards[cartaId] ? (currentData.cards[cartaId].quantita || 0) : 0;
+    if (!currentData.cards[cartaId]) currentData.cards[cartaId] = { quantita: 0 };
+    currentData.cards[cartaId].quantita = q + 1;
+    saveDataToCloud();
+    set(ref(db, `mercato/${offId}`), null).then(() => alert('✅ Carta ritirata dal mercato!'));
+};
+
+// ==================== REGALO TRA COMPAGNI ====================
+window.mandaRegalo = function() {
+    if (!isAdminUnlocked) { alert('⚠️ Il docente deve sbloccare prima la pagina!'); return; }
+    const dest = document.getElementById('regaloNickDest').value.trim().replace(/[^a-zA-Z0-9]/g, '');
+    const msg  = document.getElementById('regaloMsg').value.trim() || '💝 Un regalo!';
+    const statusEl = document.getElementById('regaloStatus');
+    if (!dest) { alert('Inserisci il nickname del destinatario!'); return; }
+    if (dest === currentStudentId) { alert('Non puoi regalare punti a te stesso! 😄'); return; }
+    if (currentData.totalTokens < 1) { alert('❌ Non hai punti da regalare!'); return; }
+    const ora = Date.now();
+    const settimanaMs = 7 * 24 * 60 * 60 * 1000;
+    if (currentData.ultimoRegalo && (ora - currentData.ultimoRegalo) < settimanaMs) {
+        const giorni = Math.ceil((settimanaMs - (ora - currentData.ultimoRegalo)) / (1000 * 60 * 60 * 24));
+        statusEl.style.cssText = 'display:block;background:#fee2e2;color:#9f1239;';
+        statusEl.textContent = `⏳ Puoi regalare di nuovo tra ${giorni} giorno/i.`;
+        return;
+    }
+    get(ref(db, `sax_students/${dest}/totalTokens`)).then(snapDest => {
+        if (!snapDest.exists()) { alert(`❌ Alunno "${dest}" non trovato!`); return; }
+        if (!confirm(`Mandare 1 punto a "${dest}" con messaggio "${msg}"?`)) return;
+        const ptDest = snapDest.val() || 0;
+        const regaloId = `regalo_${ora}`;
+        const updates = {};
+        updates[`sax_students/${currentStudentId}/totalTokens`]               = currentData.totalTokens - 1;
+        updates[`sax_students/${currentStudentId}/ultimoRegalo`]               = ora;
+        updates[`sax_students/${dest}/totalTokens`]                            = ptDest + 1;
+        updates[`sax_students/${dest}/regaliRicevuti/${regaloId}`]             = { da: currentStudentId, msg: msg, ts: ora };
+        update(ref(db), updates).then(() => {
+            statusEl.style.cssText = 'display:block;background:#dcfce7;color:#166534;';
+            statusEl.textContent = `✅ Regalo inviato a ${dest}!`;
+            document.getElementById('regaloNickDest').value = '';
+            document.getElementById('regaloMsg').value = '';
+        });
+    });
+};
+function caricaRegaliRicevuti() {
+    if (!currentStudentId) return;
+    onValue(ref(db, `sax_students/${currentStudentId}/regaliRicevuti`), snap => {
+        const lista = document.getElementById('regaliRicevutiList');
+        if (!lista) return;
+        const dati = snap.val();
+        if (!dati) { lista.innerHTML = '<p style="color:#9ca3af;font-size:13px;font-style:italic;">Nessun regalo ricevuto.</p>'; return; }
+        const ordinati = Object.values(dati).sort((a, b) => b.ts - a.ts).slice(0, 5);
+        lista.innerHTML = ordinati.map(r => {
+            const d = new Date(r.ts).toLocaleDateString('it-IT');
+            return `<div class="regalo-ricevuto-item">🎁 <div><strong>${r.da}</strong> ti ha mandato 1 punto — "<em>${r.msg}</em>" <span style="color:#9ca3af;font-size:11px;">(${d})</span></div></div>`;
+        }).join('');
+    });
+}
+
     </script>
 </body>
 </html>

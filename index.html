@@ -17,7 +17,7 @@
             --purple-bg: #f3e8ff;
             --orange: #f59e0b;
 
-            --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+            --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-700: #374151; --gray-900: #111827;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -647,6 +647,8 @@
                 </div>
             </div>
             <!-- FINE VETRINA TROFEI -->
+            </div>
+            <!-- FINE VETRINA TROFEI -->
 
             <!-- ========================================= -->
             <!-- INIZIO SISTEMA CARTE COLLEZIONABILI       -->
@@ -899,7 +901,7 @@
                 <textarea id="motivo" rows="2" placeholder="Descrivi l'azione meritevole..."></textarea>
             </div>
             
-            <button class="btn-send" onclick="window.inviaProposta()">Invia Proposta al Maestro 📩</button>
+            <button class="btn-send" onclick="inviaProposta()">Invia Proposta al Maestro 📩</button>
         </div>
         <!-- FINE AREA PROPOSTE SPOSTATA QUI -->
         <!-- RUOTA DELLA FORTUNA -->
@@ -1929,7 +1931,7 @@
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
         // 1. L'alunno invia la proposta di punti specifici
-        window.inviaProposta = async function() {
+        async function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;
             const inputPunti = document.getElementById('puntiRichiesti');
             const puntiRichiesti = inputPunti ? parseInt(inputPunti.value) : 1;
@@ -1974,7 +1976,7 @@
         }
 
         // 2. Il maestro valuta: Accetta (dà i punti) o Rifiuta (Elimina la voce)
-        window.valutaProposta = function(propostaId, azione) {
+        function valutaProposta(propostaId, azione) {
             if (!isAdminUnlocked) {
                 alert("❌ Errore: Sblocca l'Area Docente con la password prima di valutare!");
                 return;

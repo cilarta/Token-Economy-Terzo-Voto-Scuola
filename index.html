@@ -1966,7 +1966,7 @@
             
             try {
                 // Salva su Firebase e aggiorna subito lo schermo!
-                await set(ref(db, `students/${currentStudentId}/history`), currentData.history);
+                await set(ref(db, `sax_students/${currentStudentId}/history`), currentData.history);
                 alert(`Proposta di +${puntiRichiesti} punti inviata al Maestro!`);
                 document.getElementById('motivo').value = ""; // Svuota casella testo
                 if(inputPunti) inputPunti.value = ""; // Svuota casella numeri

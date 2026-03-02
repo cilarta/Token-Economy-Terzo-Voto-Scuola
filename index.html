@@ -1930,7 +1930,7 @@
 
         // --- INIZIO NUOVO SISTEMA PROPOSTE (AGGIORNATO PER FIREBASE) ---
 
-// 1. L'alunno invia la proposta di punti specifici
+        // 1. L'alunno invia la proposta di punti specifici
         async function inviaProposta() {
             const tipo = document.getElementById('tipoProposta').value;
             const inputPunti = document.getElementById('puntiRichiesti');
@@ -1954,23 +1954,21 @@
             
             const nuovaProposta = {
                 id: Date.now(),
-                type: "base", // Usiamo il tipo standard, conterà solo la quantità
+                type: "base",
                 amount: puntiRichiesti,
-                status: "pending", // L'etichetta magica
+                status: "pending",
                 note: `${etichetta}: ${motivo}`,
                 date: new Date().toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })
             };
 
-            // Salva nel database locale dell'alunno
             currentData.history = [nuovaProposta, ...(currentData.history || [])];
             
             try {
-                // Salva su Firebase e aggiorna subito lo schermo!
                 await set(ref(db, `sax_students/${currentStudentId}/history`), currentData.history);
                 alert(`Proposta di +${puntiRichiesti} punti inviata al Maestro!`);
-                document.getElementById('motivo').value = ""; // Svuota casella testo
-                if(inputPunti) inputPunti.value = ""; // Svuota casella numeri
-                updateHistory(); // Fa apparire subito la voce nel cassetto
+                document.getElementById('motivo').value = "";
+                if(inputPunti) inputPunti.value = "";
+                updateHistory();
             } catch (error) {
                 console.error("Errore Firebase:", error);
                 alert("Errore nell'invio. Riprova!");
@@ -1996,26 +1994,50 @@
             const puntiDaAggiungere = parseInt(proposta.amount) || 0;
 
             if (azione === 'accetta') {
-                // Cambia lo stato e aggiunge il segno di spunta
                 currentData.history[index].status = "approved";
                 currentData.history[index].note = "✔️ ACCETTATA - " + currentData.history[index].note;
-
-                // Aggiunge fisicamente i punti al totale dell'alunno!
                 currentData.baseTokens = (currentData.baseTokens || 0) + puntiDaAggiungere;
                 currentData.totalTokens = (currentData.totalTokens || 0) + puntiDaAggiungere;
-
                 alert(`✅ Hai accettato la proposta e assegnato ${puntiDaAggiungere} punti!`);
                 
             } else if (azione === 'rifiuta') {
-                // ELIMINA TOTALMENTE la proposta dallo storico usando "splice"
                 currentData.history.splice(index, 1);
                 alert("❌ Proposta rifiutata ed eliminata dallo storico.");
             }
 
-        // Usa la tua funzione nativa infallibile per salvare su Firebase!
             saveDataToCloud(); 
-            updateDisplay();   // Aggiorna il numero grande dei punti in alto
-            updateHistory();   // Aggiorna la lista
+            updateDisplay();
+            updateHistory();
+        }
+
+        // 3. Mostra le proposte in attesa nel pannello Docente
+        function loadPendingProposals() {
+            const listEl = document.getElementById('pendingProposalsList');
+            if (!listEl) return;
+
+            const pending = (currentData.history || []).filter(h => h.status === 'pending');
+
+            if (pending.length === 0) {
+                listEl.innerHTML = '<div style="font-size:13px; color:#888; font-style:italic;">Nessuna proposta in attesa.</div>';
+                return;
+            }
+
+            listEl.innerHTML = '';
+            pending.forEach(p => {
+                const div = document.createElement('div');
+                div.style = 'display:flex; justify-content:space-between; align-items:center; background:white; border-radius:8px; padding:10px; margin-bottom:8px; border-left:4px solid #f59e0b; font-size:13px; gap:10px;';
+                div.innerHTML = `
+                    <div style="flex:1;">
+                        <b style="color:#92400e;">${p.note}</b>
+                        <span style="color:#64748b; margin-left:8px; font-weight:bold;">+${p.amount} pt</span>
+                        <div style="font-size:11px; color:#94a3b8; margin-top:3px;">${p.date}</div>
+                    </div>
+                    <div style="display:flex; gap:6px; flex-shrink:0;">
+                        <button onclick="valutaProposta(${p.id}, 'accetta')" style="background:#10b981; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold; box-shadow:none;">✅ OK</button>
+                        <button onclick="valutaProposta(${p.id}, 'rifiuta')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold; box-shadow:none;">❌ No</button>
+                    </div>`;
+                listEl.appendChild(div);
+            });
         }
         // --- RUOTA DELLA FORTUNA ---
         window.giraLaRuota = function() {
@@ -2040,6 +2062,7 @@
             
             saveDataToCloud();
             updateDisplay();
+            
 
             const btn = document.getElementById('spinBtn');
             const wheel = document.getElementById('spinWheel');
